@@ -1,0 +1,628 @@
+{
+  "expenses": [
+    {
+      "id": "daa284b9-5568-4d02-9a84-6839d189475f",
+      "name": "Edesur",
+      "category": "Servicios",
+      "dueDate": 5,
+      "estimatedAmount": 10000
+    },
+    {
+      "id": "06458e4d-4e30-4b44-a4b7-48851fbe6d89",
+      "name": "Patente",
+      "category": "Transporte",
+      "dueDate": 10,
+      "estimatedAmount": 160000
+    },
+    {
+      "id": "16d2773d-d3a4-420b-9825-90ad009e6052",
+      "name": "Contador",
+      "category": "Otros",
+      "dueDate": 5,
+      "estimatedAmount": 42790
+    },
+    {
+      "id": "0b08ce49-fd01-492e-bbfd-f920d53fa5f3",
+      "name": "Prestamo Casa",
+      "category": "Otros",
+      "dueDate": 10,
+      "estimatedAmount": 800000
+    },
+    {
+      "id": "d83038a2-590d-490f-99de-a9641ca7f382",
+      "name": "COVICIFA",
+      "category": "Otros",
+      "dueDate": 5,
+      "estimatedAmount": 483600
+    },
+    {
+      "id": "d7374e6a-0504-4908-864c-e33d642048c5",
+      "name": "Expensas Fragata",
+      "category": "Servicios",
+      "dueDate": 5,
+      "estimatedAmount": 427520.14
+    }
+  ],
+  "payments": [
+    {
+      "id": "293b0248-200c-42bc-a554-4814403fece0",
+      "expenseId": "daa284b9-5568-4d02-9a84-6839d189475f",
+      "month": 3,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-04-08T18:46:48.472Z",
+      "actualAmount": 35000
+    },
+    {
+      "id": "15b7cd46-3608-447a-8cad-b99120a973e9",
+      "expenseId": "16d2773d-d3a4-420b-9825-90ad009e6052",
+      "month": 4,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-05-06T17:22:00.924Z",
+      "actualAmount": 42790
+    },
+    {
+      "id": "68ae8fbe-9c2b-443e-9375-fbe44a541ff3",
+      "expenseId": "d83038a2-590d-490f-99de-a9641ca7f382",
+      "month": 4,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-05-06T17:59:32.364Z",
+      "actualAmount": 483600
+    }
+  ],
+  "incomes": [
+    {
+      "id": "a2a91982-804e-45fd-a50c-90911bb32105",
+      "name": "Facu Michelin",
+      "amount": 4600,
+      "category": "Sueldo",
+      "expectedAmount": 4600,
+      "expectedDay": 0
+    },
+    {
+      "id": "202bc440-6f31-4cca-9bfd-c820dffb9548",
+      "name": "Facu Finte",
+      "amount": 3000000,
+      "category": "Sueldo",
+      "expectedAmount": 3000000,
+      "expectedDay": 0
+    },
+    {
+      "id": "4b1feac1-5f07-4c12-b30c-14c3f2c9e7ec",
+      "name": "Sabri Santo Studio",
+      "category": "Sueldo",
+      "expectedAmount": 300000,
+      "expectedDay": 0
+    }
+  ],
+  "incomeReceipts": [],
+  "creditCards": [
+    {
+      "id": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "name": "Facu - Visa",
+      "bank": "Galicia",
+      "closingDay": 6,
+      "dueDay": 25,
+      "last4Digits": "1234"
+    },
+    {
+      "id": "a5fc603e-7427-4fe7-a2c8-28b01b639758",
+      "name": "Facu - Amex",
+      "bank": "Galicia",
+      "closingDay": 6,
+      "dueDay": 25,
+      "last4Digits": "5678"
+    },
+    {
+      "id": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "name": "Facu - Visa sabri",
+      "bank": "Galicia",
+      "closingDay": 4,
+      "dueDay": 3,
+      "last4Digits": "3838"
+    },
+    {
+      "id": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "name": "Facu - Visa",
+      "bank": "Santander",
+      "closingDay": 1,
+      "dueDay": 22,
+      "last4Digits": "4563"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "0d3e1539-791b-4a0f-a4bc-e806755cd745",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*AUBASA",
+      "totalAmount": 6964,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "5b1e1c4e-8797-4b33-bf1f-81fe38e2c486",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "SUPERMERCADOS TOLEDO",
+      "totalAmount": 21199,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "54d20e6f-0509-4ec4-b1a4-b017e20c2d1b",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "PAYU*AR*NINTENDOCA159",
+      "totalAmount": 3391.48,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "50b30d4d-697f-4c7f-b7da-300a66b772ec",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*AUBASA",
+      "totalAmount": 2122.92,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "2b8d6a3b-f697-482e-9742-c9e59ba2156f",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*AUBASA",
+      "totalAmount": 2122.92,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "1a7a8952-9dfb-412f-9400-d4ec63c9cabf",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*AUBASA",
+      "totalAmount": 6964.13,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "508b7a03-bcfa-4f18-a1ac-d51a8ed0a8fa",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "YPF 543 PLAYA",
+      "totalAmount": 66009,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "533fc5b8-c7bf-4ece-a266-554bf9f684f6",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "LACAJASEGURO 031593674 -0",
+      "totalAmount": 164819,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "bd0b6834-4d2c-4bf9-8255-b951e63561ff",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*EQUIPATUCASA (Estufa)",
+      "totalAmount": 351999.12,
+      "installments": 6,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "dbd6d643-2f94-4dc1-aa2f-c25bd86c790a",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "DIARCO BARRIO",
+      "totalAmount": 37142.64,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "1665bd92-4b23-4d27-bd87-cd758881db42",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*CUSPIDE",
+      "totalAmount": 16350,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "3d67abdb-57a6-4d7f-a330-c14139f8130d",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*TORINONORTE",
+      "totalAmount": 36000,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "621c80e5-c9a8-4360-a259-b0d9e46264e8",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "CLUB ATLETICO BOC000000002412328",
+      "totalAmount": 20100,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "4dd732b3-a461-4937-8c31-0030dfd4f1c8",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "KINKA SA",
+      "totalAmount": 90031.5,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "3ed53775-b1c3-456c-8e5c-a0fe3f67f58e",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "Market Palermo (S. Ortiz)",
+      "totalAmount": 8824.5,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "b7c6b61e-6f82-4d48-a1b8-cc42cdd8aa3b",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "GASTOS DE SERVICIO EMINENT SAP",
+      "totalAmount": 51900.83,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "237770b4-551c-4fb3-8755-3fef52d43289",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "EASY WARNES",
+      "totalAmount": 15400,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "542ee4d3-7c7e-4c8d-bcb2-38e06f40ed83",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "EASY WARNES",
+      "totalAmount": 264115,
+      "installments": 1,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "68bf23d7-b906-46e8-8f13-023451456c35",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "CHULA HOME DECO-CHULA HO",
+      "totalAmount": 48600,
+      "installments": 6,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "804d2606-c2f9-4a29-a258-427a9e57d4ad",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "238103*MUSS SA (Peluca)",
+      "totalAmount": 184999.98,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "c29b6580-5c5c-4be1-ab98-b57ffbb22f92",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "338095*MUSS SA (Peluca)",
+      "totalAmount": 439999.98,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "edd38f59-8958-47bd-9db7-6e131da78d8c",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MEGATLON",
+      "totalAmount": 1079820,
+      "installments": 12,
+      "startMonth": 8,
+      "startYear": 2025,
+      "category": "Otros"
+    },
+    {
+      "id": "82dd93c7-4219-4f21-af3f-497420585b61",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MEGATLON",
+      "totalAmount": 1008000,
+      "installments": 12,
+      "startMonth": 6,
+      "startYear": 2025,
+      "category": "Otros"
+    },
+    {
+      "id": "d7ec125a-c861-4cdd-9f23-f5f2b8bf08d8",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturería Rex",
+      "totalAmount": 366855.12,
+      "installments": 6,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "ded0cf65-f691-499a-be17-3d3d5753331f",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturería Rex",
+      "totalAmount": 92823.6,
+      "installments": 6,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "ebb1a9e8-0ccf-4dd7-963d-659990e47396",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturería Rex",
+      "totalAmount": 40160.88,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "4633cd5c-a43d-4438-bbf1-89915edd03c0",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturería Rex",
+      "totalAmount": 22422.18,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "e4db0c97-e517-442a-b3af-40add76e35df",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturería Rex",
+      "totalAmount": 16268.94,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "81535e30-a193-455e-b382-c6a26ffe1879",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturerías Rex",
+      "totalAmount": 67667.76,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "adb0027b-9a2c-4bb8-b3f6-5b59b85dbf4c",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturerías Rex",
+      "totalAmount": 54817.02,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "a42972da-9b54-4873-aba8-fafccb48f771",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturería Rex",
+      "totalAmount": 65068.02,
+      "installments": 6,
+      "startMonth": 1,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "8cb8a3ae-52e1-4d3a-bca8-77ceaaa14bff",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Farmacity",
+      "totalAmount": 77415.9,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "11224757-64bb-4592-b597-31a7569abcfa",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "GASTOS DE SERVICIO EMINENT",
+      "totalAmount": 51900.83,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "edabc943-1d1f-45a1-845c-f39e57cdd7ca",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*ALIMENTOSYBEBIDAS",
+      "totalAmount": 19200,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "d8423831-c303-4e1f-afcc-46a86802b385",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "OCTOBER SA",
+      "totalAmount": 106094,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "5078ada1-dce3-46ca-a313-760faa239a26",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "Carrefour Warnes",
+      "totalAmount": 73564.32,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "9c263795-d900-4a6e-a079-bdf28a763498",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "ESTANCIAS SAN FRANCISCO",
+      "totalAmount": 9102,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "5e6b2dc2-1088-426d-8244-390382f6da9c",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "CLUB ATLETICO BOCA",
+      "totalAmount": 20750,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "3aa4b99b-41f7-48c6-a8f0-73a1c202c2d1",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "PAYUARNINTENDO",
+      "totalAmount": 3387.99,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "9958cb8f-e42e-4baa-ae0d-912a7747207a",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "La Caja Seguro",
+      "totalAmount": 169603,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "79b2d7cd-9336-4750-8976-9a3520103aff",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "Carrefour Warnes",
+      "totalAmount": 122781.39,
+      "installments": 3,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "6f87b814-a444-4fd1-bd05-c3bc7aee5b30",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "Carrefour Warnes",
+      "totalAmount": 108220,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "5ddd992b-bf04-4bf3-9cac-64afaf98e672",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*MAX",
+      "totalAmount": 8122.73,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "49e99c39-6ac2-4ff0-a4d4-05a75b91c929",
+      "cardId": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "description": "MERPAGO*MYTHIC ",
+      "totalAmount": 59965.26,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "b3058d07-b5a2-4f79-8795-7c451fd5430f",
+      "cardId": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "description": "MERPAGO*MIFARMA ",
+      "totalAmount": 50455.98,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "116e273f-d184-4fb3-bbca-c635974eab7d",
+      "cardId": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "description": "MERPAGO*INDIANARGENTI",
+      "totalAmount": 55899.99,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "8c5f8526-5aff-4f29-899e-41ee15db44df",
+      "cardId": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "description": "MERPAGO*MYTHIC Regalo Anto",
+      "totalAmount": 35400,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "a7c9cebb-1469-40df-90e8-2d6a29e6f2ff",
+      "cardId": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "description": "GOOGLE *YouTubePremium ",
+      "totalAmount": 6799,
+      "installments": 1,
+      "startMonth": 4,
+      "startYear": 2026,
+      "category": "Otros"
+    }
+  ],
+  "cardPayments": [
+    {
+      "id": "dbc259c4-1e65-40f6-ad85-855e4acfc31c",
+      "cardId": "3c83dd93-92b7-4fd9-9459-611971df0904",
+      "month": 4,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-05-06T18:16:31.809Z",
+      "actualAmount": 74039.41
+    }
+  ]
+}
