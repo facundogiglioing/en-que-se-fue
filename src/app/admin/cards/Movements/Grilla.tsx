@@ -20,13 +20,13 @@ export function Grilla({
   deletePurchase,
   activeCardId,
   categoryNames,
-  month
+  month,
 }: Props) {
   return (
-    <div className="overflow-x-auto">
+    <div className="min-h-0 flex-1 overflow-auto">
       <table className="w-full text-left">
         <thead>
-          <tr className="text-[9px] font-black uppercase text-slate-400 tracking-widest border-b border-slate-100">
+          <tr className="sticky top-0 bg-white text-[9px] font-black uppercase text-slate-400 tracking-widest border-b border-slate-100">
             <th className="px-5 py-3">Descripción</th>
             <th className="px-5 py-3">Categoría</th>
             <th className="px-5 py-3">Inicio</th>

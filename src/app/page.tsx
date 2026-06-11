@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   const cards = db.data.creditCards || [];
   const purchases = db.data.transactions || [];
 
-  const currentYear = 2026;
+  const currentYear = new Date().getFullYear();
   const currentMonthIdx = new Date().getMonth();
 
   const payments = await getPaymentsForYear(currentYear);

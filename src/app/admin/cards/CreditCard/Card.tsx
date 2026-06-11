@@ -106,15 +106,13 @@ export function Card({ card }: Props) {
               />
               <CardLabel label="Vto:" />
               <CardInput
-                name="name"
+                name="dueDay"
                 type="number"
                 min={1}
                 max={31}
                 defaultValue={card.dueDay}
                 fontSize="sm"
               />
-
-
             </div>
             <input
               name="name"

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/db";
-import type { CardPurchase, CategoryName, CreditCard } from "@/types";
+import type { CategoryName, CreditCard, Transaction } from "@/types";
 
 export async function createCard(formData: FormData) {
   const db = await getDb();
@@ -17,6 +17,7 @@ export async function createCard(formData: FormData) {
     id: crypto.randomUUID(),
     name: formData.get("name") as string,
     bank: formData.get("bank") as string,
+    last4Digits: formData.get("last4Digits") as string,
     closingDay: Number(formData.get("closingDay")),
     dueDay: Number(formData.get("dueDay")),
     order: maxOrder + 1,
@@ -34,6 +35,8 @@ export async function updateCardDetails(formData: FormData) {
   const cardId = formData.get("cardId") as string;
   const name = (formData.get("name") as string)?.trim();
   const bank = (formData.get("bank") as string)?.trim();
+
+  console.log(formData);
 
   if (!cardId || !name || !bank) return;
 
@@ -75,7 +78,7 @@ export async function addPurchase(formData: FormData) {
     startMonth = parseInt(month, 10) - 1; // Ajuste 0-11
   }
 
-  const newPurchase: CardPurchase = {
+  const newPurchase: Transaction = {
     id: crypto.randomUUID(),
     cardId,
     description: formData.get("description") as string,

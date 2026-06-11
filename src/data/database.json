@@ -39,8 +39,22 @@
       "id": "d7374e6a-0504-4908-864c-e33d642048c5",
       "name": "Expensas Fragata",
       "category": "Servicios",
-      "dueDate": 5,
+      "dueDate": 15,
       "estimatedAmount": 427520.14
+    },
+    {
+      "id": "ebfdc286-4199-4376-8610-e740a339b426",
+      "name": "Medifé Facu",
+      "category": "Salud",
+      "dueDate": 19,
+      "estimatedAmount": 170000
+    },
+    {
+      "id": "d2062af3-c0f3-4bbd-b6a0-378ede2c29ec",
+      "name": "Medifé Sabri",
+      "category": "Salud",
+      "dueDate": 19,
+      "estimatedAmount": 170000
     }
   ],
   "payments": [
@@ -70,6 +84,60 @@
       "isPaid": true,
       "paidAt": "2026-05-06T17:59:32.364Z",
       "actualAmount": 483600
+    },
+    {
+      "id": "eb8e3d55-f865-4ffa-8bff-b99559f19099",
+      "expenseId": "0b08ce49-fd01-492e-bbfd-f920d53fa5f3",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-10T13:49:40.183Z",
+      "actualAmount": 854003.32
+    },
+    {
+      "id": "a8498bdb-4820-44e1-8632-2ff1b400b231",
+      "expenseId": "d83038a2-590d-490f-99de-a9641ca7f382",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-10T13:51:25.857Z",
+      "actualAmount": 483600
+    },
+    {
+      "id": "ff928d61-07ae-4f9c-8985-a87c8fda03eb",
+      "expenseId": "d7374e6a-0504-4908-864c-e33d642048c5",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-10T13:52:08.834Z",
+      "actualAmount": 378596.14
+    },
+    {
+      "id": "db5e7edd-4c0e-42d0-a7fe-dc34c8088a2c",
+      "expenseId": "ebfdc286-4199-4376-8610-e740a339b426",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-10T14:46:35.889Z",
+      "actualAmount": 169156.26
+    },
+    {
+      "id": "0286ebea-9556-461a-b1d4-1743145752dd",
+      "expenseId": "d2062af3-c0f3-4bbd-b6a0-378ede2c29ec",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-10T14:46:52.009Z",
+      "actualAmount": 170179.93
+    },
+    {
+      "id": "271404d9-73d1-4e33-a467-cdeb0f3e702e",
+      "expenseId": "16d2773d-d3a4-420b-9825-90ad009e6052",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-10T14:48:39.048Z",
+      "actualAmount": 42790
     }
   ],
   "incomes": [
@@ -117,8 +185,8 @@
     },
     {
       "id": "3c83dd93-92b7-4fd9-9459-611971df0904",
-      "name": "Facu - Visa sabri",
-      "bank": "Galicia",
+      "name": "Sabri - Visa",
+      "bank": "Santander",
       "closingDay": 4,
       "dueDay": 3,
       "last4Digits": "3838"
@@ -612,6 +680,166 @@
       "startMonth": 4,
       "startYear": 2026,
       "category": "Otros"
+    },
+    {
+      "id": "54561c98-9f3c-49dd-a39b-79c5791806d3",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "EASY WARNES",
+      "totalAmount": 4850,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "0e95e61a-473b-46b7-bd7b-37834c3729e2",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "EASY WARNES",
+      "totalAmount": 74185,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "7a0fbc67-bbb3-4186-9d2b-1c051ff2dcef",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "GASTOS DE SERVICIO EMINENT SAP",
+      "totalAmount": 57603.31,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "792ca317-d2a2-4443-83bf-254a256cfafa",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*MAX",
+      "totalAmount": 8122.73,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Entretenimiento"
+    },
+    {
+      "id": "ef594e86-b25c-453b-ba1e-681387ba356b",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "La Caja Seguro",
+      "totalAmount": 177618,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "53b2aa5c-fd17-4727-8ef5-03efc849797a",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*AUSOL",
+      "totalAmount": 1192.99,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Transporte"
+    },
+    {
+      "id": "79519876-4ffd-422d-b7af-d06fce761273",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*AUSOL",
+      "totalAmount": 994.15,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Transporte"
+    },
+    {
+      "id": "4e7dae54-a605-4d44-855c-20cd7fe4aed0",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*ALIMENTOSYBEBIDAS",
+      "totalAmount": 24400,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "38cb078d-79d9-4b29-8144-1e8454cc9c72",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*ALTORANCHO",
+      "totalAmount": 159980.04,
+      "installments": 3,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "419d548d-8d52-42e7-929b-eac013930610",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*EMOTYWALLDECO",
+      "totalAmount": 226642.5,
+      "installments": 3,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "db68bf32-ec0c-4808-a394-ca22d5044fd0",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "EASY WARNES",
+      "totalAmount": 79525,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "e26d53a0-cd69-40f0-bb16-9009461630dc",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "Boca",
+      "totalAmount": 21300,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Entretenimiento"
+    },
+    {
+      "id": "71287ba6-bda8-42c5-b317-6f2fecb7b01b",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*ESTACIONAMMED",
+      "totalAmount": 291.67,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "c915fae5-887c-44dd-9c82-bce32dea34cb",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*TORINONORTE",
+      "totalAmount": 73500,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "fa448cc7-b5bb-4cfa-a259-828d720d8bbc",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "E-PAGOS - Multa",
+      "totalAmount": 332250,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "6ea32554-698d-4deb-9f86-703d2ede71db",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*LAMADRILENASA",
+      "totalAmount": 33250.32,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
     }
   ],
   "cardPayments": [

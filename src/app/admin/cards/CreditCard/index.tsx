@@ -31,7 +31,7 @@ export async function CreditCard({ card, allCards, month }: Props) {
           />
         </div>
         <div className="flex-4 flex items-center justify-center">
-          <Card card={card} />
+          <Card key={card.id} card={card} />
         </div>
         <div className="flex-1 flex items-center justify-center">
           <IconButton

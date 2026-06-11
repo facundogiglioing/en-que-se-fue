@@ -44,7 +44,9 @@ export default async function CardsAdminPage({
   const activeCard = cardId ? cards.find((c) => c.id === cardId) : cards[0];
 
   const parsedOffset = Number(params.m ?? 0);
-  const monthOffset = Number.isFinite(parsedOffset) ? Math.trunc(parsedOffset) : 0;
+  const monthOffset = Number.isFinite(parsedOffset)
+    ? Math.trunc(parsedOffset)
+    : 0;
   const baseDate = new Date();
   const selectedDate = new Date(
     baseDate.getFullYear(),
@@ -62,12 +64,23 @@ export default async function CardsAdminPage({
   const editPurchaseId = params.edit;
 
   const transactions = activeCard
-    ? purchases.filter((p) => {
-      if (p.cardId !== activeCard.id) return false;
-      const startIndex = p.startYear * 12 + p.startMonth;
-      const endIndex = startIndex + Math.max(1, p.installments || 1) - 1;
-      return selectedIndex >= startIndex && selectedIndex <= endIndex;
-    })
+    ? purchases
+        .filter((p) => {
+          if (p.cardId !== activeCard.id) return false;
+          const startIndex = p.startYear * 12 + p.startMonth;
+          const endIndex = startIndex + Math.max(1, p.installments || 1) - 1;
+          return selectedIndex >= startIndex && selectedIndex <= endIndex;
+        })
+        .sort((a, b) => {
+          const aStartIndex = a.startYear * 12 + a.startMonth;
+          const bStartIndex = b.startYear * 12 + b.startMonth;
+
+          if (aStartIndex !== bStartIndex) {
+            return bStartIndex - aStartIndex;
+          }
+
+          return b.id.localeCompare(a.id);
+        })
     : [];
 
   const totalForPeriod = transactions.reduce(
@@ -79,8 +92,12 @@ export default async function CardsAdminPage({
   const currentCardId = activeCard?.id ?? "";
 
   return (
-    <Container>
-      <CreditCard card={activeCard || null} allCards={cards} month={monthOffset} />
+    <Container className="flex h-[calc(100dvh-141px)] flex-col gap-4 overflow-hidden">
+      <CreditCard
+        card={activeCard || null}
+        allCards={cards}
+        month={monthOffset}
+      />
       {/* ── DOTS Y AGREGAR NUEVA ──────────────────────────────────── */}
       <div className="flex flex-row gap-4">
         <Link
@@ -171,7 +188,7 @@ export default async function CardsAdminPage({
 
       {/* ── GRILLA DE MOVIMIENTOS ──────────────────────────────────── */}
       {activeCard && (
-        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div className="flex min-h-0 flex-1 flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
           {/* Header movimientos */}
           <div className="px-5 py-4 border-b border-slate-100 flex flex-wrap gap-3 justify-between items-center">
             <div>
@@ -305,7 +322,7 @@ export default async function CardsAdminPage({
 
           {/* Tabla */}
           {transactions.length === 0 ? (
-            <div className="py-14 text-center text-slate-400 italic text-sm">
+            <div className="flex flex-1 items-center justify-center px-5 py-14 text-center text-slate-400 italic text-sm">
               Sin movimientos para este período.
             </div>
           ) : (
@@ -322,7 +339,6 @@ export default async function CardsAdminPage({
           )}
         </div>
       )}
-
     </Container>
   );
 }
