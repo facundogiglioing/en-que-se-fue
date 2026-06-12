@@ -10,6 +10,7 @@ import { Container } from "@/components/Container";
 import { CATEGORIES } from "@/lib/constants";
 import { getDb } from "@/lib/db";
 import { CreditCard } from "./CreditCard";
+import { InstallmentAmountFields } from "./InstallmentAmountFields";
 import { Movimientos } from "./Movements/Movimientos";
 
 export const dynamic = "force-dynamic";
@@ -65,22 +66,22 @@ export default async function CardsAdminPage({
 
   const transactions = activeCard
     ? purchases
-        .filter((p) => {
-          if (p.cardId !== activeCard.id) return false;
-          const startIndex = p.startYear * 12 + p.startMonth;
-          const endIndex = startIndex + Math.max(1, p.installments || 1) - 1;
-          return selectedIndex >= startIndex && selectedIndex <= endIndex;
-        })
-        .sort((a, b) => {
-          const aStartIndex = a.startYear * 12 + a.startMonth;
-          const bStartIndex = b.startYear * 12 + b.startMonth;
+      .filter((p) => {
+        if (p.cardId !== activeCard.id) return false;
+        const startIndex = p.startYear * 12 + p.startMonth;
+        const endIndex = startIndex + Math.max(1, p.installments || 1) - 1;
+        return selectedIndex >= startIndex && selectedIndex <= endIndex;
+      })
+      .sort((a, b) => {
+        const aStartIndex = a.startYear * 12 + a.startMonth;
+        const bStartIndex = b.startYear * 12 + b.startMonth;
 
-          if (aStartIndex !== bStartIndex) {
-            return bStartIndex - aStartIndex;
-          }
+        if (aStartIndex !== bStartIndex) {
+          return bStartIndex - aStartIndex;
+        }
 
-          return b.id.localeCompare(a.id);
-        })
+        return b.id.localeCompare(a.id);
+      })
     : [];
 
   const totalForPeriod = transactions.reduce(
@@ -240,41 +241,37 @@ export default async function CardsAdminPage({
               </p>
               <form action={addPurchase} className="space-y-3">
                 <input type="hidden" name="cardId" value={activeCard.id} />
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                  <input
-                    name="description"
-                    placeholder="Descripción"
-                    required
-                    className="px-3 py-2 border border-slate-200 rounded-lg text-sm sm:col-span-2 focus:outline-none focus:ring-1 focus:ring-slate-400"
-                  />
-                  <input
-                    name="amount"
-                    type="number"
-                    step="0.01"
-                    placeholder="Monto total"
-                    required
-                    className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-                  />
-                  <input
-                    name="installments"
-                    type="number"
-                    placeholder="Cuotas"
-                    defaultValue={1}
-                    min={1}
-                    required
-                    className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-                  />
+                <div className="grid grid-cols-1 gap-3 lg:grid-cols-1">
+                  <div>
+                    <label
+                      htmlFor="description"
+                      className="text-xxs text-slate-500 mb-1 block"
+                    >
+                      Descripción
+                    </label>
+                    <input
+                      name="description"
+                      placeholder="Descripción"
+                      required
+                      className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 lg:col-span-6"
+                    />
+                  </div>
+
                 </div>
+                <InstallmentAmountFields
+                  defaultInstallments={1}
+                  className="lg:col-span-6"
+                />
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label
-                      htmlFor="add-start-period"
+                      htmlFor="start-period"
                       className="text-xxs text-slate-500 mb-1 block"
                     >
                       Primer cuota
                     </label>
                     <input
-                      id="add-start-period"
+                      id="start-period"
                       name="startPeriod"
                       type="month"
                       defaultValue={currentPeriod}

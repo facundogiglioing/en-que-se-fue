@@ -50,6 +50,25 @@ export function PaymentGrid({
   currentMonthIdx,
 }: Props) {
   const [modalData, setModalData] = useState<ModalData | null>(null);
+  const visibleWindowSize = 7;
+  const halfWindow = Math.floor(visibleWindowSize / 2);
+
+  let windowStart = Math.max(0, currentMonthIdx - halfWindow);
+  let windowEnd = Math.min(11, currentMonthIdx + halfWindow);
+
+  const currentWindowSize = windowEnd - windowStart + 1;
+  if (currentWindowSize < visibleWindowSize) {
+    const missing = visibleWindowSize - currentWindowSize;
+    const extraBefore = Math.min(windowStart, missing);
+    windowStart -= extraBefore;
+    const extraAfter = Math.min(11 - windowEnd, missing - extraBefore);
+    windowEnd += extraAfter;
+  }
+
+  const visibleMonthIndices = Array.from(
+    { length: windowEnd - windowStart + 1 },
+    (_, idx) => windowStart + idx,
+  );
 
   const findExpensePayment = (expenseId: string, monthIdx: number) =>
     payments.find(
@@ -104,8 +123,8 @@ export function PaymentGrid({
 
   return (
     <>
-      <div className="bg-white rounded-4xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white rounded-sm border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
+        <div className="max-h-[calc(100dvh-280px)] overflow-auto">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-slate-50/80 border-b border-slate-100">
@@ -114,15 +133,15 @@ export function PaymentGrid({
                     Concepto
                   </span>
                 </th>
-                {MONTH_NAMES.map((m, i) => (
+                {visibleMonthIndices.map((monthIdx) => (
                   <th
-                    key={m}
-                    className={`p-4 text-center min-w-25 ${i === currentMonthIdx ? "bg-blue-600/5" : ""}`}
+                    key={MONTH_NAMES[monthIdx]}
+                    className={`p-4 text-center min-w-25 ${monthIdx === currentMonthIdx ? "bg-blue-600/5" : ""}`}
                   >
                     <span
-                      className={`text-xxs font-black uppercase tracking-widest ${i === currentMonthIdx ? "text-blue-600" : "text-slate-400"}`}
+                      className={`text-xxs font-black uppercase tracking-widest ${monthIdx === currentMonthIdx ? "text-blue-600" : "text-slate-400"}`}
                     >
-                      {m}
+                      {MONTH_NAMES[monthIdx]}
                     </span>
                   </th>
                 ))}
@@ -132,7 +151,7 @@ export function PaymentGrid({
               {/* --- SECCIÓN: SERVICIOS --- */}
               <tr className="bg-slate-50/30">
                 <td
-                  colSpan={13}
+                  colSpan={visibleMonthIndices.length + 1}
                   className="px-5 py-2 font-black text-[9px] uppercase tracking-[0.3em] text-blue-600 border-y border-slate-100"
                 >
                   Gastos Fijos y Servicios
@@ -153,12 +172,12 @@ export function PaymentGrid({
                       </span>
                     </div>
                   </td>
-                  {MONTH_NAMES.map((m, i) => {
-                    const payment = findExpensePayment(exp.id, i);
+                  {visibleMonthIndices.map((monthIdx) => {
+                    const payment = findExpensePayment(exp.id, monthIdx);
                     const isPaid = !!payment;
-                    const isCurrent = i === currentMonthIdx;
-                    const isPast = i < currentMonthIdx;
-                    const isClickable = i <= currentMonthIdx;
+                    const isCurrent = monthIdx === currentMonthIdx;
+                    const isPast = monthIdx < currentMonthIdx;
+                    const isClickable = monthIdx <= currentMonthIdx;
                     const displayAmount =
                       isPaid && payment.actualAmount != null
                         ? payment.actualAmount
@@ -166,10 +185,10 @@ export function PaymentGrid({
 
                     return (
                       <td
-                        key={m}
-                        onClick={() => openExpenseModal(exp, i)}
+                        key={`${exp.id}-${monthIdx}`}
+                        onClick={() => openExpenseModal(exp, monthIdx)}
                         onKeyDown={(e) =>
-                          e.key === "Enter" && openExpenseModal(exp, i)
+                          e.key === "Enter" && openExpenseModal(exp, monthIdx)
                         }
                         className={[
                           "p-3 text-center transition-colors",
@@ -195,7 +214,7 @@ export function PaymentGrid({
                               </span>
                               {payment.actualAmount != null &&
                                 payment.actualAmount !==
-                                exp.estimatedAmount && (
+                                  exp.estimatedAmount && (
                                   <span className="text-[9px] font-bold text-emerald-400 line-through">
                                     $
                                     {exp.estimatedAmount?.toLocaleString(
@@ -232,7 +251,7 @@ export function PaymentGrid({
               {/* --- SECCIÓN: TARJETAS --- */}
               <tr className="bg-slate-50/30">
                 <td
-                  colSpan={13}
+                  colSpan={visibleMonthIndices.length + 1}
                   className="px-5 py-2 font-black text-[9px] uppercase tracking-[0.3em] text-green-600 border-y border-slate-100"
                 >
                   Tarjetas de Crédito
@@ -262,19 +281,23 @@ export function PaymentGrid({
                         </div>
                       </div>
                     </td>
-                    {MONTH_NAMES.map((m, i) => {
+                    {visibleMonthIndices.map((monthIdx) => {
                       let monthlyTotal = 0;
                       for (const p of transactionsList) {
-                        const info = getInstallmentInfo(p, i, currentYear);
+                        const info = getInstallmentInfo(
+                          p,
+                          monthIdx,
+                          currentYear,
+                        );
                         monthlyTotal += info ? info.amount : 0;
                       }
 
-                      const cardPayment = findCardPayment(card.id, i);
+                      const cardPayment = findCardPayment(card.id, monthIdx);
                       const isPaid = !!cardPayment;
-                      const isCurrent = i === currentMonthIdx;
-                      const isPast = i < currentMonthIdx;
+                      const isCurrent = monthIdx === currentMonthIdx;
+                      const isPast = monthIdx < currentMonthIdx;
                       const isClickable =
-                        i <= currentMonthIdx && monthlyTotal > 0;
+                        monthIdx <= currentMonthIdx && monthlyTotal > 0;
                       const displayAmount =
                         isPaid && cardPayment.actualAmount != null
                           ? cardPayment.actualAmount
@@ -282,11 +305,13 @@ export function PaymentGrid({
 
                       return (
                         <td
-                          key={m}
-                          onClick={() => openCardModal(card, i, monthlyTotal)}
+                          key={`${card.id}-${monthIdx}`}
+                          onClick={() =>
+                            openCardModal(card, monthIdx, monthlyTotal)
+                          }
                           onKeyDown={(e) =>
                             e.key === "Enter" &&
-                            openCardModal(card, i, monthlyTotal)
+                            openCardModal(card, monthIdx, monthlyTotal)
                           }
                           className={[
                             "p-3 text-center transition-colors",
@@ -316,7 +341,7 @@ export function PaymentGrid({
                                   </span>
                                   {cardPayment.actualAmount != null &&
                                     Math.round(cardPayment.actualAmount) !==
-                                    Math.round(monthlyTotal) && (
+                                      Math.round(monthlyTotal) && (
                                       <span className="text-[9px] font-bold text-emerald-400 line-through">
                                         $
                                         {monthlyTotal.toLocaleString("es-AR", {

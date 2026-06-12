@@ -55,6 +55,27 @@
       "category": "Salud",
       "dueDate": 19,
       "estimatedAmount": 170000
+    },
+    {
+      "id": "cb61f7f2-8108-4522-811e-55d20adfe41c",
+      "name": "ARCA - Cintia",
+      "category": "Servicios",
+      "dueDate": 10,
+      "estimatedAmount": 9006.78
+    },
+    {
+      "id": "69c7ad38-e4bb-4541-98bb-84a59c97b97d",
+      "name": "Servicio - Cintia",
+      "category": "Servicios",
+      "dueDate": 18,
+      "estimatedAmount": 90000
+    },
+    {
+      "id": "37c15102-a2ad-46ca-93d2-effc28b23080",
+      "name": "Personal - Todo",
+      "category": "Servicios",
+      "dueDate": 10,
+      "estimatedAmount": 79087.99
     }
   ],
   "payments": [
@@ -138,6 +159,15 @@
       "isPaid": true,
       "paidAt": "2026-06-10T14:48:39.048Z",
       "actualAmount": 42790
+    },
+    {
+      "id": "ae0a9d7d-08ee-4ae2-92eb-c6028fe1096e",
+      "expenseId": "37c15102-a2ad-46ca-93d2-effc28b23080",
+      "month": 5,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-06-11T21:28:18.313Z",
+      "actualAmount": 79087.99
     }
   ],
   "incomes": [
@@ -198,6 +228,15 @@
       "closingDay": 1,
       "dueDay": 22,
       "last4Digits": "4563"
+    },
+    {
+      "id": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "name": "Sabri - Master",
+      "bank": "Ciudad",
+      "last4Digits": null,
+      "closingDay": 25,
+      "dueDay": 5,
+      "order": null
     }
   ],
   "transactions": [
@@ -838,6 +877,26 @@
       "totalAmount": 33250.32,
       "installments": 1,
       "startMonth": 5,
+      "startYear": 2026,
+      "category": "Servicios"
+    },
+    {
+      "id": "dc35dc73-ad0a-421f-9427-5ce144ee2405",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "Mercado Pago",
+      "totalAmount": 18220,
+      "installments": 1,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "31939a29-6b44-4856-8310-93f4c5f47ecd",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "Ossira",
+      "totalAmount": 36799.98,
+      "installments": 3,
+      "startMonth": 4,
       "startYear": 2026,
       "category": "Servicios"
     }
