@@ -4,31 +4,31 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   defaultInstallments?: number;
+  defaultAmount?: number;
   className?: string;
 };
 
 export function InstallmentAmountFields({
   defaultInstallments = 1,
+  defaultAmount,
   className = "",
 }: Props) {
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const [installmentAmount, setInstallmentAmount] = useState("");
+  const [installmentAmount, setInstallmentAmount] = useState<string>(() => {
+    // Si hay un monto total, calcular el monto por cuota
+    if (defaultAmount && defaultInstallments) {
+      return (defaultAmount / defaultInstallments).toFixed(2);
+    }
+    return "";
+  });
   const [installmentsInput, setInstallmentsInput] = useState(
     String(defaultInstallments),
   );
 
   useEffect(() => {
-    const form = rootRef.current?.closest("form");
-    if (!form) return;
-
-    const handleSubmit = () => {
-      setInstallmentAmount("");
-      setInstallmentsInput(String(defaultInstallments));
-    };
-
-    form.addEventListener("submit", handleSubmit);
-    return () => form.removeEventListener("submit", handleSubmit);
-  }, [defaultInstallments]);
+    // El componente se reinicializa cuando defaultAmount o defaultInstallments cambian
+    // No hay nada especial que hacer en el submit
+  }, []);
 
   const parsedInstallments = Number.parseInt(installmentsInput, 10);
   const installments =
@@ -42,11 +42,12 @@ export function InstallmentAmountFields({
       !Number.isFinite(parsedInstallmentAmount) ||
       parsedInstallmentAmount <= 0
     ) {
-      return "";
+      // Si no hay monto por cuota, retornar el defaultAmount si existe
+      return defaultAmount ? defaultAmount.toFixed(2) : "";
     }
 
     return (parsedInstallmentAmount * installments).toFixed(2);
-  }, [installmentAmount, installments]);
+  }, [installmentAmount, installments, defaultAmount]);
 
   return (
     <div
@@ -90,7 +91,11 @@ export function InstallmentAmountFields({
           className="w-full min-w-0 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 text-slate-700"
         />
       </div>
-      <input name="amount" type="hidden" value={totalAmount} />
+      <input 
+        name="amount" 
+        type="hidden" 
+        value={totalAmount || defaultAmount?.toFixed(2) || 0} 
+      />
     </div>
   );
 }

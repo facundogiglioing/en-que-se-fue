@@ -10,9 +10,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-black: #222222;
+  --color-cell: #FBFBFB;
+  --font-sans: var(--font-plus-jakarta-sans);
   --font-mono: var(--font-roboto-mono);
   
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
   --text-xxs: 10px;
 }
 
@@ -26,6 +35,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-plus-jakarta-sans), sans-serif;
 }
 
 @layer base {

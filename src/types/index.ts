@@ -67,6 +67,7 @@ export interface Transaction {
   startMonth: number;
   startYear: number;
   category: CategoryName;
+  isRecurring?: boolean;
 }
 
 // Actualizamos el Schema Global

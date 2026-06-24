@@ -1,8 +1,6 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import {
-  addPurchase,
-  createCard,
   deletePurchase,
   updatePurchase,
 } from "@/actions/creditCard";
@@ -10,7 +8,8 @@ import { Container } from "@/components/Container";
 import { CATEGORIES } from "@/lib/constants";
 import { getDb } from "@/lib/db";
 import { CreditCard } from "./CreditCard";
-import { InstallmentAmountFields } from "./InstallmentAmountFields";
+import { FormCard } from "./FormCard";
+import { FormPurchase } from "./FormPurchase";
 import { Movimientos } from "./Movements/Movimientos";
 
 export const dynamic = "force-dynamic";
@@ -69,7 +68,10 @@ export default async function CardsAdminPage({
       .filter((p) => {
         if (p.cardId !== activeCard.id) return false;
         const startIndex = p.startYear * 12 + p.startMonth;
-        const endIndex = startIndex + Math.max(1, p.installments || 1) - 1;
+        // Si es recurrente, no tiene fin; si no, termina con las cuotas
+        const endIndex = p.isRecurring 
+          ? Infinity 
+          : startIndex + Math.max(1, p.installments || 1) - 1;
         return selectedIndex >= startIndex && selectedIndex <= endIndex;
       })
       .sort((a, b) => {
@@ -113,77 +115,13 @@ export default async function CardsAdminPage({
       {/* ── FORMULARIO NUEVA TARJETA ──────────────────────────────── */}
       {showNewCard && (
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-xs font-black uppercase tracking-widest text-slate-700 mb-4">
-            Nueva tarjeta
-          </h2>
-          <form action={createCard} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                name="name"
-                placeholder="Nombre (Ej: Visa Platinum)"
-                required
-                className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-              />
-              <input
-                name="bank"
-                placeholder="Banco"
-                required
-                className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="new-card-closing"
-                  className="text-xs text-slate-500 mb-1 block"
-                >
-                  Día de cierre
-                </label>
-                <input
-                  id="new-card-closing"
-                  name="closingDay"
-                  type="number"
-                  placeholder="Ej: 5"
-                  min={1}
-                  max={31}
-                  required
-                  className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="new-card-due"
-                  className="text-xs text-slate-500 mb-1 block"
-                >
-                  Día de vencimiento
-                </label>
-                <input
-                  id="new-card-due"
-                  name="dueDay"
-                  type="number"
-                  placeholder="Ej: 20"
-                  min={1}
-                  max={31}
-                  required
-                  className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
-                />
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <button
-                type="submit"
-                className="px-4 py-2 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 transition"
-              >
-                Guardar tarjeta
-              </button>
-              <Link
-                href={`/admin/cards?card=${currentCardId}&m=${monthOffset}`}
-                className="px-4 py-2 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition"
-              >
-                Cancelar
-              </Link>
-            </div>
-          </form>
+          <FormCard cardId={currentCardId} monthOffset={monthOffset} />
+          <Link
+            href={`/admin/cards?card=${currentCardId}&m=${monthOffset}`}
+            className="mt-4 px-4 py-2 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition inline-block"
+          >
+            Cancelar
+          </Link>
         </div>
       )}
 
@@ -239,81 +177,12 @@ export default async function CardsAdminPage({
               <p className="text-xxs font-black uppercase tracking-widest text-slate-500 mb-3">
                 Nuevo movimiento
               </p>
-              <form action={addPurchase} className="space-y-3">
-                <input type="hidden" name="cardId" value={activeCard.id} />
-                <div className="grid grid-cols-1 gap-3 lg:grid-cols-1">
-                  <div>
-                    <label
-                      htmlFor="description"
-                      className="text-xxs text-slate-500 mb-1 block"
-                    >
-                      Descripción
-                    </label>
-                    <input
-                      name="description"
-                      placeholder="Descripción"
-                      required
-                      className="px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-slate-400 lg:col-span-6"
-                    />
-                  </div>
-
-                </div>
-                <InstallmentAmountFields
-                  defaultInstallments={1}
-                  className="lg:col-span-6"
-                />
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label
-                      htmlFor="start-period"
-                      className="text-xxs text-slate-500 mb-1 block"
-                    >
-                      Primer cuota
-                    </label>
-                    <input
-                      id="start-period"
-                      name="startPeriod"
-                      type="month"
-                      defaultValue={currentPeriod}
-                      required
-                      className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="add-category"
-                      className="text-xxs text-slate-500 mb-1 block"
-                    >
-                      Categoría
-                    </label>
-                    <select
-                      id="add-category"
-                      name="category"
-                      className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
-                    >
-                      {categoryNames.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex items-end gap-2">
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 transition"
-                    >
-                      Guardar
-                    </button>
-                    <Link
-                      href={`/admin/cards?card=${activeCard.id}&m=${monthOffset}`}
-                      className="px-4 py-2 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition"
-                    >
-                      Cancelar
-                    </Link>
-                  </div>
-                </div>
-              </form>
+              <FormPurchase
+                activeCardId={activeCard.id}
+                categoryNames={categoryNames}
+                monthOffset={monthOffset}
+                currentPeriod={currentPeriod}
+              />
             </div>
           )}
 
@@ -332,6 +201,7 @@ export default async function CardsAdminPage({
               activeCardId={activeCard.id}
               categoryNames={categoryNames}
               month={monthOffset}
+              currentPeriod={currentPeriod}
             />
           )}
         </div>

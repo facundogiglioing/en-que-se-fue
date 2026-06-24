@@ -10,6 +10,7 @@ type Props = {
   activeCardId: string;
   categoryNames: string[];
   month: number;
+  currentPeriod: string;
 };
 
 export function Movimientos(props: Props) {

@@ -97,6 +97,7 @@ export async function addPurchase(formData: FormData) {
     startMonth,
     startYear,
     category: (formData.get("category") as CategoryName) || "Otros",
+    isRecurring: formData.get("isRecurring") === "on",
   };
 
   if (!db.data.transactions) db.data.transactions = [];
@@ -118,6 +119,7 @@ export async function updatePurchase(formData: FormData) {
   const db = await getDb();
   const id = formData.get("id") as string;
   const cardId = formData.get("cardId") as string;
+  const monthOffset = formData.get("monthOffset") as string;
 
   const startPeriod = formData.get("startPeriod") as string;
   let startMonth = new Date().getMonth();
@@ -144,6 +146,7 @@ export async function updatePurchase(formData: FormData) {
       (formData.get("category") as CategoryName) ||
       db.data.transactions[index].category ||
       "Otros",
+    isRecurring: formData.get("isRecurring") === "on",
   };
 
   const cookieStore = await cookies();
@@ -156,6 +159,8 @@ export async function updatePurchase(formData: FormData) {
   await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
+  
+  redirect(`/admin/cards?card=${cardId}&m=${monthOffset}`);
 }
 
 export async function deletePurchase(id: string) {

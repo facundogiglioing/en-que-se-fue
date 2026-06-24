@@ -764,11 +764,12 @@
       "id": "ef594e86-b25c-453b-ba1e-681387ba356b",
       "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
       "description": "La Caja Seguro",
-      "totalAmount": 177618,
+      "totalAmount": 177000,
       "installments": 1,
       "startMonth": 5,
       "startYear": 2026,
-      "category": "Servicios"
+      "category": "Servicios",
+      "isRecurring": true
     },
     {
       "id": "53b2aa5c-fd17-4727-8ef5-03efc849797a",
@@ -838,7 +839,8 @@
       "installments": 1,
       "startMonth": 5,
       "startYear": 2026,
-      "category": "Entretenimiento"
+      "category": "Entretenimiento",
+      "isRecurring": true
     },
     {
       "id": "71287ba6-bda8-42c5-b317-6f2fecb7b01b",
