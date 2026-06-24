@@ -1,11 +1,15 @@
-import { Plus } from "lucide-react";
 import { CATEGORIES } from "@/lib/constants";
 
-export function CategoryIcon({ category }: { category: string }) {
+type CategoryIconProps = {
+  category: string;
+  size: number;
+};
+
+export function CategoryIcon({ category, size = 18 }: CategoryIconProps) {
   const categoryData = CATEGORIES.find((c) => c.name === category);
   if (!categoryData) return null;
 
   const Icon = categoryData.icon;
 
-  return <Icon size={18} />;
+  return <Icon size={size} />;
 }

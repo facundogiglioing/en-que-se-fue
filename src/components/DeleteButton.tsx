@@ -8,7 +8,7 @@ export function DeleteButton({
   return (
     <button
       type="submit"
-      className="p-2 text-slate-300 hover:text-red-500 transition"
+      className="p-2 text-slate-300 hover:text-red-500 transition cursor-pointer"
     >
       <Trash2 size={size} />
     </button>

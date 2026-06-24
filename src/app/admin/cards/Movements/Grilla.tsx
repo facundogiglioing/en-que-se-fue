@@ -1,5 +1,8 @@
 import { Infinity as InfinityIcon, Plus } from "lucide-react";
-import Link from "next/link";
+import type Link from "next/link";
+import { CategoryIcon } from "@/components/CategoryIcon";
+import { DeleteButton } from "@/components/DeleteButton";
+import { EditButton } from "@/components/EditButton";
 import { CATEGORIES } from "@/lib/constants";
 import type { Transaction } from "@/types";
 import { FormPurchase } from "../FormPurchase";
@@ -44,8 +47,6 @@ export function Grilla({
             const startIndex = p.startYear * 12 + p.startMonth;
             const currentInstallment = selectedIndex - startIndex + 1;
             const installmentAmount = p.totalAmount / installments;
-            const CategoryIcon =
-              CATEGORIES.find((c) => c.name === p.category)?.icon || Plus;
             const isEditing = editPurchaseId === p.id;
 
             if (isEditing) {
@@ -65,7 +66,10 @@ export function Grilla({
             }
 
             return (
-              <tr key={p.id} className="group hover:bg-slate-50/60 transition text-slate-500">
+              <tr
+                key={p.id}
+                className="group hover:bg-slate-50/60 transition text-slate-500"
+              >
                 <td className="px-5 py-4 flex items-center justify-between gap-2">
                   <div>
                     <p className="font-bold text-slate-700 text-sm flex items-center gap-2">
@@ -83,7 +87,7 @@ export function Grilla({
                 </td>
                 <td className="text-sm">
                   <span className="inline-flex items-center gap-2">
-                    <CategoryIcon size={14} className="text-slate-400" />
+                    <CategoryIcon size={14} category={p.category} />
                     {p.category}
                   </span>
                 </td>
@@ -109,24 +113,18 @@ export function Grilla({
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
-                    <Link
+                    <EditButton
                       href={`/admin/cards?card=${activeCardId}&m=${month}&edit=${p.id}`}
-                      className="px-2 py-1 text-xxs font-bold text-slate-600 border border-slate-200 rounded-md hover:bg-slate-100 transition"
-                    >
-                      Editar
-                    </Link>
+                    />
+
                     <form
                       action={async () => {
                         "use server";
                         await deletePurchase(p.id);
                       }}
                     >
-                      <button
-                        type="submit"
-                        className="px-2 py-1 text-xxs font-bold text-red-500 border border-red-200 rounded-md hover:bg-red-50 transition"
-                      >
-                        Eliminar
-                      </button>
+                      <DeleteButton />
+
                     </form>
                   </div>
                 </td>
