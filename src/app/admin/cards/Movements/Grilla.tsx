@@ -1,32 +1,23 @@
-import { Infinity as InfinityIcon, Plus } from "lucide-react";
-import type Link from "next/link";
+import { Infinity as InfinityIcon } from "lucide-react";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { DeleteButton } from "@/components/DeleteButton";
 import { EditButton } from "@/components/EditButton";
-import { CATEGORIES } from "@/lib/constants";
 import type { Transaction } from "@/types";
-import { FormPurchase } from "../FormPurchase";
 
 type Props = {
   transactions: Transaction[];
   selectedIndex: number;
-  editPurchaseId?: string;
   deletePurchase: (id: string) => Promise<void>;
   activeCardId: string;
-  categoryNames: string[];
   month: number;
-  currentPeriod: string;
 };
 
 export function Grilla({
   transactions,
   selectedIndex,
-  editPurchaseId,
   deletePurchase,
   activeCardId,
-  categoryNames,
   month,
-  currentPeriod,
 }: Props) {
   return (
     <div className="min-h-0 flex-1 overflow-auto">
@@ -47,23 +38,6 @@ export function Grilla({
             const startIndex = p.startYear * 12 + p.startMonth;
             const currentInstallment = selectedIndex - startIndex + 1;
             const installmentAmount = p.totalAmount / installments;
-            const isEditing = editPurchaseId === p.id;
-
-            if (isEditing) {
-              return (
-                <tr key={p.id} className="bg-slate-50">
-                  <td colSpan={6} className="px-5 py-4">
-                    <FormPurchase
-                      activeCardId={activeCardId}
-                      categoryNames={categoryNames}
-                      transaction={p}
-                      monthOffset={month}
-                      currentPeriod={currentPeriod}
-                    />
-                  </td>
-                </tr>
-              );
-            }
 
             return (
               <tr

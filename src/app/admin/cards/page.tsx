@@ -2,9 +2,9 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import {
   deletePurchase,
-  updatePurchase,
 } from "@/actions/creditCard";
 import { Container } from "@/components/Container";
+import { Sheet } from "@/components/Sheet";
 import { CATEGORIES } from "@/lib/constants";
 import { getDb } from "@/lib/db";
 import { CreditCard } from "./CreditCard";
@@ -85,6 +85,13 @@ export default async function CardsAdminPage({
         return b.id.localeCompare(a.id);
       })
     : [];
+
+  const editingTransaction =
+    editPurchaseId && activeCard
+      ? purchases.find(
+        (p) => p.id === editPurchaseId && p.cardId === activeCard.id,
+      )
+      : undefined;
 
   const totalForPeriod = transactions.reduce(
     (acc, p) => acc + p.totalAmount / Math.max(1, p.installments || 1),
@@ -195,16 +202,28 @@ export default async function CardsAdminPage({
             <Movimientos
               transactions={transactions}
               selectedIndex={selectedIndex}
-              editPurchaseId={editPurchaseId}
-              updatePurchase={updatePurchase}
               deletePurchase={deletePurchase}
               activeCardId={activeCard.id}
-              categoryNames={categoryNames}
               month={monthOffset}
-              currentPeriod={currentPeriod}
             />
           )}
         </div>
+      )}
+
+      {activeCard && editingTransaction && (
+        <Sheet
+          title="Editar movimiento"
+          description="Actualizá el detalle de la compra y guardá los cambios."
+          closeHref={`/admin/cards?card=${activeCard.id}&m=${monthOffset}`}
+        >
+          <FormPurchase
+            activeCardId={activeCard.id}
+            categoryNames={categoryNames}
+            transaction={editingTransaction}
+            monthOffset={monthOffset}
+            currentPeriod={currentPeriod}
+          />
+        </Sheet>
       )}
     </Container>
   );
