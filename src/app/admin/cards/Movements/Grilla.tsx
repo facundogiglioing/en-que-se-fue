@@ -35,10 +35,10 @@ export function Grilla({
           <tr className="sticky top-0 bg-cell text-black text-sm border-b border-slate-100">
             <th className="px-5 py-3">Descripción</th>
             <th>Categoría</th>
-            <th className="px-5 py-3">Inicio</th>
-            <th className="px-5 py-3">Cuotas</th>
-            <th className="px-5 py-3 text-right">Monto cuota</th>
-            <th className="px-5 py-3" />
+            <th className="px-2 py-3">Inicio</th>
+            <th className="px-2 py-3 text-center">Cuotas</th>
+            <th className="px-2 py-3 text-right">Monto cuota</th>
+            <th />
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-50">
@@ -91,10 +91,10 @@ export function Grilla({
                     {p.category}
                   </span>
                 </td>
-                <td className="px-5 py-4 text-xs font-medium text-slate-500">
+                <td className="px-2 py-4 text-xs font-medium text-slate-500">
                   {p.startMonth + 1}/{p.startYear}
                 </td>
-                <td className="px-5 py-4">
+                <td className="px-2 py-4 text-center">
                   {p.isRecurring ? (
                     <span className="px-2 py-1 bg-blue-50 text-blue-500 rounded-md text-xxs font-bold uppercase">
                       Mensual
@@ -105,13 +105,13 @@ export function Grilla({
                     </span>
                   )}
                 </td>
-                <td className="px-5 py-4 text-right font-mono font-bold text-slate-900 text-sm">
+                <td className="px-2 py-4 text-right font-mono text-black text-sm">
                   $
                   {installmentAmount.toLocaleString("es-AR", {
                     minimumFractionDigits: 2,
                   })}
                 </td>
-                <td className="px-5 py-4">
+                <td>
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
                     <EditButton
                       href={`/admin/cards?card=${activeCardId}&m=${month}&edit=${p.id}`}

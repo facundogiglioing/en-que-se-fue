@@ -69,8 +69,8 @@ export default async function CardsAdminPage({
         if (p.cardId !== activeCard.id) return false;
         const startIndex = p.startYear * 12 + p.startMonth;
         // Si es recurrente, no tiene fin; si no, termina con las cuotas
-        const endIndex = p.isRecurring 
-          ? Infinity 
+        const endIndex = p.isRecurring
+          ? Infinity
           : startIndex + Math.max(1, p.installments || 1) - 1;
         return selectedIndex >= startIndex && selectedIndex <= endIndex;
       })
@@ -127,7 +127,7 @@ export default async function CardsAdminPage({
 
       {/* ── GRILLA DE MOVIMIENTOS ──────────────────────────────────── */}
       {activeCard && (
-        <div className="flex min-h-0 flex-1 flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div className="flex min-h-0 flex-1 flex-col bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
           {/* Header movimientos */}
           <div className="px-5 py-4 border-b border-slate-100 flex flex-wrap gap-3 justify-between items-center">
             <div>
