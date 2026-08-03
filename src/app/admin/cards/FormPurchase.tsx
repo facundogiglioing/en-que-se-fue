@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { addPurchase, updatePurchase } from "@/actions/creditCard";
+import { Input } from "@/components/base/Input";
+import { InputThousands } from "@/components/base/InputWithMask";
+import { Categories } from "@/components/Categories";
 import type { Transaction } from "@/types";
 import { InstallmentAmountFields } from "./InstallmentAmountFields";
 
@@ -13,7 +16,6 @@ type Props = {
 
 export function FormPurchase({
   activeCardId,
-  categoryNames,
   transaction,
   monthOffset = 0,
   currentPeriod,
@@ -38,21 +40,34 @@ export function FormPurchase({
       <input type="hidden" name="cardId" value={activeCardId} />
       <input type="hidden" name="monthOffset" value={monthOffset} />
 
-      <div className="grid grid-cols-1 gap-3">
-        <div>
-          <label
-            htmlFor="description"
-            className="text-xxs text-slate-500 mb-1 block"
-          >
-            Descripción
-          </label>
-          <input
-            id="description"
+      <div className="grid grid-cols-6 gap-6">
+        <div className="col-span-6 ">
+          <Input
             name="description"
+            label="Descripción"
             placeholder="Descripción"
             defaultValue={transaction?.description}
             required
-            className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
+          />
+        </div>
+        <div className="md:col-span-3">
+          <InputThousands
+            name="installmentAmount"
+            label="Monto por cuota"
+            defaultValue={0}
+            required
+          />
+        </div>
+        <div className="">
+          <Input
+            name="installments"
+            label="Cuotas"
+            min={1}
+            max={24}
+            maxLength={2}
+            type="number"
+            defaultValue={transaction?.installments ?? 1}
+            required
           />
         </div>
       </div>
@@ -62,14 +77,8 @@ export function FormPurchase({
         defaultAmount={transaction?.totalAmount}
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label
-            htmlFor="start-period"
-            className="text-xxs text-slate-500 mb-1 block"
-          >
-            Primer cuota
-          </label>
           <input
             id="start-period"
             name="startPeriod"
@@ -80,24 +89,7 @@ export function FormPurchase({
           />
         </div>
         <div>
-          <label
-            htmlFor="category"
-            className="text-xxs text-slate-500 mb-1 block"
-          >
-            Categoría
-          </label>
-          <select
-            id="category"
-            name="category"
-            defaultValue={transaction?.category}
-            className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
-          >
-            {categoryNames.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          <Categories value={transaction?.category} />
         </div>
         <div className="flex items-end">
           <label className="flex items-center gap-2 cursor-pointer">

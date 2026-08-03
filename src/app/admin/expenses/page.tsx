@@ -7,9 +7,9 @@ import {
   getExpenses,
   updateExpense,
 } from "@/actions/expense";
-import { Categories } from "@/components/Categories";
+import { Categories } from "@/components/base/Categories";
+import { Input } from "@/components/base/Input";
 import { DayPicker } from "@/components/DayPicker";
-import { Input } from "@/components/Input";
 import { CATEGORIES } from "@/lib/constants";
 
 export default async function ExpensesPage({
@@ -80,14 +80,13 @@ export default async function ExpensesPage({
                 defaultValue={editingExpense?.estimatedAmount}
                 required
               />
-
             </div>
 
             <button
               type="submit" // <--- Explícito
               className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${editingExpense
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-slate-900 text-white hover:bg-slate-800"
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-slate-900 text-white hover:bg-slate-800"
                 }`}
             >
               {editingExpense ? "Actualizar Cambios" : "Guardar Gasto"}
@@ -108,8 +107,8 @@ export default async function ExpensesPage({
                 <div
                   key={expense.id}
                   className={`group bg-white border p-4 rounded-xl flex items-center justify-between transition-all ${isEditing
-                    ? "border-blue-500 ring-2 ring-blue-500/10 shadow-lg"
-                    : "border-slate-200 hover:shadow-md"
+                      ? "border-blue-500 ring-2 ring-blue-500/10 shadow-lg"
+                      : "border-slate-200 hover:shadow-md"
                     }`}
                 >
                   <div className="flex items-center gap-4">
@@ -161,8 +160,6 @@ export default async function ExpensesPage({
             })}
           </div>
         </div>
-
-
       </section>
     </div>
   );

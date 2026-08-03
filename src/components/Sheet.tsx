@@ -81,20 +81,22 @@ export function Sheet({
       <style>{`
         @keyframes sheet-in-right {
           from {
+            opacity: 0;
             transform: translateX(500px);
           }
           to {
+            opacity: 1; 
             transform: translateX(0);
           }
         }
 
         @keyframes sheet-in-left {
           from {
-            
+            opacity: 0;
             transform: translateX(-32px);
           }
           to {
-            
+            opacity: 1;
             transform: translateX(0);
           }
         }

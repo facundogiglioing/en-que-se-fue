@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 type Props = {
   defaultInstallments?: number;
@@ -24,11 +24,6 @@ export function InstallmentAmountFields({
   const [installmentsInput, setInstallmentsInput] = useState(
     String(defaultInstallments),
   );
-
-  useEffect(() => {
-    // El componente se reinicializa cuando defaultAmount o defaultInstallments cambian
-    // No hay nada especial que hacer en el submit
-  }, []);
 
   const parsedInstallments = Number.parseInt(installmentsInput, 10);
   const installments =
@@ -91,10 +86,10 @@ export function InstallmentAmountFields({
           className="w-full min-w-0 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 text-slate-700"
         />
       </div>
-      <input 
-        name="amount" 
-        type="hidden" 
-        value={totalAmount || defaultAmount?.toFixed(2) || 0} 
+      <input
+        name="amount"
+        type="hidden"
+        value={totalAmount || defaultAmount?.toFixed(2) || 0}
       />
     </div>
   );

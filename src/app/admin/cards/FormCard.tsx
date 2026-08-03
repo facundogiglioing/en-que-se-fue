@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { createCard, updateCardDetails } from "@/actions/creditCard";
 import { Button } from "@/components/Button";
-import { Input } from "@/components/Input";
+import { Input } from "@/components/base/Input";
 import { Panel } from "@/components/Panel";
 import type { CreditCard } from "@/types";
 

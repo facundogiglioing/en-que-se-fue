@@ -758,7 +758,8 @@
       "installments": 1,
       "startMonth": 5,
       "startYear": 2026,
-      "category": "Entretenimiento"
+      "category": "Entretenimiento",
+      "isRecurring": true
     },
     {
       "id": "ef594e86-b25c-453b-ba1e-681387ba356b",
@@ -870,7 +871,8 @@
       "installments": 1,
       "startMonth": 5,
       "startYear": 2026,
-      "category": "Servicios"
+      "category": "Otros",
+      "isRecurring": false
     },
     {
       "id": "6ea32554-698d-4deb-9f86-703d2ede71db",
@@ -901,6 +903,17 @@
       "startMonth": 4,
       "startYear": 2026,
       "category": "Servicios"
+    },
+    {
+      "id": "0fb9f2be-366d-4651-a3de-00c3bb8ffe8a",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "Gasto del mes",
+      "totalAmount": 537341.69,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Servicios",
+      "isRecurring": false
     }
   ],
   "cardPayments": [

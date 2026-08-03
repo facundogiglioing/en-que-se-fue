@@ -7,7 +7,7 @@ type Props = {
 export function Categories({ value }: Props) {
   return (
     <div>
-      <span className="block text-xs font-bold uppercase text-slate-500 mb-2">
+      <span className="block text-xxs uppercase text-slate-500 mb-2">
         Categoría
       </span>
       <div className="grid grid-cols-4 gap-2">
