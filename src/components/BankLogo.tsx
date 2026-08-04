@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 const BANK_LOGOS = {
-  ciudad: "/assets/bank-logos/logo-banco-ciudad.jpg",
+  ciudad: "/assets/bank-logos/logo-banco-ciudad.png",
   santander: "/assets/bank-logos/logo-banco-santander.png",
-  galicia: "/assets/bank-logos/logo-banco-galicia.svg",
+  galicia: "/assets/bank-logos/logo-banco-galicia.png",
 } as const;
 
 const normalizeBankName = (bankName: string): string => {
