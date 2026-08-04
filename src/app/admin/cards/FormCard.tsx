@@ -1,9 +1,7 @@
-
 import Link from "next/link";
 import { createCard, updateCardDetails } from "@/actions/creditCard";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/base/Button";
 import { Input } from "@/components/base/Input";
-import { Panel } from "@/components/Panel";
 import type { CreditCard } from "@/types";
 
 type Props = {
@@ -19,18 +17,31 @@ export function FormCard({ card, cardId, monthOffset = 0 }: Props) {
   const submitLabel = isEditing ? "Actualizar Tarjeta" : "Guardar Tarjeta";
 
   return (
-    <Panel title={title}>
-      <form action={action}>
+    <div className="space-y-4">
+      <div>
+        <h3 className="text-sm font-black uppercase tracking-widest text-slate-700">
+          {title}
+        </h3>
+        <p className="mt-1 text-xs text-slate-500">
+          {isEditing
+            ? "Actualizá los datos de la tarjeta seleccionada."
+            : "Agregá una tarjeta para empezar a registrar movimientos."}
+        </p>
+      </div>
+
+      <form action={action} className="space-y-4">
         {isEditing && <input type="hidden" name="cardId" value={card.id} />}
 
         <div className="space-y-3">
           <Input
+            label="Nombre"
             name="name"
             placeholder="Nombre (Ej: Visa Platinum)"
             defaultValue={card?.name}
             required
           />
           <Input
+            label="Banco"
             name="bank"
             placeholder="Banco (Ej: Santander)"
             defaultValue={card?.bank}
@@ -60,19 +71,19 @@ export function FormCard({ card, cardId, monthOffset = 0 }: Props) {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button type="submit" variant="primary">{submitLabel}</Button>
-            {isEditing && cardId && (
-              <Link
-                href={`/admin/cards?card=${cardId}&m=${monthOffset}`}
-                className="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-semibold rounded-lg hover:bg-slate-50 transition"
-              >
-                Cancelar
-              </Link>
-            )}
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" variant="primary">
+              {submitLabel}
+            </Button>
+            <Link
+              href={`/admin/cards?card=${cardId ?? ""}&m=${monthOffset}`}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
+            >
+              Cancelar
+            </Link>
           </div>
         </div>
       </form>
-    </Panel>
+    </div>
   );
 }

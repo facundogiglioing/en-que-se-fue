@@ -925,6 +925,15 @@
       "isPaid": true,
       "paidAt": "2026-05-06T18:16:31.809Z",
       "actualAmount": 74039.41
+    },
+    {
+      "id": "21644880-6e43-4ffd-8c09-23965636be68",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "month": 7,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-08-03T19:57:30.616Z",
+      "actualAmount": 537341.69
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { Edit3, Plus, Trash2, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
@@ -7,9 +7,11 @@ import {
   getExpenses,
   updateExpense,
 } from "@/actions/expense";
-import { Categories } from "@/components/base/Categories";
+
 import { Input } from "@/components/base/Input";
+import { Categories } from "@/components/Categories";
 import { DayPicker } from "@/components/DayPicker";
+import { EntityListItem } from "@/components/EntityListItem";
 import { CATEGORIES } from "@/lib/constants";
 
 export default async function ExpensesPage({
@@ -84,10 +86,11 @@ export default async function ExpensesPage({
 
             <button
               type="submit" // <--- Explícito
-              className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${editingExpense
+              className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${
+                editingExpense
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-slate-900 text-white hover:bg-slate-800"
-                }`}
+              }`}
             >
               {editingExpense ? "Actualizar Cambios" : "Guardar Gasto"}
             </button>
@@ -104,58 +107,19 @@ export default async function ExpensesPage({
               const isEditing = expense.id === edit;
 
               return (
-                <div
+                <EntityListItem
                   key={expense.id}
-                  className={`group bg-white border p-4 rounded-xl flex items-center justify-between transition-all ${isEditing
-                      ? "border-blue-500 ring-2 ring-blue-500/10 shadow-lg"
-                      : "border-slate-200 hover:shadow-md"
-                    }`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`p-2 rounded-lg ${isEditing ? "bg-blue-50 text-blue-600" : "bg-slate-50 text-slate-600"}`}
-                    >
-                      <Icon size={20} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-slate-900">
-                        {expense.name}
-                      </h3>
-                      <p className="text-xs text-slate-400 uppercase font-medium">
-                        {expense.category} • Día {expense.dueDate}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-sm font-semibold text-slate-600 mr-2">
-                      ${expense.estimatedAmount?.toLocaleString()}
-                    </span>
-
-                    {/* Botón Editar (Solo link con query) */}
-                    <Link
-                      href={`/admin/expenses?edit=${expense.id}`}
-                      className="p-2 text-slate-400 hover:text-blue-600 transition"
-                    >
-                      <Edit3 size={18} />
-                    </Link>
-
-                    {/* Botón Eliminar */}
-                    <form
-                      action={async () => {
-                        "use server";
-                        await deleteExpense(expense.id);
-                      }}
-                    >
-                      <button
-                        type="submit"
-                        className="p-2 text-slate-300 hover:text-red-500 transition"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </form>
-                  </div>
-                </div>
+                  title={expense.name}
+                  subtitle={`${expense.category} • Día ${expense.dueDate}`}
+                  icon={<Icon size={20} />}
+                  value={`$${expense.estimatedAmount?.toLocaleString()}`}
+                  isActive={isEditing}
+                  editHref={`/admin/expenses?edit=${expense.id}`}
+                  onDelete={async () => {
+                    "use server";
+                    await deleteExpense(expense.id);
+                  }}
+                />
               );
             })}
           </div>

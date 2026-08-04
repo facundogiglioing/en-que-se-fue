@@ -1,5 +1,3 @@
-
-
 interface CardPurchase {
   startYear: number;
   startMonth: number;
@@ -29,17 +27,16 @@ export function getInstallmentInfo(
   return null;
 }
 
-
 /**
  * Formatea un número con separadores de miles
  * Ej: 1000 → "1.000", 1000000 → "1.000.000"
  */
 export function formatNumberWithThousandsSeparator(value: string): string {
   // Eliminar caracteres no numéricos excepto el punto decimal
-  const numericValue = value.replace(/\D/g, '');
+  const numericValue = value.replace(/\D/g, "");
 
   // Aplicar separador de miles cada 3 dígitos
-  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
 /**
@@ -47,7 +44,7 @@ export function formatNumberWithThousandsSeparator(value: string): string {
  * Ej: "1.000" → "1000", "1.000.000" → "1000000"
  */
 export function removeThousandsSeparators(value: string): string {
-  return value.replace(/\./g, '');
+  return value.replace(/\./g, "");
 }
 
 /**
@@ -56,9 +53,9 @@ export function removeThousandsSeparators(value: string): string {
  */
 export function formatNumberWithDecimals(value: string): string {
   // Eliminar caracteres no numéricos
-  let numericValue = value.replace(/\D/g, '');
+  let numericValue = value.replace(/\D/g, "");
 
-  if (numericValue.length === 0) return '0,00';
+  if (numericValue.length === 0) return "0,00";
 
   // Asegurar que tenga al menos 3 caracteres (para los 2 decimales)
   while (numericValue.length < 3) {
@@ -70,10 +67,10 @@ export function formatNumberWithDecimals(value: string): string {
   const decimalPart = numericValue.slice(-2);
 
   // Remover ceros al principio del integer part, manteniendo al menos un dígito
-  const trimmedInteger = integerPart.replace(/^0+(?=\d)/, '') || '0';
+  const trimmedInteger = integerPart.replace(/^0+(?=\d)/, "") || "0";
 
   // Aplicar separador de miles al entero
-  const formattedInteger = trimmedInteger.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const formattedInteger = trimmedInteger.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   return `${formattedInteger},${decimalPart}`;
 }
@@ -84,7 +81,7 @@ export function formatNumberWithDecimals(value: string): string {
  */
 export function removeDecimalFormatting(value: string): string {
   // Remover puntos (separadores de miles) y reemplazar coma por nada
-  return value.replace(/\./g, '').replace(/,/g, '');
+  return value.replace(/\./g, "").replace(/,/g, "");
 }
 
 /**
@@ -93,7 +90,7 @@ export function removeDecimalFormatting(value: string): string {
  * Ej: 55545454 → "5554 5454", 5554545 → "555 4545"
  */
 export function formatPhoneNumber(value: string): string {
-  const numericValue = value.replace(/\D/g, '').slice(0, 8);
+  const numericValue = value.replace(/\D/g, "").slice(0, 8);
 
   if (numericValue.length <= 4) {
     return numericValue;
@@ -112,7 +109,7 @@ export function formatPhoneNumber(value: string): string {
  * Ej: "5554 5454" → "55545454", "555 4545" → "5554545"
  */
 export function removePhoneNumberFormatting(value: string): string {
-  return value.replace(/\s/g, '');
+  return value.replace(/\s/g, "");
 }
 
 /**
@@ -120,7 +117,7 @@ export function removePhoneNumberFormatting(value: string): string {
  * Ej: "15/01/2024" → "15012024", "15/01" → "1501"
  */
 export function removeDateFormatting(value: string): string {
-  return value.replace(/\//g, '');
+  return value.replace(/\//g, "");
 }
 
 /**
@@ -153,7 +150,7 @@ export function isValidDate(value: string): boolean {
  * Ej: 20123456784 → "20-12345678-4"
  */
 export function formatCUIT(value: string): string {
-  const numericValue = value.replace(/\D/g, '').slice(0, 11);
+  const numericValue = value.replace(/\D/g, "").slice(0, 11);
 
   if (numericValue.length <= 2) {
     return numericValue;
@@ -165,7 +162,7 @@ export function formatCUIT(value: string): string {
 
   return `${numericValue.slice(0, 2)}-${numericValue.slice(
     2,
-    10
+    10,
   )}-${numericValue.slice(10)}`;
 }
 
@@ -174,6 +171,5 @@ export function formatCUIT(value: string): string {
  * Ej: "20-12345678-4" → "20123456784"
  */
 export function removeCUITFormatting(value: string): string {
-  return value.replace(/\D/g, '');
+  return value.replace(/\D/g, "");
 }
-

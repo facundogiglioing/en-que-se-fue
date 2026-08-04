@@ -159,7 +159,7 @@ export async function updatePurchase(formData: FormData) {
   await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
-  
+
   redirect(`/admin/cards?card=${cardId}&m=${monthOffset}`);
 }
 

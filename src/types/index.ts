@@ -1,7 +1,12 @@
 export type CategoryName =
-  | "Servicios" | "Entretenimiento" | "Salidas"
-  | "Supermercado" | "Transporte" | "Salud"
-  | "Educación" | "Otros";
+  | "Servicios"
+  | "Entretenimiento"
+  | "Salidas"
+  | "Supermercado"
+  | "Transporte"
+  | "Salud"
+  | "Educación"
+  | "Otros";
 
 export interface Expense {
   id: string;
@@ -50,11 +55,11 @@ export interface IncomeReceipt {
 
 export interface CreditCard {
   id: string;
-  name: string;         // Ej: Visa Santander
+  name: string; // Ej: Visa Santander
   bank: string;
-  closingDay: number;   // Día que cierra la tarjeta
-  dueDay: number;       // Día que vence el resumen
-  order: number;        // Orden de visualización en el carrusel
+  closingDay: number; // Día que cierra la tarjeta
+  dueDay: number; // Día que vence el resumen
+  order: number; // Orden de visualización en el carrusel
   last4Digits: string; // Últimos 4 dígitos de la tarjeta
 }
 

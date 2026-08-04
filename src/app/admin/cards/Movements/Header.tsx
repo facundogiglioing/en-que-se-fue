@@ -1,0 +1,66 @@
+import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { Button } from "@/components/base/Button";
+import HeaderBase from "@/components/Header";
+
+type HeaderProps = {
+  totalForPeriod: number;
+  selectedPeriodLabel: string;
+  activeCardId: string;
+  monthOffset: number;
+};
+
+export default function Header({
+  totalForPeriod,
+  selectedPeriodLabel,
+  activeCardId,
+  monthOffset,
+}: HeaderProps) {
+  const formattedTotal = totalForPeriod.toLocaleString("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const Actions = () => {
+    return (
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          variant="danger"
+          href={`/admin/cards?card=${activeCardId}&m=${monthOffset - 1}`}
+        >
+          <ArrowLeft size={18} />
+        </Button>
+        <span className="px-3 py-1 text-xs font-bold text-slate-900 bg-slate-100 rounded-lg whitespace-nowrap">
+          {selectedPeriodLabel}
+        </span>
+        <Button
+          type="button"
+          variant="danger"
+          href={`/admin/cards?card=${activeCardId}&m=${monthOffset + 1}`}
+        >
+          <ArrowRight size={18} />
+        </Button>
+        <Button
+          type="button"
+          variant="primary"
+          href={`/admin/cards?card=${activeCardId}&m=${monthOffset}&addPurchase=1`}
+        >
+          <Plus size={12} />
+          Agregar
+        </Button>
+      </div>
+
+    )
+  }
+
+  return (
+    <HeaderBase
+      title="Movimientos"
+      subTitle={`Total: ${formattedTotal}`}
+      actions={<Actions />}
+    />
+  );
+}
+

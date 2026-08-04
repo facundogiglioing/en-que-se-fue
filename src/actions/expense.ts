@@ -9,7 +9,9 @@ export async function getExpenses(): Promise<Expense[]> {
   return db.data.expenses;
 }
 
-export async function getExpenseById(id: string | undefined): Promise<Expense | undefined> {
+export async function getExpenseById(
+  id: string | undefined,
+): Promise<Expense | undefined> {
   if (!id) return undefined;
 
   const db = await getDb();
@@ -33,7 +35,7 @@ export async function createExpense(formData: FormData) {
 
 export async function updateExpense(id: string, formData: FormData) {
   const db = await getDb();
-  const index = db.data.expenses.findIndex(e => e.id === id);
+  const index = db.data.expenses.findIndex((e) => e.id === id);
 
   if (index !== -1) {
     db.data.expenses[index] = {

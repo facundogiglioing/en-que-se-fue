@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { getDb } from "@/lib/db";
 import type { CardPayment } from "@/types";
 
-export async function getCardPaymentsForYear(year: number): Promise<CardPayment[]> {
+export async function getCardPaymentsForYear(
+  year: number,
+): Promise<CardPayment[]> {
   const db = await getDb();
   return (db.data.cardPayments ?? []).filter((p) => p.year === year);
 }

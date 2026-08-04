@@ -15,8 +15,7 @@ type Props = {
 const sideStyles: Record<SheetSide, string> = {
   right:
     "right-0 my-10 top-0 h-[calc(100dvh-5rem)] w-full max-w-xl border-l border-slate-200 rounded-l-2xl",
-  left:
-    "left-0 my-10 top-0 h-[calc(100dvh-5rem)] w-full max-w-xl border-r border-slate-200 rounded-r-2xl",
+  left: "left-0 my-10 top-0 h-[calc(100dvh-5rem)] w-full max-w-xl border-r border-slate-200 rounded-r-2xl",
   top: "left-0 top-0 w-full max-h-[85dvh] border-b border-slate-200 rounded-b-2xl",
   bottom:
     "left-0 bottom-0 w-full max-h-[85dvh] border-t border-slate-200 rounded-t-2xl",

@@ -28,7 +28,8 @@ export function Categories({ value }: Props) {
             />
 
             {/* El botón visual */}
-            <div className={`
+            <div
+              className={`
               flex items-center justify-center gap-2 p-2
               text-xs
               border border-slate-200
@@ -37,7 +38,8 @@ export function Categories({ value }: Props) {
               peer-checked:bg-slate-50
               transition
               hover:bg-slate-50  
-            `}>
+            `}
+            >
               <cat.icon
                 size={14}
                 className="text-slate-400 group-hover:text-slate-900"
@@ -46,7 +48,9 @@ export function Categories({ value }: Props) {
 
             {/* EL TOOLTIP / POPUP */}
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-xl">
-              <p className="font-medium">{cat.name} - {cat.description}</p>
+              <p className="font-medium">
+                {cat.name} - {cat.description}
+              </p>
               {/* Triangulito del Tooltip */}
               <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900"></div>
             </div>

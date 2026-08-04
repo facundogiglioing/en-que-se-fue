@@ -1,4 +1,4 @@
-import { Edit3, PiggyBank, Trash2, Wallet, X } from "lucide-react";
+import { PiggyBank, Wallet, X } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import {
@@ -8,6 +8,7 @@ import {
   updateIncome,
 } from "@/actions/income";
 import { DayPicker } from "@/components/DayPicker";
+import { EntityListItem } from "@/components/EntityListItem";
 
 export const dynamic = "force-dynamic";
 
@@ -135,10 +136,11 @@ export default async function IncomePage({
 
           <button
             type="submit"
-            className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${editingIncome
-              ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-100 shadow-lg"
-              : "bg-slate-900 text-white hover:bg-slate-800"
-              }`}
+            className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${
+              editingIncome
+                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-100 shadow-lg"
+                : "bg-slate-900 text-white hover:bg-slate-800"
+            }`}
           >
             {editingIncome ? "Actualizar Ingreso" : "Guardar Ingreso"}
           </button>
@@ -158,56 +160,21 @@ export default async function IncomePage({
 
         <div className="grid gap-3">
           {incomes.map((income) => (
-            <div
+            <EntityListItem
               key={income.id}
-              className={`group bg-white border p-4 rounded-xl flex items-center justify-between transition-all ${income.id === edit
-                ? "border-blue-500 ring-2 ring-blue-500/10 shadow-lg"
-                : "border-slate-200 hover:shadow-md"
-                }`}
-            >
-              <div className="flex items-center gap-4">
-                <div
-                  className={`p-2 rounded-lg ${income.id === edit ? "bg-blue-50 text-blue-600" : "bg-slate-50 text-slate-500"}`}
-                >
-                  <PiggyBank size={20} />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-slate-900">
-                    {income.name}
-                  </h3>
-                  <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">
-                    {income.category} • Día estimado: {income.expectedDay}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-sm font-black text-green-600 mr-2">
-                  +${income.expectedAmount?.toLocaleString()}
-                </span>
-
-                <Link
-                  href={`/admin/income?edit=${income.id}`}
-                  className="p-2 text-slate-300 hover:text-blue-600 transition"
-                >
-                  <Edit3 size={18} />
-                </Link>
-
-                <form
-                  action={async () => {
-                    "use server";
-                    await deleteIncome(income.id);
-                  }}
-                >
-                  <button
-                    type="submit"
-                    className="p-2 text-slate-200 hover:text-red-500 transition"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </form>
-              </div>
-            </div>
+              title={income.name}
+              subtitle={`${income.category} • Día estimado: ${income.expectedDay}`}
+              subtitleClassName="font-bold tracking-wider"
+              icon={<PiggyBank size={20} />}
+              value={`+$${income.expectedAmount?.toLocaleString()}`}
+              valueClassName="font-black text-green-600"
+              isActive={income.id === edit}
+              editHref={`/admin/income?edit=${income.id}`}
+              onDelete={async () => {
+                "use server";
+                await deleteIncome(income.id);
+              }}
+            />
           ))}
 
           {incomes.length === 0 && (

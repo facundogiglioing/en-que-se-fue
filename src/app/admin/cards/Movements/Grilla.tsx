@@ -1,7 +1,7 @@
 import { Infinity as InfinityIcon } from "lucide-react";
+import { DeleteButton } from "@/components/base/DeleteButton";
+import { EditButton } from "@/components/base/EditButton";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { DeleteButton } from "@/components/DeleteButton";
-import { EditButton } from "@/components/EditButton";
 import type { Transaction } from "@/types";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
   month: number;
 };
 
-export function Grilla({
+export default function Grilla({
   transactions,
   selectedIndex,
   deletePurchase,
@@ -98,7 +98,6 @@ export function Grilla({
                       }}
                     >
                       <DeleteButton />
-
                     </form>
                   </div>
                 </td>

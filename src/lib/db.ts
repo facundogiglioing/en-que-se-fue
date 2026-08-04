@@ -3,7 +3,8 @@ import type { DbSchema } from "@/types";
 
 export async function getDb() {
   const defaultData: DbSchema = {
-    expenses: [], payments: [],
+    expenses: [],
+    payments: [],
     incomes: [],
     incomeReceipts: [],
     creditCards: [],

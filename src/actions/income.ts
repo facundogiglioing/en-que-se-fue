@@ -14,7 +14,7 @@ export async function createIncome(formData: FormData) {
   const newIncome: Income = {
     id: crypto.randomUUID(),
     name: formData.get("name") as string,
-    category: formData.get("category") as any,
+    category: (formData.get("category") as Income["category"]) || "Otros",
     expectedAmount: Number(formData.get("amount")),
     expectedDay: Number(formData.get("expectedDay")),
   };
@@ -25,13 +25,13 @@ export async function createIncome(formData: FormData) {
 
 export async function updateIncome(id: string, formData: FormData) {
   const db = await getDb();
-  const index = db.data.incomes.findIndex(i => i.id === id);
+  const index = db.data.incomes.findIndex((i) => i.id === id);
 
   if (index !== -1) {
     db.data.incomes[index] = {
       ...db.data.incomes[index],
       name: formData.get("name") as string,
-      category: formData.get("category") as any,
+      category: (formData.get("category") as Income["category"]) || "Otros",
       expectedAmount: Number(formData.get("amount")),
       expectedDay: Number(formData.get("expectedDay")),
     };
@@ -50,12 +50,16 @@ export async function deleteIncome(id: string) {
 }
 
 // Lógica para marcar como cobrado en el Dashboard
-export async function toggleIncomeStatus(incomeId: string, month: number, year: number) {
+export async function toggleIncomeStatus(
+  incomeId: string,
+  month: number,
+  year: number,
+) {
   const db = await getDb();
   if (!db.data.incomeReceipts) db.data.incomeReceipts = [];
 
   const index = db.data.incomeReceipts.findIndex(
-    r => r.incomeId === incomeId && r.month === month && r.year === year
+    (r) => r.incomeId === incomeId && r.month === month && r.year === year,
   );
 
   if (index !== -1) {
@@ -74,7 +78,12 @@ export async function toggleIncomeStatus(incomeId: string, month: number, year: 
   revalidatePath("/");
 }
 
-export async function getIncomeReceipts(month: number, year: number): Promise<IncomeReceipt[]> {
+export async function getIncomeReceipts(
+  month: number,
+  year: number,
+): Promise<IncomeReceipt[]> {
   const db = await getDb();
-  return (db.data.incomeReceipts || []).filter(r => r.month === month && r.year === year);
+  return (db.data.incomeReceipts || []).filter(
+    (r) => r.month === month && r.year === year,
+  );
 }

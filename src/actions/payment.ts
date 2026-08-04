@@ -83,8 +83,7 @@ export async function unconfirmExpensePayment(
 ) {
   const db = await getDb();
   db.data.payments = db.data.payments.filter(
-    (p) =>
-      !(p.expenseId === expenseId && p.month === month && p.year === year),
+    (p) => !(p.expenseId === expenseId && p.month === month && p.year === year),
   );
   await db.write();
   revalidatePath("/");
