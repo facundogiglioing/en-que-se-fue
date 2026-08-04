@@ -1,9 +1,6 @@
 import { getDb } from "@/lib/db";
 
-
-
 export async function GetPageData(cardId: string | undefined, date: Date) {
-
   const db = await getDb();
   const cards = db.data.creditCards || [];
   const purchases = db.data.transactions || [];
@@ -12,10 +9,7 @@ export async function GetPageData(cardId: string | undefined, date: Date) {
   const selectedYear = date.getFullYear();
   const selectedIndex = selectedYear * 12 + selectedMonth;
 
-
   const card = cardId ? cards.find((c) => c.id === cardId) : cards[0];
-
-
 
   const transactions = card
     ? purchases

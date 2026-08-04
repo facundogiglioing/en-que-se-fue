@@ -1,7 +1,6 @@
 import { deletePurchase } from "@/actions/creditCard";
 import { Container } from "@/components/Container";
 import { Sheet } from "@/components/Sheet";
-import { CATEGORIES } from "@/lib/constants";
 import { getDb } from "@/lib/db";
 import CreditCardList from "./CreditCard/List";
 import { FormCard } from "./FormCard";
@@ -43,11 +42,10 @@ export default async function CardsAdminPage({
   const selectedMonth = selectedDate.getMonth();
   const selectedYear = selectedDate.getFullYear();
   const selectedIndex = selectedYear * 12 + selectedMonth;
+
   const currentPeriod = `${baseDate.getFullYear()}-${String(baseDate.getMonth() + 1).padStart(2, "0")}`;
 
-  const showNewCard = newCard === "1";
-  const editPurchaseId = edit;
-  const editCardMode = editCard === "1";
+
 
   const transactions = activeCard
     ? purchases
@@ -72,15 +70,18 @@ export default async function CardsAdminPage({
       })
     : [];
 
+
+
+  const showNewCard = newCard === "1";
+  const editPurchaseId = edit;
+  const editCardMode = editCard === "1";
+
   const editingTransaction =
     editPurchaseId && activeCard
       ? purchases.find(
         (p) => p.id === editPurchaseId && p.cardId === activeCard.id,
       )
       : undefined;
-
-  const categoryNames = CATEGORIES.map((c) => c.name);
-
 
   return (
     <Container className="flex h-[calc(100dvh-141px)] flex-col gap-4 overflow-hidden">
@@ -89,7 +90,6 @@ export default async function CardsAdminPage({
           <CreditCardList
             cards={cards}
             month={monthOffset}
-            cardId={cardId || ""}
           />
         </div>
         <div className="min-w-0 border-l border-slate-200">
@@ -130,7 +130,6 @@ export default async function CardsAdminPage({
         >
           <FormPurchase
             activeCardId={cardId || ''}
-            categoryNames={categoryNames}
             transaction={editingTransaction}
             monthOffset={monthOffset}
             currentPeriod={currentPeriod}

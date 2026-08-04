@@ -8,7 +8,6 @@ import { InstallmentAmountFields } from "./InstallmentAmountFields";
 
 type Props = {
   activeCardId: string;
-  categoryNames: string[];
   transaction?: Transaction;
   monthOffset?: number;
   currentPeriod?: string;

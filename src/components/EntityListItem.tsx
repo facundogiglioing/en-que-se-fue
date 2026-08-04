@@ -1,4 +1,4 @@
-import type { MouseEventHandler, ReactNode } from "react";
+import type { KeyboardEventHandler, MouseEventHandler, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 type EntityListItemProps = {
@@ -6,7 +6,8 @@ type EntityListItemProps = {
   subtitle: string;
   icon: ReactNode;
   value?: ReactNode;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLDivElement>;
+  onKeyDown?: KeyboardEventHandler<HTMLDivElement>;
   isActive?: boolean;
   editHref?: string;
   onDelete?: () => Promise<void>;
@@ -24,6 +25,7 @@ export function EntityListItem({
   value,
   isActive = false,
   onClick,
+  onKeyDown,
   className,
   subtitleClassName,
   valueClassName,
@@ -33,11 +35,13 @@ export function EntityListItem({
 
 
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
+      onKeyDown={onKeyDown}
       onClick={onClick}
       className={cn(
-        "group flex items-center justify-between rounded-xl border p-4 transition-all cursor-pointer w-full",
+        "group flex items-center justify-between rounded-xl border p-4 transition-all cursor-pointer w-full text-left",
         isActive
           ? "border-blue-500 ring-2 ring-blue-500/10 shadow-lg"
           : "border-slate-200 hover:shadow-md",
@@ -83,6 +87,6 @@ export function EntityListItem({
 
         {actions}
       </div>
-    </button>
+    </div>
   );
 }
