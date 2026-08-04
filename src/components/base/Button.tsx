@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { MouseEventHandler } from "react";
 import type { Variants } from "@/types/general";
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
   formAction?: string | ((formData: FormData) => void | Promise<void>);
   formNoValidate?: boolean;
   href?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
 };
 
@@ -16,6 +18,7 @@ export function Button({
   variant,
   formNoValidate,
   href,
+  onClick,
   children,
 }: Props) {
   const className = `
@@ -52,6 +55,7 @@ export function Button({
       className={className}
       formAction={formAction}
       formNoValidate={formNoValidate}
+      onClick={onClick}
     >
       {children}
     </button>

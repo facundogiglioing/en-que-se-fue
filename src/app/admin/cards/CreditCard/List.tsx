@@ -60,7 +60,7 @@ const CreditCardListItem = ({
   currentMonth,
 }: CreditCardListItemProps) => {
   return (
-    <Link href={`/admin/cards?card=${card.id}&m=${currentMonth}`}>
+    <Link href={`/admin/cards?cardId=${card.id}&m=${currentMonth}`}>
       <EntityListItem
         title={card.name}
         subtitle={`Cierre: ${card.closingDay} -  Vencimiento ${card.dueDay}`}

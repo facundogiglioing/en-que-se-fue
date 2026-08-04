@@ -33,6 +33,13 @@ export default function Grilla({
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-50">
+          {transactions.length === 0 && (
+            <tr>
+              <td colSpan={6} className="items-center justify-center px-5 py-5 text-center text-slate-400 italic text-sm">
+                <p>Sin movimientos para este período.</p>
+              </td>
+            </tr>
+          )}
           {transactions.map((p) => {
             const installments = Math.max(1, p.installments || 1);
             const startIndex = p.startYear * 12 + p.startMonth;
@@ -88,7 +95,7 @@ export default function Grilla({
                 <td>
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
                     <EditButton
-                      href={`/admin/cards?card=${activeCardId}&m=${month}&edit=${p.id}`}
+                      href={`/admin/cards?cardId=${activeCardId}&m=${month}&edit=${p.id}`}
                     />
 
                     <form

@@ -14,23 +14,23 @@ export default async function CardsAdminPage({
   searchParams,
 }: {
   searchParams: Promise<{
-    card?: string;
+    cardId?: string;
     m?: string;
     edit?: string;
     addPurchase?: string;
     newCard?: string;
+    editCard?: string;
   }>;
 }) {
-  const params = await searchParams;
+  const { cardId, m, newCard, edit, editCard } = await searchParams;
   const db = await getDb();
   const cards = db.data.creditCards || [];
   const purchases = db.data.transactions || [];
 
   // Obtener tarjeta activa por ID
-  const cardId = params.card;
   const activeCard = cardId ? cards.find((c) => c.id === cardId) : cards[0];
 
-  const parsedOffset = Number(params.m ?? 0);
+  const parsedOffset = Number(m ?? 0);
   const monthOffset = Number.isFinite(parsedOffset)
     ? Math.trunc(parsedOffset)
     : 0;
@@ -45,10 +45,9 @@ export default async function CardsAdminPage({
   const selectedIndex = selectedYear * 12 + selectedMonth;
   const currentPeriod = `${baseDate.getFullYear()}-${String(baseDate.getMonth() + 1).padStart(2, "0")}`;
 
-  const showNewCard = params.newCard === "1";
-  const showAddPurchase = params.addPurchase === "1";
-  const editPurchaseId = params.edit;
-  const editCardMode = params.editCard === "1";
+  const showNewCard = newCard === "1";
+  const editPurchaseId = edit;
+  const editCardMode = editCard === "1";
 
   const transactions = activeCard
     ? purchases
@@ -81,7 +80,7 @@ export default async function CardsAdminPage({
       : undefined;
 
   const categoryNames = CATEGORIES.map((c) => c.name);
-  const activeCardId = activeCard?.id ?? "";
+
 
   return (
     <Container className="flex h-[calc(100dvh-141px)] flex-col gap-4 overflow-hidden">
@@ -90,24 +89,18 @@ export default async function CardsAdminPage({
           <CreditCardList
             cards={cards}
             month={monthOffset}
-            activeCardId={activeCardId}
+            cardId={cardId || ""}
           />
         </div>
         <div className="min-w-0 border-l border-slate-200">
-          {/* Tabla */}
-          {transactions.length === 0 ? (
-            <div className="flex flex-1 items-center justify-center px-5 py-14 text-center text-slate-400 italic text-sm">
-              Sin movimientos para este período.
-            </div>
-          ) : (
-            <Movimientos
-              transactions={transactions}
-              selectedIndex={selectedIndex}
-              deletePurchase={deletePurchase}
-              activeCardId={activeCard?.id || "0"}
-              month={monthOffset}
-            />
-          )}
+          <Movimientos
+            transactions={transactions}
+            selectedIndex={selectedIndex}
+            deletePurchase={deletePurchase}
+            activeCardId={activeCard?.id || "0"}
+            month={monthOffset}
+          />
+
         </div>
       </div>
 
@@ -119,11 +112,11 @@ export default async function CardsAdminPage({
               ? "Completá los datos para registrar una nueva tarjeta."
               : "Actualizá los datos de la tarjeta seleccionada."
           }
-          closeHref={`/admin/cards?card=${activeCardId}&m=${monthOffset}`}
+          closeHref={`/admin/cards?${cardId && `cardId=${cardId}`}&m=${monthOffset}`}
         >
           <FormCard
             card={showNewCard ? undefined : activeCard}
-            cardId={activeCardId}
+            cardId={cardId}
             monthOffset={monthOffset}
           />
         </Sheet>
@@ -133,10 +126,10 @@ export default async function CardsAdminPage({
         <Sheet
           title="Editar movimiento"
           description="Actualizá el detalle de la compra y guardá los cambios."
-          closeHref={`/admin/cards?card=${activeCard.id}&m=${monthOffset}`}
+          closeHref={`/admin/cards?${cardId && `cardId=${cardId}`}&m=${monthOffset}`}
         >
           <FormPurchase
-            activeCardId={activeCard.id}
+            activeCardId={cardId || ''}
             categoryNames={categoryNames}
             transaction={editingTransaction}
             monthOffset={monthOffset}

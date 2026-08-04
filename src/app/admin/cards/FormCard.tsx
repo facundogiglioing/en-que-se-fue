@@ -76,7 +76,7 @@ export function FormCard({ card, cardId, monthOffset = 0 }: Props) {
               {submitLabel}
             </Button>
             <Link
-              href={`/admin/cards?card=${cardId ?? ""}&m=${monthOffset}`}
+              href={`/admin/cards?cardId=${cardId ?? ""}&m=${monthOffset}`}
               className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
             >
               Cancelar

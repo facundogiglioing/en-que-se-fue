@@ -28,7 +28,7 @@ export default function Header({
         <Button
           type="button"
           variant="danger"
-          href={`/admin/cards?card=${activeCardId}&m=${monthOffset - 1}`}
+          href={`/admin/cards?cardId=${activeCardId}&m=${monthOffset - 1}`}
         >
           <ArrowLeft size={18} />
         </Button>
@@ -38,14 +38,14 @@ export default function Header({
         <Button
           type="button"
           variant="danger"
-          href={`/admin/cards?card=${activeCardId}&m=${monthOffset + 1}`}
+          href={`/admin/cards?cardId=${activeCardId}&m=${monthOffset + 1}`}
         >
           <ArrowRight size={18} />
         </Button>
         <Button
           type="button"
           variant="primary"
-          href={`/admin/cards?card=${activeCardId}&m=${monthOffset}&addPurchase=1`}
+          href={`/admin/cards?cardId=${activeCardId}&m=${monthOffset}&addPurchase=1`}
         >
           <Plus size={12} />
           Agregar

@@ -27,7 +27,7 @@ export async function createCard(formData: FormData) {
   db.data.creditCards.push(newCard);
   await db.write();
   revalidatePath("/admin/cards");
-  redirect(`/admin/cards?card=${newCard.id}`);
+  redirect(`/admin/cards?cardId=${newCard.id}`);
 }
 
 export async function updateCardDetails(formData: FormData) {
@@ -160,7 +160,7 @@ export async function updatePurchase(formData: FormData) {
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
-  redirect(`/admin/cards?card=${cardId}&m=${monthOffset}`);
+  redirect(`/admin/cards?cardId=${cardId}&m=${monthOffset}`);
 }
 
 export async function deletePurchase(id: string) {

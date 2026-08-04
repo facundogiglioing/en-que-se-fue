@@ -31,8 +31,8 @@ export function FormPurchase({
 
   // Determinar URL de cancelar según el contexto
   const cancelUrl = isEditing
-    ? `/admin/cards?card=${activeCardId}&m=${monthOffset}`
-    : `/admin/cards?card=${activeCardId}&m=${monthOffset}`;
+    ? `/admin/cards?cardId=${activeCardId}&m=${monthOffset}`
+    : `/admin/cards?cardId=${activeCardId}&m=${monthOffset}`;
 
   return (
     <form action={action} className="space-y-3">
