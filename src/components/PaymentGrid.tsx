@@ -123,8 +123,8 @@ export function PaymentGrid({
 
   return (
     <>
-      <div className="bg-white rounded-sm border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
-        <div className="max-h-[calc(100dvh-280px)] overflow-auto">
+      <div className="bg-white  overflow-hidden">
+        <div className="flex h-full overflow-auto">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-slate-50/80 border-b border-slate-100">
@@ -214,7 +214,7 @@ export function PaymentGrid({
                               </span>
                               {payment.actualAmount != null &&
                                 payment.actualAmount !==
-                                  exp.estimatedAmount && (
+                                exp.estimatedAmount && (
                                   <span className="text-[9px] font-bold text-emerald-400 line-through">
                                     $
                                     {exp.estimatedAmount?.toLocaleString(
@@ -341,7 +341,7 @@ export function PaymentGrid({
                                   </span>
                                   {cardPayment.actualAmount != null &&
                                     Math.round(cardPayment.actualAmount) !==
-                                      Math.round(monthlyTotal) && (
+                                    Math.round(monthlyTotal) && (
                                       <span className="text-[9px] font-bold text-emerald-400 line-through">
                                         $
                                         {monthlyTotal.toLocaleString("es-AR", {

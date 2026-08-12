@@ -5,7 +5,7 @@ import type { MouseEvent } from "react";
 import { deleteCard } from "@/actions/creditCard";
 import { BankLogo } from "@/components/BankLogo";
 import { EntityListItem } from "@/components/EntityListItem";
-import Header from "@/components/Header";
+import PanelHeader from "@/components/PanelHeader";
 import type { CreditCard } from "@/types";
 import { HeaderActions, ItemActions } from "./Actions";
 
@@ -63,7 +63,7 @@ export default function CreditCardList({ month, cards }: CreditCardListProps) {
 
   return (
     <div className="flex flex-col">
-      <Header
+      <PanelHeader
         title="Tarjetas"
         subTitle="El subtítulo"
         actions={<HeaderActions cardId={cardId} month={month} />}

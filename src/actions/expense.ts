@@ -20,12 +20,16 @@ export async function getExpenseById(
 
 export async function createExpense(formData: FormData) {
   const db = await getDb();
+  const electronicPaymentCode =
+    (formData.get("electronicPaymentCode") as string)?.trim() || undefined;
+
   const newExpense: Expense = {
     id: crypto.randomUUID(),
     name: formData.get("name") as string,
     category: formData.get("category") as CategoryName,
     dueDate: Number(formData.get("dueDate")),
     estimatedAmount: Number(formData.get("amount")) || 0,
+    electronicPaymentCode,
   };
   db.data.expenses.push(newExpense);
   await db.write();
@@ -36,6 +40,8 @@ export async function createExpense(formData: FormData) {
 export async function updateExpense(id: string, formData: FormData) {
   const db = await getDb();
   const index = db.data.expenses.findIndex((e) => e.id === id);
+  const electronicPaymentCode =
+    (formData.get("electronicPaymentCode") as string)?.trim() || undefined;
 
   if (index !== -1) {
     db.data.expenses[index] = {
@@ -44,6 +50,7 @@ export async function updateExpense(id: string, formData: FormData) {
       category: formData.get("category") as CategoryName,
       dueDate: Number(formData.get("dueDate")),
       estimatedAmount: Number(formData.get("amount")) || 0,
+      electronicPaymentCode,
     };
     await db.write();
     revalidatePath("/admin/expenses");

@@ -74,6 +74,13 @@ export default async function ExpensesPage({
               <DayPicker defaultValue={editingExpense?.dueDate} />
 
               <Input
+                id="electronicPaymentCode"
+                name="electronicPaymentCode"
+                label="Código de pago electrónico"
+                defaultValue={editingExpense?.electronicPaymentCode}
+              />
+
+              <Input
                 id="amount"
                 name="amount"
                 label="Monto Estimado"
@@ -86,11 +93,10 @@ export default async function ExpensesPage({
 
             <button
               type="submit" // <--- Explícito
-              className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${
-                editingExpense
+              className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${editingExpense
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-slate-900 text-white hover:bg-slate-800"
-              }`}
+                }`}
             >
               {editingExpense ? "Actualizar Cambios" : "Guardar Gasto"}
             </button>
@@ -107,19 +113,23 @@ export default async function ExpensesPage({
               const isEditing = expense.id === edit;
 
               return (
-                <EntityListItem
+                <Link
                   key={expense.id}
-                  title={expense.name}
-                  subtitle={`${expense.category} • Día ${expense.dueDate}`}
-                  icon={<Icon size={20} />}
-                  value={`$${expense.estimatedAmount?.toLocaleString()}`}
-                  isActive={isEditing}
-                  editHref={`/admin/expenses?edit=${expense.id}`}
-                  onDelete={async () => {
-                    "use server";
-                    await deleteExpense(expense.id);
-                  }}
-                />
+                  href={`/admin/expenses?edit=${expense.id}`}
+                >
+                  <EntityListItem
+                    title={expense.name}
+                    subtitle={`${expense.category} • Día ${expense.dueDate}`}
+                    icon={<Icon size={20} />}
+                    value={`$${expense.estimatedAmount?.toLocaleString()}`}
+                    isActive={isEditing}
+                    editHref={`/admin/expenses?edit=${expense.id}`}
+                    onDelete={async () => {
+                      "use server";
+                      await deleteExpense(expense.id);
+                    }}
+                  />
+                </Link>
               );
             })}
           </div>

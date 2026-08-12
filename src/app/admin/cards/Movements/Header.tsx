@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { Button } from "@/components/base/Button";
-import HeaderBase from "@/components/Header";
+import HeaderBase from "@/components/PanelHeader";
 
 type HeaderProps = {
   totalForPeriod: number;

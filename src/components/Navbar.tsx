@@ -1,57 +1,48 @@
-"use client";
-
 import { CreditCard, Home, Settings, Wallet } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import DynamicHeader from "@/components/DynamicHeader";
 
-export function Navbar() {
+export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md dark:bg-slate-900/80 dark:border-slate-800">
-      <div className="mx-auto max-w-5xl px-6 py-2 flex justify-between items-center">
-        <Image
-          src="/assets/logo-normal.png"
-          alt="Logo"
-          width={134}
-          height={60}
-        />
-        <DynamicHeader />
-        {/* Navegación Principal */}
-        <div className="flex items-center gap-1 sm:gap-2">
+    <aside
+      className="hidden min-h-0 overflow-hidden border-r border-border-primary bg-white p-5 shadow-sm lg:flex lg:flex-col lg:gap-5"
+      style={{ gridArea: "menu" }}
+    >
+      <div>
+        <p className="text-xxs font-bold uppercase tracking-[0.2em] text-slate-400">
+          Menú
+        </p>
+        <div className="mt-3 flex flex-col gap-2">
           <Link
             href="/"
-            className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 group"
-            title="Inicio"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
           >
-            <Home size={20} />
+            <Home size={18} />
+            Inicio
           </Link>
-
           <Link
             href="/admin/income"
-            className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 group"
-            title="Ingresos"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
           >
-            <Wallet size={20} />
+            <Wallet size={18} />
+            Ingresos
           </Link>
-
-          {/* Nuevo Link de Tarjetas */}
           <Link
             href="/admin/cards"
-            className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 group"
-            title="Tarjetas"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
           >
-            <CreditCard size={20} />
+            <CreditCard size={18} />
+            Tarjetas
           </Link>
-
           <Link
             href="/admin/expenses"
-            className="p-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 group"
-            title="Gastos Fijos"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
           >
-            <Settings size={20} />
+            <Settings size={18} />
+            Gastos fijos
           </Link>
         </div>
       </div>
-    </nav>
+    </aside>
   );
+
 }

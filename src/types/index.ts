@@ -14,6 +14,7 @@ export interface Expense {
   category: CategoryName;
   dueDate: number;
   estimatedAmount?: number;
+  electronicPaymentCode?: string;
 }
 
 export interface Payment {

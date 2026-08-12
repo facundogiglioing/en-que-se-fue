@@ -76,6 +76,22 @@
       "category": "Servicios",
       "dueDate": 10,
       "estimatedAmount": 79087.99
+    },
+    {
+      "id": "09cd99c5-1dce-47ef-b20e-bd550ec5bed3",
+      "name": "ABL Terraza",
+      "category": "Servicios",
+      "dueDate": 5,
+      "estimatedAmount": 900,
+      "electronicPaymentCode": "1707214"
+    },
+    {
+      "id": "88a3ed75-1af8-433a-9873-358a9d0cea1c",
+      "name": "ABL Departamento",
+      "category": "Servicios",
+      "dueDate": 5,
+      "estimatedAmount": 50000,
+      "electronicPaymentCode": "1707196"
     }
   ],
   "payments": [
@@ -168,6 +184,51 @@
       "isPaid": true,
       "paidAt": "2026-06-11T21:28:18.313Z",
       "actualAmount": 79087.99
+    },
+    {
+      "id": "984aa8d9-0476-4deb-9622-e87eb7aab1ee",
+      "expenseId": "16d2773d-d3a4-420b-9825-90ad009e6052",
+      "month": 7,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-08-11T13:51:06.261Z",
+      "actualAmount": 48050
+    },
+    {
+      "id": "e46f9b4e-a99c-41b3-9342-07112f109c10",
+      "expenseId": "ebfdc286-4199-4376-8610-e740a339b426",
+      "month": 7,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-08-11T13:52:03.147Z",
+      "actualAmount": 178329.52
+    },
+    {
+      "id": "1e18f807-4c1f-4514-aebe-8b363a078f3c",
+      "expenseId": "d2062af3-c0f3-4bbd-b6a0-378ede2c29ec",
+      "month": 7,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-08-11T13:52:29.420Z",
+      "actualAmount": 177458.03
+    },
+    {
+      "id": "7aa85174-ee44-49cf-b494-6add4ee3e8d5",
+      "expenseId": "d83038a2-590d-490f-99de-a9641ca7f382",
+      "month": 7,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-08-11T14:00:27.272Z",
+      "actualAmount": 522800
+    },
+    {
+      "id": "0b44d3a1-58dd-4a5c-a2aa-d691f53f787f",
+      "expenseId": "0b08ce49-fd01-492e-bbfd-f920d53fa5f3",
+      "month": 7,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-08-11T14:01:56.109Z",
+      "actualAmount": 888603.22
     }
   ],
   "incomes": [

@@ -84,7 +84,7 @@ export default async function CardsAdminPage({
       : undefined;
 
   return (
-    <Container className="flex h-[calc(100dvh-141px)] flex-col gap-4 overflow-hidden">
+    <Container className="flex h-full overflow-hidden">
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
         <div className="min-w-0">
           <CreditCardList
@@ -92,7 +92,7 @@ export default async function CardsAdminPage({
             month={monthOffset}
           />
         </div>
-        <div className="min-w-0 border-l border-slate-200">
+        <div className="min-w-0 border-l border-border-primary">
           <Movimientos
             transactions={transactions}
             selectedIndex={selectedIndex}

@@ -1,28 +1,25 @@
+"use client";
 
-type HeaderProps = {
-  title: string;
-  subTitle: string;
-  actions?: React.ReactNode;
-};
+import Image from "next/image";
+import DynamicHeader from "@/components/DynamicHeader";
 
-export default function Header({
-  title,
-  subTitle,
-  actions
-}: HeaderProps) {
+export function Header() {
   return (
-    <div className="p-4 border-b border-border-primary flex flex-wrap justify-between items-center">
-      <div>
-        <h3 className="font-bold uppercase tracking-widest text-slate-700">
-          {title}
-        </h3>
-        <p className="text-xs text-slate-400 mt-0.5">
-          {subTitle}
-        </p>
+    <header
+      className="z-50 border-b bg-white/80 backdrop-blur-md border-border-primary"
+      style={{ gridArea: "header" }}
+    >
+      <div className="mx-auto max-w-5xl px-6 py-2 flex justify-between items-center">
+        <Image
+          src="/assets/logo-normal.png"
+          alt="Logo"
+          width={134}
+          height={60}
+        />
+        <DynamicHeader />
       </div>
-      <div className="flex items-center gap-2">
-        {actions}
-      </div>
-    </div>
+
+    </header>
+
   );
 }
