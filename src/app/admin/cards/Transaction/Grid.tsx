@@ -9,14 +9,14 @@ type Props = {
   transactions: Transaction[];
   selectedIndex: number;
   activeCardId: string;
-  month: number;
+  index: number;
 };
 
 export default async function TransactionGrid({
   transactions,
   selectedIndex,
   activeCardId,
-  month,
+  index,
 }: Props) {
   return (
     <div className="min-h-0 flex-1 overflow-auto">
@@ -97,7 +97,7 @@ export default async function TransactionGrid({
                 <td>
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
                     <EditButton
-                      href={`/admin/cards?cardId=${activeCardId}&m=${month}&edit=${p.id}`}
+                      href={`/admin/cards/${activeCardId}/${index}?edit=${p.id}`}
                     />
 
 

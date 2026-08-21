@@ -7,10 +7,10 @@ import type { CreditCard } from "@/types";
 type Props = {
   card?: CreditCard;
   cardId?: string;
-  monthOffset?: number;
+  selectedIndex?: number;
 };
 
-export function CardForm({ card, cardId, monthOffset = 0 }: Props) {
+export function CardForm({ card, cardId, selectedIndex }: Props) {
   const isEditing = !!card;
   const action = isEditing ? updateCardDetails : createCard;
   const title = isEditing ? "Editar Tarjeta" : "Registrar Tarjeta";
@@ -76,7 +76,7 @@ export function CardForm({ card, cardId, monthOffset = 0 }: Props) {
               {submitLabel}
             </Button>
             <Link
-              href={`/admin/cards?cardId=${cardId ?? ""}&m=${monthOffset}`}
+              href={cardId && selectedIndex ? `/admin/cards/${cardId}/${selectedIndex}` : "/admin/cards"}
               className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
             >
               Cancelar

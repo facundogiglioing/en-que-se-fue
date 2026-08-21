@@ -1,19 +1,20 @@
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { Button } from "@/components/base/Button";
 import HeaderBase from "@/components/PanelHeader";
+import { shiftIndex } from "../utils";
 
 type HeaderProps = {
   totalForPeriod: number;
   selectedPeriodLabel: string;
   cardId: string;
-  monthOffset: number;
+  selectedIndex: number;
 };
 
 export default function TransactionHeader({
   totalForPeriod,
   selectedPeriodLabel,
   cardId,
-  monthOffset,
+  selectedIndex,
 }: HeaderProps) {
   const formattedTotal = totalForPeriod.toLocaleString("es-AR", {
     style: "currency",
@@ -23,12 +24,16 @@ export default function TransactionHeader({
   });
 
   const Actions = () => {
+    const basePath = cardId && cardId !== "0" ? `/admin/cards/${cardId}` : "/admin/cards";
+    const prevIndex = shiftIndex(selectedIndex, -1);
+    const nextIndex = shiftIndex(selectedIndex, 1);
+
     return (
       <div className="flex items-center gap-2">
         <Button
           type="button"
           variant="danger"
-          href={`/admin/cards?cardId=${cardId}&m=${monthOffset - 1}`}
+          href={`${basePath}/${prevIndex}`}
         >
           <ArrowLeft size={18} />
         </Button>
@@ -38,14 +43,14 @@ export default function TransactionHeader({
         <Button
           type="button"
           variant="danger"
-          href={`/admin/cards?cardId=${cardId}&m=${monthOffset + 1}`}
+          href={`${basePath}/${nextIndex}`}
         >
           <ArrowRight size={18} />
         </Button>
         <Button
           type="button"
           variant="primary"
-          href={`/admin/cards?cardId=${cardId}&m=${monthOffset}&addPurchase=1`}
+          href={`${basePath}/${selectedIndex}?addPurchase=1`}
         >
           <Plus size={12} />
           Agregar

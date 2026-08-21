@@ -6,25 +6,26 @@ import TransactionHeader from "./Header";
 type Props = {
   transactions: Transaction[];
   cardId: string;
-  month: number;
+  selectedIndex: number;
 };
 
 export default async function Transactions({
   transactions,
   cardId,
-  month,
+  selectedIndex,
 }: Props) {
   const totalForPeriod = transactions.reduce(
     (acc, p) => acc + p.totalAmount / Math.max(1, p.installments || 1),
     0,
   );
 
-  function getMonthLabel(month: number) {
-    const currentYear = new Date().getFullYear();
+  function getMonthLabel(index: number) {
+    const year = Math.trunc(index / 100);
+    const month = index % 100;
     const label = new Intl.DateTimeFormat("es-AR", {
       month: "long",
       year: "numeric",
-    }).format(new Date(currentYear, month, 1));
+    }).format(new Date(year, month - 1, 1));
 
     return label.charAt(0).toUpperCase() + label.slice(1);
   }
@@ -33,15 +34,15 @@ export default async function Transactions({
     <>
       <TransactionHeader
         totalForPeriod={totalForPeriod}
-        selectedPeriodLabel={getMonthLabel(month)}
+        selectedPeriodLabel={getMonthLabel(selectedIndex)}
         cardId={cardId}
-        monthOffset={1}
+        selectedIndex={selectedIndex}
       />
       <TransactionGrid
         transactions={transactions}
-        selectedIndex={1}
+        selectedIndex={selectedIndex}
         activeCardId={cardId}
-        month={month}
+        index={selectedIndex}
       />
     </>
   );

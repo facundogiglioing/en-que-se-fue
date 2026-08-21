@@ -1,22 +1,22 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/base/Button";
 import { getCurrentIndex, normalizeIndex, shiftIndex } from "../utils";
 
 export function Actions() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const rawIndex = Number.parseInt(searchParams.get("index") ?? "", 10);
+  const segments = pathname.split("/").filter(Boolean);
+  const rawIndex = Number.parseInt(segments[segments.length - 1] ?? "", 10);
   const currentIndex = Number.isFinite(rawIndex)
     ? normalizeIndex(rawIndex)
     : getCurrentIndex();
+  const cardId = segments.length >= 3 ? segments[2] : undefined;
 
   const createUrlWithIndex = (index: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("index", String(index));
-    return `${pathname}?${params.toString()}`;
+    if (!cardId) return "/admin/cards";
+    return `/admin/cards/${cardId}/${index}`;
   };
 
   const prevIndex = shiftIndex(currentIndex, -1);
@@ -44,7 +44,7 @@ export function Actions() {
       <Button
         type="button"
         variant="primary"
-        href={createUrlWithIndex(nextIndex)}
+        href={`${pathname}?addPurchase=1`}
       >
         <Plus size={12} />
         Agregar

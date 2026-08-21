@@ -9,14 +9,14 @@ import { InstallmentAmountFields } from "../InstallmentAmountFields";
 type Props = {
   activeCardId: string;
   transaction?: Transaction;
-  monthOffset?: number;
+  selectedIndex?: number;
   currentPeriod?: string;
 };
 
 export function TransactionForm({
   activeCardId,
   transaction,
-  monthOffset = 0,
+  selectedIndex,
   currentPeriod,
 }: Props) {
   const isEditing = !!transaction;
@@ -29,15 +29,15 @@ export function TransactionForm({
     : undefined;
 
   // Determinar URL de cancelar según el contexto
-  const cancelUrl = isEditing
-    ? `/admin/cards?cardId=${activeCardId}&m=${monthOffset}`
-    : `/admin/cards?cardId=${activeCardId}&m=${monthOffset}`;
+  const cancelUrl = activeCardId && selectedIndex
+    ? `/admin/cards/${activeCardId}/${selectedIndex}`
+    : "/admin/cards";
 
   return (
     <form action={action} className="space-y-3">
       {isEditing && <input type="hidden" name="id" value={transaction.id} />}
       <input type="hidden" name="cardId" value={activeCardId} />
-      <input type="hidden" name="monthOffset" value={monthOffset} />
+      <input type="hidden" name="selectedIndex" value={selectedIndex ?? ""} />
 
       <div className="grid grid-cols-6 gap-6">
         <div className="col-span-6 ">

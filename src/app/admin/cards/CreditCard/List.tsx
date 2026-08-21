@@ -11,14 +11,12 @@ import { HeaderActions, ItemActions } from "./Actions";
 type CreditCardListProps = {
   id?: string;
   cards: CreditCard[];
+  selectedIndex: number;
 };
 
-export default function CreditCardList({ id, cards }: CreditCardListProps) {
-  const handleAddCard = () => { };
-
+export default function CreditCardList({ id, cards, selectedIndex }: CreditCardListProps) {
   const handleEditCard = (
     event: MouseEvent<HTMLButtonElement>,
-    selectedCardId: string,
   ) => {
     event.stopPropagation();
 
@@ -60,7 +58,7 @@ export default function CreditCardList({ id, cards }: CreditCardListProps) {
         {cards?.map((card) => (
           <Link
             key={card.id}
-            href={`/admin/cards/${card.id}`}
+            href={`/admin/cards/${card.id}/${selectedIndex}`}
             className="w-full"
           >
             <EntityListItem
@@ -72,7 +70,7 @@ export default function CreditCardList({ id, cards }: CreditCardListProps) {
               isActive={id === card.id}
               actions={
                 <ItemActions
-                  onEdit={(event) => handleEditCard(event, card.id)}
+                  onEdit={(event) => handleEditCard(event)}
                   onDelete={(event) => handleDeleteCard(event, card.id)}
                 />
               }

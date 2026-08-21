@@ -27,7 +27,9 @@ export async function createCard(formData: FormData) {
   db.data.creditCards.push(newCard);
   await db.write();
   revalidatePath("/admin/cards");
-  redirect(`/admin/cards?cardId=${newCard.id}`);
+  const now = new Date();
+  const currentIndex = now.getFullYear() * 100 + (now.getMonth() + 1);
+  redirect(`/admin/cards/${newCard.id}/${currentIndex}`);
 }
 
 export async function updateCardDetails(formData: FormData) {
@@ -119,7 +121,7 @@ export async function updatePurchase(formData: FormData) {
   const db = await getDb();
   const id = formData.get("id") as string;
   const cardId = formData.get("cardId") as string;
-  const monthOffset = formData.get("monthOffset") as string;
+  const selectedIndex = formData.get("selectedIndex") as string;
 
   const startPeriod = formData.get("startPeriod") as string;
   let startMonth = new Date().getMonth();
@@ -160,7 +162,11 @@ export async function updatePurchase(formData: FormData) {
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
-  redirect(`/admin/cards?cardId=${cardId}&m=${monthOffset}`);
+  const parsedIndex = Number(selectedIndex);
+  const now = new Date();
+  const fallbackIndex = now.getFullYear() * 100 + (now.getMonth() + 1);
+  const safeIndex = Number.isFinite(parsedIndex) ? Math.trunc(parsedIndex) : fallbackIndex;
+  redirect(`/admin/cards/${cardId}/${safeIndex}`);
 }
 
 export async function deletePurchase(id: string) {

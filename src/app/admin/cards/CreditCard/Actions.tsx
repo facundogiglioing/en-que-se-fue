@@ -12,7 +12,7 @@ type ItemActionsProps = {
 const HeaderActions = () => {
   return (
     <div className="flex flex-row gap-4">
-      <AddButton href={`/admin/cards?newCard=true`} />
+      <AddButton href="/admin/cards" />
     </div>
   );
 };
