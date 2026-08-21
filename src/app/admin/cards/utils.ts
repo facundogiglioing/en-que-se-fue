@@ -13,7 +13,7 @@ export async function GetPageData(cardId: string | undefined, index: number) {
     ? purchases
       .filter((p) => {
         if (p.cardId !== card.id) return false;
-        const startIndex = p.startYear * 100 + p.startMonth;
+        const startIndex = p.startYear * 100 + (p.startMonth + 1);
         // Si es recurrente, no tiene fin; si no, termina con las cuotas
         const endIndex = p.isRecurring
           ? Infinity
@@ -21,8 +21,8 @@ export async function GetPageData(cardId: string | undefined, index: number) {
         return index >= startIndex && index <= endIndex;
       })
       .sort((a, b) => {
-        const aStartIndex = a.startYear * 100 + a.startMonth;
-        const bStartIndex = b.startYear * 100 + b.startMonth;
+        const aStartIndex = a.startYear * 100 + (a.startMonth + 1);
+        const bStartIndex = b.startYear * 100 + (b.startMonth + 1);
 
         if (aStartIndex !== bStartIndex) {
           return bStartIndex - aStartIndex;

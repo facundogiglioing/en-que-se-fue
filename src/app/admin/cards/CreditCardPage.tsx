@@ -1,7 +1,7 @@
 import Container from "@/components/Container";
 import type { CreditCard, Transaction } from "@/types";
-import CreditCardList from "../CreditCard/List";
-import Transactions from "../Transaction";
+import CreditCardList from "./CreditCard/List";
+import Transactions from "./Transaction";
 
 type CreditCardPageProps = {
   id?: string;

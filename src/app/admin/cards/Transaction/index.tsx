@@ -1,5 +1,6 @@
 "use server";
 import type { Transaction } from "@/types";
+import { normalizeIndex } from "../utils";
 import TransactionGrid from "./Grid";
 import TransactionHeader from "./Header";
 
@@ -20,8 +21,11 @@ export default async function Transactions({
   );
 
   function getMonthLabel(index: number) {
-    const year = Math.trunc(index / 100);
-    const month = index % 100;
+    const safeIndex = Number.isFinite(index)
+      ? normalizeIndex(Math.trunc(index))
+      : normalizeIndex(0);
+    const year = Math.trunc(safeIndex / 100);
+    const month = safeIndex % 100;
     const label = new Intl.DateTimeFormat("es-AR", {
       month: "long",
       year: "numeric",

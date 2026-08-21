@@ -1,4 +1,4 @@
-import CreditCardPage from "../[id]/CreditCardPage";
+import CreditCardPage from "../CreditCardPage";
 import { GetPageData, getCurrentIndex, normalizeIndex } from "../utils";
 
 type CardsAdminPageProps = {
