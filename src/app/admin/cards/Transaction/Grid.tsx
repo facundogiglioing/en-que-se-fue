@@ -43,7 +43,7 @@ export default async function TransactionGrid({
           {transactions.map((p) => {
             const installments = Math.max(1, p.installments || 1);
             const startIndex = p.startYear * 100 + p.startMonth;
-            const currentInstallment = index - startIndex + 1;
+            const currentInstallment = index - startIndex;
             const installmentAmount = p.totalAmount / installments;
 
             return (
