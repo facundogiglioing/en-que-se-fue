@@ -15,7 +15,7 @@ export function Categories({ value }: Props) {
           <label
             key={cat.name}
             htmlFor={`cat-${cat.name}`}
-            className="relative cursor-pointer group" // "group" es clave para el hover
+            className="relative cursor-pointer group/category" // group con nombre para evitar colisiones con ancestros
           >
             <input
               type="radio"
@@ -47,7 +47,7 @@ export function Categories({ value }: Props) {
             </div>
 
             {/* EL TOOLTIP / POPUP */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-xl">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-xxs rounded-lg opacity-0 pointer-events-none group-hover/category:opacity-100 transition-opacity z-50 shadow-xl">
               <p className="font-medium">
                 {cat.name} - {cat.description}
               </p>

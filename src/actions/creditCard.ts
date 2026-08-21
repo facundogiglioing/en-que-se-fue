@@ -131,6 +131,16 @@ export async function updatePurchase(formData: FormData) {
   const id = formData.get("id") as string;
   const cardId = formData.get("cardId") as string;
   const selectedIndex = formData.get("selectedIndex") as string;
+  const installments = Math.max(1, Number(formData.get("installments")) || 1);
+  const amountFromForm = Number(formData.get("amount"));
+  const installmentAmount = Number(formData.get("installmentAmount"));
+
+  const totalAmount =
+    Number.isFinite(amountFromForm) && amountFromForm > 0
+      ? amountFromForm
+      : Number.isFinite(installmentAmount) && installmentAmount > 0
+        ? installmentAmount * installments
+        : 0;
 
   const startPeriod = formData.get("startPeriod") as string;
   let startMonth = new Date().getMonth();
@@ -149,8 +159,8 @@ export async function updatePurchase(formData: FormData) {
     ...db.data.transactions[index],
     cardId,
     description: formData.get("description") as string,
-    totalAmount: Number(formData.get("amount")),
-    installments: Number(formData.get("installments")) || 1,
+    totalAmount,
+    installments,
     startMonth,
     startYear,
     category:

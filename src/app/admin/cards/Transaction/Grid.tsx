@@ -1,9 +1,9 @@
 import { Infinity as InfinityIcon } from "lucide-react";
 import { deletePurchase } from "@/actions/creditCard";
 import { DeleteButton } from "@/components/base/DeleteButton";
-import { EditButton } from "@/components/base/EditButton";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import type { Transaction } from "@/types";
+import EditPurchaseAction from "./EditPurchaseAction";
 
 type Props = {
   transactions: Transaction[];
@@ -94,8 +94,10 @@ export default async function TransactionGrid({
                 </td>
                 <td>
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
-                    <EditButton
-                      href={`/admin/cards/${activeCardId}/${index}?edit=${p.id}`}
+                    <EditPurchaseAction
+                      cardId={activeCardId}
+                      selectedIndex={index}
+                      transaction={p}
                     />
 
 
