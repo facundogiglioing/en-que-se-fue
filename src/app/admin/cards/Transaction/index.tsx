@@ -1,20 +1,18 @@
 import type { Transaction } from "@/types";
-import Grilla from "./Grilla";
-import Header from "./Header";
+import TransactionGrid from "./Grid";
+import TransactionHeader from "./Header";
 
 type Props = {
   transactions: Transaction[];
-  selectedIndex: number;
   deletePurchase: (id: string) => Promise<void>;
-  activeCardId: string;
+  cardId: string;
   month: number;
 };
 
-export function Movimientos({
+export default function Transactions({
   transactions,
-  selectedIndex,
   deletePurchase,
-  activeCardId,
+  cardId,
   month,
 }: Props) {
   const totalForPeriod = transactions.reduce(
@@ -22,28 +20,29 @@ export function Movimientos({
     0,
   );
 
-  function getMonthLabel(month: number, year: number) {
+  function getMonthLabel(month: number) {
+    const currentYear = new Date().getFullYear();
     const label = new Intl.DateTimeFormat("es-AR", {
       month: "long",
       year: "numeric",
-    }).format(new Date(year, month, 1));
+    }).format(new Date(currentYear, month, 1));
 
     return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
   return (
     <>
-      <Header
+      <TransactionHeader
         totalForPeriod={totalForPeriod}
-        selectedPeriodLabel={getMonthLabel(month, Math.floor(selectedIndex / 12))}
-        activeCardId={activeCardId}
+        selectedPeriodLabel={getMonthLabel(month)}
+        cardId={cardId}
         monthOffset={1}
       />
-      <Grilla
+      <TransactionGrid
         transactions={transactions}
-        selectedIndex={selectedIndex}
+        selectedIndex={1}
         deletePurchase={deletePurchase}
-        activeCardId={activeCardId}
+        activeCardId={cardId}
         month={month}
       />
     </>

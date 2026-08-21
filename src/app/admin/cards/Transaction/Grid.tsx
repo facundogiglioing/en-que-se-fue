@@ -1,3 +1,4 @@
+"use server";
 import { Infinity as InfinityIcon } from "lucide-react";
 import { DeleteButton } from "@/components/base/DeleteButton";
 import { EditButton } from "@/components/base/EditButton";
@@ -12,7 +13,7 @@ type Props = {
   month: number;
 };
 
-export default function Grilla({
+export default async function TransactionGrid({
   transactions,
   selectedIndex,
   deletePurchase,
@@ -42,7 +43,7 @@ export default function Grilla({
           )}
           {transactions.map((p) => {
             const installments = Math.max(1, p.installments || 1);
-            const startIndex = p.startYear * 12 + p.startMonth;
+            const startIndex = p.startYear * 100 + p.startMonth;
             const currentInstallment = selectedIndex - startIndex + 1;
             const installmentAmount = p.totalAmount / installments;
 
@@ -100,7 +101,6 @@ export default function Grilla({
 
                     <form
                       action={async () => {
-                        "use server";
                         await deletePurchase(p.id);
                       }}
                     >

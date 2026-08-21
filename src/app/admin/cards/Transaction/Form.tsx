@@ -4,7 +4,7 @@ import { Input } from "@/components/base/Input";
 import { InputThousands } from "@/components/base/InputWithMask";
 import { Categories } from "@/components/Categories";
 import type { Transaction } from "@/types";
-import { InstallmentAmountFields } from "./InstallmentAmountFields";
+import { InstallmentAmountFields } from "../InstallmentAmountFields";
 
 type Props = {
   activeCardId: string;
@@ -13,7 +13,7 @@ type Props = {
   currentPeriod?: string;
 };
 
-export function FormPurchase({
+export function TransactionForm({
   activeCardId,
   transaction,
   monthOffset = 0,

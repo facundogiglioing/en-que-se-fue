@@ -10,11 +10,10 @@ import type { CreditCard } from "@/types";
 import { HeaderActions, ItemActions } from "./Actions";
 
 type CreditCardListProps = {
-  month: number;
   cards: CreditCard[];
 };
 
-export default function CreditCardList({ month, cards }: CreditCardListProps) {
+export default function CreditCardList({ cards }: CreditCardListProps) {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const pathname = usePathname();
@@ -26,6 +25,8 @@ export default function CreditCardList({ month, cards }: CreditCardListProps) {
     params.set("cardId", cardId);
     router.push(`${pathname}?${params.toString()}`);
   };
+
+  const handleAddCard = () => { };
 
   const handleEditCard = (
     event: MouseEvent<HTMLButtonElement>,
@@ -40,7 +41,7 @@ export default function CreditCardList({ month, cards }: CreditCardListProps) {
 
   const handleDeleteCard = async (
     event: MouseEvent<HTMLButtonElement>,
-    selectedCardId: string
+    selectedCardId: string,
   ) => {
     event.stopPropagation();
 
@@ -66,7 +67,7 @@ export default function CreditCardList({ month, cards }: CreditCardListProps) {
       <PanelHeader
         title="Tarjetas"
         subTitle="El subtítulo"
-        actions={<HeaderActions cardId={cardId} month={month} />}
+        actions={<HeaderActions cardId={cardId} />}
       />
       <div className="flex flex-col gap-4 p-4">
         {!!cards && cards.length === 0 && <p>No hay tarjetas disponibles.</p>}
@@ -74,7 +75,7 @@ export default function CreditCardList({ month, cards }: CreditCardListProps) {
           <EntityListItem
             key={card.id}
             title={`${card.name}`}
-            subtitle={`Cierre: ${card.closingDay} -  Vencimiento ${card.dueDay}`}
+            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
             icon={BankLogo(card.bank, 20)}
             value={card.last4Digits}
             isActive={cardId === card.id}

@@ -1,7 +1,7 @@
 
 type PanelHeaderProps = {
   title: string;
-  subTitle: string;
+  subTitle?: string;
   actions?: React.ReactNode;
 };
 
@@ -16,9 +16,11 @@ export default function PanelHeader({
         <h3 className="font-bold uppercase tracking-widest text-slate-700">
           {title}
         </h3>
+
         <p className="text-xs text-slate-400 mt-0.5">
-          {subTitle}
+          {subTitle} &nbsp;
         </p>
+
       </div>
       <div className="flex items-center gap-2">
         {actions}

@@ -5,8 +5,7 @@ import { DeleteButton } from "@/components/base/DeleteButton";
 import { EditButton } from "@/components/base/EditButton";
 
 type HeaderActionsProps = {
-  cardId: string;
-  month: number;
+  cardId: string | null;
 };
 
 type ItemActionsProps = {
@@ -14,10 +13,10 @@ type ItemActionsProps = {
   onEdit?: MouseEventHandler<HTMLButtonElement>;
 };
 
-const HeaderActions = ({ cardId, month }: HeaderActionsProps) => {
+const HeaderActions = ({ cardId }: HeaderActionsProps) => {
   return (
     <div className="flex flex-row gap-4">
-      <AddButton href={`/admin/cards?card=${cardId}&m=${month}&newCard=1`} />
+      <AddButton href={`/admin/cards?card=${cardId}&newCard=1`} />
     </div>
   );
 };

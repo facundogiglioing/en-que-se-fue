@@ -10,7 +10,7 @@ type Props = {
   monthOffset?: number;
 };
 
-export function FormCard({ card, cardId, monthOffset = 0 }: Props) {
+export function CardForm({ card, cardId, monthOffset = 0 }: Props) {
   const isEditing = !!card;
   const action = isEditing ? updateCardDetails : createCard;
   const title = isEditing ? "Editar Tarjeta" : "Registrar Tarjeta";

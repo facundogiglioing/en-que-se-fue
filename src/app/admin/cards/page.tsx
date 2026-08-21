@@ -1,11 +1,30 @@
+import CreditCardPage from "./CreditCardPage";
+import { GetPageData } from "./utils";
+
+
+type CardsAdminPageProps = {
+  searchParams: Promise<{
+    cardId?: string;
+    index?: string;
+  }>;
+};
+
+export default async function CardsAdminPage({ searchParams }: CardsAdminPageProps) {
+  const { cardId, index } = await searchParams;
+  const { cards, transactions } = await GetPageData(cardId, 202608);
+
+  return <CreditCardPage cards={cards} transactions={transactions} />;
+}
+/*
+import { useState } from "react";
 import { deletePurchase } from "@/actions/creditCard";
-import { Container } from "@/components/Container";
+
 import { Sheet } from "@/components/Sheet";
 import { getDb } from "@/lib/db";
-import CreditCardList from "./CreditCard/List";
+
 import { FormCard } from "./FormCard";
 import { FormPurchase } from "./FormPurchase";
-import { Movimientos } from "./Movements/Movimientos";
+
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +36,10 @@ export default async function CardsAdminPage({
     m?: string;
     edit?: string;
     addPurchase?: string;
-    newCard?: string;
     editCard?: string;
   }>;
 }) {
-  const { cardId, m, newCard, edit, editCard } = await searchParams;
+  const { cardId, m, edit, editCard } = await searchParams;
   const db = await getDb();
   const cards = db.data.creditCards || [];
   const purchases = db.data.transactions || [];
@@ -44,8 +62,6 @@ export default async function CardsAdminPage({
   const selectedIndex = selectedYear * 12 + selectedMonth;
 
   const currentPeriod = `${baseDate.getFullYear()}-${String(baseDate.getMonth() + 1).padStart(2, "0")}`;
-
-
 
   const transactions = activeCard
     ? purchases
@@ -70,9 +86,8 @@ export default async function CardsAdminPage({
       })
     : [];
 
-
-
-  const showNewCard = newCard === "1";
+  const [showNewCard, setShowNewCard] = useState(false);
+  // const showNewCard = newCard === "1";
   const editPurchaseId = edit;
   const editCardMode = editCard === "1";
 
@@ -85,12 +100,9 @@ export default async function CardsAdminPage({
 
   return (
     <Container className="flex h-full overflow-hidden">
-      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] w-full">
         <div className="min-w-0">
-          <CreditCardList
-            cards={cards}
-            month={monthOffset}
-          />
+          <CreditCardList cards={cards} month={monthOffset} />
         </div>
         <div className="min-w-0 border-l border-border-primary">
           <Movimientos
@@ -100,7 +112,6 @@ export default async function CardsAdminPage({
             activeCardId={activeCard?.id || "0"}
             month={monthOffset}
           />
-
         </div>
       </div>
 
@@ -129,7 +140,7 @@ export default async function CardsAdminPage({
           closeHref={`/admin/cards?${cardId && `cardId=${cardId}`}&m=${monthOffset}`}
         >
           <FormPurchase
-            activeCardId={cardId || ''}
+            activeCardId={cardId || ""}
             transaction={editingTransaction}
             monthOffset={monthOffset}
             currentPeriod={currentPeriod}
@@ -139,3 +150,4 @@ export default async function CardsAdminPage({
     </Container>
   );
 }
+*/
