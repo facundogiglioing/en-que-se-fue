@@ -35,7 +35,7 @@ export default async function Transactions({
   }
 
   return (
-    <>
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
       <TransactionHeader
         totalForPeriod={totalForPeriod}
         selectedPeriodLabel={getMonthLabel(index)}
@@ -47,6 +47,6 @@ export default async function Transactions({
         index={index}
         transactions={transactions}
       />
-    </>
+    </div>
   );
 }

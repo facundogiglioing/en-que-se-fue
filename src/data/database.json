@@ -812,17 +812,6 @@
       "category": "Servicios"
     },
     {
-      "id": "792ca317-d2a2-4443-83bf-254a256cfafa",
-      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
-      "description": "MERPAGO*MAX",
-      "totalAmount": 8122.73,
-      "installments": 1,
-      "startMonth": 5,
-      "startYear": 2026,
-      "category": "Entretenimiento",
-      "isRecurring": true
-    },
-    {
       "id": "ef594e86-b25c-453b-ba1e-681387ba356b",
       "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
       "description": "La Caja Seguro",

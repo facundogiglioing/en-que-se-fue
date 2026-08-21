@@ -2,10 +2,9 @@ import Link from "next/link";
 import type { MouseEventHandler } from "react";
 import { addPurchase, updatePurchase } from "@/actions/creditCard";
 import { Input } from "@/components/base/Input";
-import { InputThousands } from "@/components/base/InputWithMask";
 import { Categories } from "@/components/Categories";
 import type { Transaction } from "@/types";
-import { InstallmentAmountFields } from "../InstallmentAmountFields";
+import { InstallmentAmountFields } from "./InstallmentFields";
 
 type Props = {
   activeCardId: string;
@@ -52,48 +51,26 @@ export function TransactionForm({
             required
           />
         </div>
-        <div className="md:col-span-3">
-          <InputThousands
-            name="installmentAmount"
-            label="Monto por cuota"
-            defaultValue={0}
-            required
+        <div className="col-span-6 ">
+          <InstallmentAmountFields
+            defaultInstallments={transaction?.installments ?? 1}
+            defaultAmount={transaction?.totalAmount}
           />
         </div>
-        <div className="">
+        <div className="col-span-3">
           <Input
-            name="installments"
-            label="Cuotas"
-            min={1}
-            max={24}
-            maxLength={2}
-            type="number"
-            defaultValue={transaction?.installments ?? 1}
-            required
-          />
-        </div>
-      </div>
-
-      <InstallmentAmountFields
-        defaultInstallments={transaction?.installments ?? 1}
-        defaultAmount={transaction?.totalAmount}
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div>
-          <input
             id="start-period"
             name="startPeriod"
+            label="Primer período"
             type="month"
             defaultValue={defaultStartPeriod || currentPeriod}
             required
-            className="px-3 py-2 border border-slate-200 rounded-lg text-sm w-full focus:outline-none focus:ring-1 focus:ring-slate-400"
           />
         </div>
-        <div>
+        <div className="col-span-3">
           <Categories value={transaction?.category} />
         </div>
-        <div className="flex items-end">
+        <div className="col-span-6 ">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -106,7 +83,8 @@ export function TransactionForm({
             </span>
           </label>
         </div>
-        <div className="flex items-end gap-2">
+
+        <div className="col-span-6 flex items-center gap-10 justify-end">
           <button
             type="submit"
             className="px-4 py-2 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 transition"
@@ -129,6 +107,7 @@ export function TransactionForm({
               Cancelar
             </Link>
           )}
+
         </div>
       </div>
     </form>

@@ -96,7 +96,7 @@ export function Sheet({
           )}
         </header>
 
-        <div className="min-h-0 flex-1 overflow-auto px-6 py-5">{children}</div>
+        <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">{children}</div>
       </aside>
 
       <style>{`

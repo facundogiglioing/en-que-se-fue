@@ -7,12 +7,11 @@ export async function GetPageData(cardId: string | undefined, index: number) {
   const db = await getDb();
   const cards = db.data.creditCards || [];
   const purchases = db.data.transactions || [];
-  const card = cardId ? cards.find((c) => c.id === cardId) : cards[0];
 
-  const transactions = card
+  const transactions = cardId
     ? purchases
       .filter((p) => {
-        if (p.cardId !== card.id) return false;
+        if (p.cardId !== cardId) return false;
         const startIndex = p.startYear * 100 + (p.startMonth + 1);
         // Si es recurrente, no tiene fin; si no, termina con las cuotas
         const endIndex = p.isRecurring
@@ -33,7 +32,6 @@ export async function GetPageData(cardId: string | undefined, index: number) {
     : [];
 
   return {
-    card,
     cards,
     purchases,
     transactions

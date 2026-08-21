@@ -49,9 +49,9 @@ export default async function TransactionGrid({
             return (
               <tr
                 key={p.id}
-                className="group hover:bg-slate-50/60 transition text-slate-500"
+                className="group transition text-slate-500 hover:bg-slate-50/60"
               >
-                <td className="px-5 py-4 flex items-center justify-between gap-2">
+                <td className="pl-5 py-4 flex items-center justify-between gap-2">
                   <div>
                     <p className="font-bold text-slate-700 text-sm flex items-center gap-2">
                       {p.description}
@@ -66,7 +66,7 @@ export default async function TransactionGrid({
                     </span>
                   )}
                 </td>
-                <td className="text-sm">
+                <td className="px-2 py-4 text-sm">
                   <span className="inline-flex items-center gap-2">
                     <CategoryIcon size={14} category={p.category} />
                     {p.category}
@@ -92,7 +92,7 @@ export default async function TransactionGrid({
                     minimumFractionDigits: 2,
                   })}
                 </td>
-                <td>
+                <td className="pr-5 py-4">
                   <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
                     <EditPurchaseAction
                       cardId={activeCardId}
