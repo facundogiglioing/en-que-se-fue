@@ -69,6 +69,7 @@ export async function deleteCard(id: string) {
 export async function addPurchase(formData: FormData) {
   const db = await getDb();
   const cardId = formData.get("cardId") as string;
+  const selectedIndex = Number(formData.get("selectedIndex"));
   const installments = Math.max(1, Number(formData.get("installments")) || 1);
   const amountFromForm = Number(formData.get("amount"));
   const installmentAmount = Number(formData.get("installmentAmount"));
@@ -115,6 +116,14 @@ export async function addPurchase(formData: FormData) {
   await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
+
+  const now = new Date();
+  const fallbackIndex = now.getFullYear() * 100 + (now.getMonth() + 1);
+  const safeIndex = Number.isFinite(selectedIndex)
+    ? Math.trunc(selectedIndex)
+    : fallbackIndex;
+
+  redirect(`/admin/cards/${cardId}/${safeIndex}`);
 }
 
 export async function updatePurchase(formData: FormData) {

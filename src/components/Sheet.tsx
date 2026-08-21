@@ -1,12 +1,13 @@
 import { X } from "lucide-react";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 
 type SheetSide = "right" | "left" | "top" | "bottom";
 
 type Props = {
   children: ReactNode;
-  closeHref: string;
+  closeHref?: string;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
   title: string;
   description?: string;
   side?: SheetSide;
@@ -31,17 +32,27 @@ const sideAnimations: Record<SheetSide, string> = {
 export function Sheet({
   children,
   closeHref,
+  onClose,
   title,
   description,
   side = "right",
 }: Props) {
   return (
     <div className="fixed inset-0 z-50">
-      <Link
-        href={closeHref}
-        aria-label="Cerrar panel"
-        className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"
-      />
+      {closeHref ? (
+        <Link
+          href={closeHref}
+          aria-label="Cerrar panel"
+          className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"
+        />
+      ) : (
+        <button
+          type="button"
+          aria-label="Cerrar panel"
+          onClick={onClose}
+          className="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"
+        />
+      )}
 
       <aside
         role="dialog"
@@ -65,13 +76,24 @@ export function Sheet({
             )}
           </div>
 
-          <Link
-            href={closeHref}
-            aria-label="Cerrar"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
-          >
-            <X size={16} />
-          </Link>
+          {closeHref ? (
+            <Link
+              href={closeHref}
+              aria-label="Cerrar"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
+            >
+              <X size={16} />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              aria-label="Cerrar"
+              onClick={onClose}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
+            >
+              <X size={16} />
+            </button>
+          )}
         </header>
 
         <div className="min-h-0 flex-1 overflow-auto px-6 py-5">{children}</div>

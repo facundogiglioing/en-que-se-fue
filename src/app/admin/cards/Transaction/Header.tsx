@@ -1,7 +1,8 @@
-import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/base/Button";
 import HeaderBase from "@/components/PanelHeader";
 import { shiftIndex } from "../utils";
+import AddPurchaseAction from "./AddPurchaseAction";
 
 type HeaderProps = {
   totalForPeriod: number;
@@ -24,7 +25,8 @@ export default function TransactionHeader({
   });
 
   const Actions = () => {
-    const basePath = cardId && cardId !== "0" ? `/admin/cards/${cardId}` : "/admin/cards";
+    const basePath =
+      cardId && cardId !== "0" ? `/admin/cards/${cardId}` : "/admin/cards";
     const prevIndex = shiftIndex(selectedIndex, -1);
     const nextIndex = shiftIndex(selectedIndex, 1);
 
@@ -47,18 +49,10 @@ export default function TransactionHeader({
         >
           <ArrowRight size={18} />
         </Button>
-        <Button
-          type="button"
-          variant="primary"
-          href={`${basePath}/${selectedIndex}?addPurchase=1`}
-        >
-          <Plus size={12} />
-          Agregar
-        </Button>
+        <AddPurchaseAction cardId={cardId} selectedIndex={selectedIndex} />
       </div>
-
-    )
-  }
+    );
+  };
 
   return (
     <HeaderBase
@@ -68,4 +62,3 @@ export default function TransactionHeader({
     />
   );
 }
-

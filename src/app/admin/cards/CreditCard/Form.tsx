@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { MouseEventHandler } from "react";
 import { createCard, updateCardDetails } from "@/actions/creditCard";
 import { Button } from "@/components/base/Button";
 import { Input } from "@/components/base/Input";
@@ -8,9 +9,10 @@ type Props = {
   card?: CreditCard;
   cardId?: string;
   selectedIndex?: number;
+  onCancel?: MouseEventHandler<HTMLButtonElement>;
 };
 
-export function CardForm({ card, cardId, selectedIndex }: Props) {
+export function CardForm({ card, cardId, selectedIndex, onCancel }: Props) {
   const isEditing = !!card;
   const action = isEditing ? updateCardDetails : createCard;
   const title = isEditing ? "Editar Tarjeta" : "Registrar Tarjeta";
@@ -75,12 +77,22 @@ export function CardForm({ card, cardId, selectedIndex }: Props) {
             <Button type="submit" variant="primary">
               {submitLabel}
             </Button>
-            <Link
-              href={cardId && selectedIndex ? `/admin/cards/${cardId}/${selectedIndex}` : "/admin/cards"}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
-            >
-              Cancelar
-            </Link>
+            {onCancel ? (
+              <button
+                type="button"
+                onClick={onCancel}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
+              >
+                Cancelar
+              </button>
+            ) : (
+              <Link
+                href={cardId && selectedIndex ? `/admin/cards/${cardId}/${selectedIndex}` : "/admin/cards"}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600 transition hover:bg-slate-50"
+              >
+                Cancelar
+              </Link>
+            )}
           </div>
         </div>
       </form>

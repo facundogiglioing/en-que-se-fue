@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { MouseEventHandler } from "react";
 import { addPurchase, updatePurchase } from "@/actions/creditCard";
 import { Input } from "@/components/base/Input";
 import { InputThousands } from "@/components/base/InputWithMask";
@@ -11,6 +12,7 @@ type Props = {
   transaction?: Transaction;
   selectedIndex?: number;
   currentPeriod?: string;
+  onCancel?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export function TransactionForm({
@@ -18,6 +20,7 @@ export function TransactionForm({
   transaction,
   selectedIndex,
   currentPeriod,
+  onCancel,
 }: Props) {
   const isEditing = !!transaction;
   const action = isEditing ? updatePurchase : addPurchase;
@@ -110,12 +113,22 @@ export function TransactionForm({
           >
             {submitLabel}
           </button>
-          <Link
-            href={cancelUrl}
-            className="px-4 py-2 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition"
-          >
-            Cancelar
-          </Link>
+          {onCancel ? (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-2 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition"
+            >
+              Cancelar
+            </button>
+          ) : (
+            <Link
+              href={cancelUrl}
+              className="px-4 py-2 border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-50 transition"
+            >
+              Cancelar
+            </Link>
+          )}
         </div>
       </div>
     </form>
