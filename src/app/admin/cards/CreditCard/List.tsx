@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
-import type { MouseEvent } from "react";
+import { useRouter } from "next/navigation";
+import type { KeyboardEvent, MouseEvent } from "react";
 import { deleteCard } from "@/actions/creditCard";
 import { BankLogo } from "@/components/BankLogo";
 import { EntityListItem } from "@/components/EntityListItem";
@@ -15,9 +15,12 @@ type CreditCardListProps = {
 };
 
 export default function CreditCardList({ id, cards, selectedIndex }: CreditCardListProps) {
+  const router = useRouter();
+
   const handleEditCard = (
     event: MouseEvent<HTMLButtonElement>,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
 
 
@@ -27,6 +30,7 @@ export default function CreditCardList({ id, cards, selectedIndex }: CreditCardL
     event: MouseEvent<HTMLButtonElement>,
     selectedCardId: string,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
 
     const confirmed = window.confirm(
@@ -56,26 +60,29 @@ export default function CreditCardList({ id, cards, selectedIndex }: CreditCardL
       <div className="flex flex-col gap-4 p-4">
         {!!cards && cards.length === 0 && <p>No hay tarjetas disponibles.</p>}
         {cards?.map((card) => (
-          <Link
+          <EntityListItem
             key={card.id}
-            href={`/admin/cards/${card.id}/${selectedIndex}`}
-            className="w-full"
-          >
-            <EntityListItem
-              key={card.id}
-              title={`${card.name}`}
-              subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
-              icon={BankLogo(card.bank, 20)}
-              value={card.last4Digits}
-              isActive={id === card.id}
-              actions={
-                <ItemActions
-                  onEdit={(event) => handleEditCard(event)}
-                  onDelete={(event) => handleDeleteCard(event, card.id)}
-                />
+            title={`${card.name}`}
+            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
+            icon={BankLogo(card.bank, 20)}
+            value={card.last4Digits}
+            isActive={id === card.id}
+            onClick={() => {
+              router.push(`/admin/cards/${card.id}/${selectedIndex}`);
+            }}
+            onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                router.push(`/admin/cards/${card.id}/${selectedIndex}`);
               }
-            />
-          </Link>
+            }}
+            actions={
+              <ItemActions
+                onEdit={(event) => handleEditCard(event)}
+                onDelete={(event) => handleDeleteCard(event, card.id)}
+              />
+            }
+          />
         ))}
       </div>
     </div>
