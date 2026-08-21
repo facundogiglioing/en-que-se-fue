@@ -1,5 +1,5 @@
-"use server";
 import { Infinity as InfinityIcon } from "lucide-react";
+import { deletePurchase } from "@/actions/creditCard";
 import { DeleteButton } from "@/components/base/DeleteButton";
 import { EditButton } from "@/components/base/EditButton";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -8,7 +8,6 @@ import type { Transaction } from "@/types";
 type Props = {
   transactions: Transaction[];
   selectedIndex: number;
-  deletePurchase: (id: string) => Promise<void>;
   activeCardId: string;
   month: number;
 };
@@ -16,7 +15,6 @@ type Props = {
 export default async function TransactionGrid({
   transactions,
   selectedIndex,
-  deletePurchase,
   activeCardId,
   month,
 }: Props) {
@@ -36,7 +34,10 @@ export default async function TransactionGrid({
         <tbody className="divide-y divide-slate-50">
           {transactions.length === 0 && (
             <tr>
-              <td colSpan={6} className="items-center justify-center px-5 py-5 text-center text-slate-400 italic text-sm">
+              <td
+                colSpan={6}
+                className="items-center justify-center px-5 py-5 text-center text-slate-400 italic text-sm"
+              >
                 <p>Sin movimientos para este período.</p>
               </td>
             </tr>
@@ -99,13 +100,12 @@ export default async function TransactionGrid({
                       href={`/admin/cards?cardId=${activeCardId}&m=${month}&edit=${p.id}`}
                     />
 
-                    <form
-                      action={async () => {
-                        await deletePurchase(p.id);
-                      }}
-                    >
-                      <DeleteButton />
-                    </form>
+
+                    <DeleteButton onClick={async () => {
+                      "use server";
+                      await deletePurchase(p.id);
+                    }} />
+
                   </div>
                 </td>
               </tr>

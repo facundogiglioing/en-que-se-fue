@@ -1,17 +1,16 @@
+"use server";
 import type { Transaction } from "@/types";
 import TransactionGrid from "./Grid";
 import TransactionHeader from "./Header";
 
 type Props = {
   transactions: Transaction[];
-  deletePurchase: (id: string) => Promise<void>;
   cardId: string;
   month: number;
 };
 
-export default function Transactions({
+export default async function Transactions({
   transactions,
-  deletePurchase,
   cardId,
   month,
 }: Props) {
@@ -41,7 +40,6 @@ export default function Transactions({
       <TransactionGrid
         transactions={transactions}
         selectedIndex={1}
-        deletePurchase={deletePurchase}
         activeCardId={cardId}
         month={month}
       />

@@ -1,19 +1,18 @@
+import { GetPageData } from "../utils";
 import CreditCardPage from "./CreditCardPage";
-import { GetPageData } from "./utils";
-
 
 type CardsAdminPageProps = {
-  searchParams: Promise<{
-    cardId?: string;
+  params: Promise<{
+    id?: string;
     index?: string;
   }>;
 };
 
-export default async function CardsAdminPage({ searchParams }: CardsAdminPageProps) {
-  const { cardId, index } = await searchParams;
-  const { cards, transactions } = await GetPageData(cardId, 202608);
+export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
+  const { id, index } = await params;
+  const { cards, transactions } = await GetPageData(id, 202608);
 
-  return <CreditCardPage cards={cards} transactions={transactions} />;
+  return <CreditCardPage id={id} cards={cards} transactions={transactions} />;
 }
 /*
 import { useState } from "react";

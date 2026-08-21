@@ -1,6 +1,5 @@
 "use client";
-
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import type { MouseEvent } from "react";
 import { deleteCard } from "@/actions/creditCard";
 import { BankLogo } from "@/components/BankLogo";
@@ -10,22 +9,11 @@ import type { CreditCard } from "@/types";
 import { HeaderActions, ItemActions } from "./Actions";
 
 type CreditCardListProps = {
+  id?: string;
   cards: CreditCard[];
 };
 
-export default function CreditCardList({ cards }: CreditCardListProps) {
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const cardId = searchParams.get("card") ?? "";
-
-  const handleCardClick = (cardId: string) => {
-    params.set("cardId", cardId);
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
+export default function CreditCardList({ id, cards }: CreditCardListProps) {
   const handleAddCard = () => { };
 
   const handleEditCard = (
@@ -34,9 +22,7 @@ export default function CreditCardList({ cards }: CreditCardListProps) {
   ) => {
     event.stopPropagation();
 
-    params.set("cardId", selectedCardId);
-    params.set("editCard", "1");
-    router.push(`${pathname}?${params.toString()}`);
+
   };
 
   const handleDeleteCard = async (
@@ -52,7 +38,7 @@ export default function CreditCardList({ cards }: CreditCardListProps) {
       return;
     }
     try {
-      ("use server");
+      "use server";
       await deleteCard(selectedCardId);
     } catch (error) {
       console.error(error);
@@ -67,26 +53,31 @@ export default function CreditCardList({ cards }: CreditCardListProps) {
       <PanelHeader
         title="Tarjetas"
         subTitle="El subtítulo"
-        actions={<HeaderActions cardId={cardId} />}
+        actions={<HeaderActions />}
       />
       <div className="flex flex-col gap-4 p-4">
         {!!cards && cards.length === 0 && <p>No hay tarjetas disponibles.</p>}
         {cards?.map((card) => (
-          <EntityListItem
+          <Link
             key={card.id}
-            title={`${card.name}`}
-            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
-            icon={BankLogo(card.bank, 20)}
-            value={card.last4Digits}
-            isActive={cardId === card.id}
-            actions={
-              <ItemActions
-                onEdit={(event) => handleEditCard(event, card.id)}
-                onDelete={(event) => handleDeleteCard(event, card.id)}
-              />
-            }
-            onClick={() => handleCardClick(card.id)}
-          />
+            href={`/admin/cards/${card.id}`}
+            className="w-full"
+          >
+            <EntityListItem
+              key={card.id}
+              title={`${card.name}`}
+              subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
+              icon={BankLogo(card.bank, 20)}
+              value={card.last4Digits}
+              isActive={id === card.id}
+              actions={
+                <ItemActions
+                  onEdit={(event) => handleEditCard(event, card.id)}
+                  onDelete={(event) => handleDeleteCard(event, card.id)}
+                />
+              }
+            />
+          </Link>
         ))}
       </div>
     </div>

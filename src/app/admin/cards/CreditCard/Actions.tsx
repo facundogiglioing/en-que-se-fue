@@ -4,19 +4,15 @@ import { AddButton } from "@/components/base/AddButton";
 import { DeleteButton } from "@/components/base/DeleteButton";
 import { EditButton } from "@/components/base/EditButton";
 
-type HeaderActionsProps = {
-  cardId: string | null;
-};
-
 type ItemActionsProps = {
   onDelete?: MouseEventHandler<HTMLButtonElement>;
   onEdit?: MouseEventHandler<HTMLButtonElement>;
 };
 
-const HeaderActions = ({ cardId }: HeaderActionsProps) => {
+const HeaderActions = () => {
   return (
     <div className="flex flex-row gap-4">
-      <AddButton href={`/admin/cards?card=${cardId}&newCard=1`} />
+      <AddButton href={`/admin/cards?newCard=true`} />
     </div>
   );
 };

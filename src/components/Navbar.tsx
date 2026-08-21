@@ -27,7 +27,7 @@ export default function Navbar() {
             Ingresos
           </Link>
           <Link
-            href="/admin/cards"
+            href="/admin/cards/0"
             className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
           >
             <CreditCard size={18} />
