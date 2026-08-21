@@ -32,8 +32,6 @@ export function EntityListItem({
   iconClassName,
   actions,
 }: EntityListItemProps) {
-
-  console.log("Facu", isActive)
   return (
     <div
       role="button"

@@ -5,15 +5,15 @@ import TransactionGrid from "./Grid";
 import TransactionHeader from "./Header";
 
 type Props = {
-  transactions: Transaction[];
   cardId: string;
-  selectedIndex: number;
+  index: number;
+  transactions: Transaction[];
 };
 
 export default async function Transactions({
-  transactions,
   cardId,
-  selectedIndex,
+  index,
+  transactions,
 }: Props) {
   const totalForPeriod = transactions.reduce(
     (acc, p) => acc + p.totalAmount / Math.max(1, p.installments || 1),
@@ -38,15 +38,14 @@ export default async function Transactions({
     <>
       <TransactionHeader
         totalForPeriod={totalForPeriod}
-        selectedPeriodLabel={getMonthLabel(selectedIndex)}
+        selectedPeriodLabel={getMonthLabel(index)}
         cardId={cardId}
-        selectedIndex={selectedIndex}
+        selectedIndex={index}
       />
       <TransactionGrid
-        transactions={transactions}
-        selectedIndex={selectedIndex}
         activeCardId={cardId}
-        index={selectedIndex}
+        index={index}
+        transactions={transactions}
       />
     </>
   );

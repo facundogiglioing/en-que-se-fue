@@ -10,13 +10,13 @@ type CardsAdminPageProps = {
 export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
   const { segments } = await params;
 
-  const [segmentCardId, segmentIndex] = segments ?? [];
-  const cardId = segmentCardId && segmentCardId !== "0"
-    ? segmentCardId
+  const [id, index] = segments ?? [];
+  const cardId = id && id !== "0"
+    ? id
     : undefined;
 
   const currentIndex = getCurrentIndex();
-  const parsedSegmentIndex = Number(segmentIndex);
+  const parsedSegmentIndex = Number(index);
 
   const selectedIndex = Number.isFinite(parsedSegmentIndex)
     ? normalizeIndex(Math.trunc(parsedSegmentIndex))
@@ -27,9 +27,9 @@ export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
   return (
     <CreditCardPage
       id={card?.id}
+      index={selectedIndex}
       cards={cards}
       transactions={transactions}
-      selectedIndex={selectedIndex}
     />
   );
 }

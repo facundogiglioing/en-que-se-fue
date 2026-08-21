@@ -7,16 +7,14 @@ import type { Transaction } from "@/types";
 
 type Props = {
   transactions: Transaction[];
-  selectedIndex: number;
   activeCardId: string;
   index: number;
 };
 
 export default async function TransactionGrid({
-  transactions,
-  selectedIndex,
-  activeCardId,
   index,
+  transactions,
+  activeCardId,
 }: Props) {
   return (
     <div className="min-h-0 flex-1 overflow-auto">
@@ -45,7 +43,7 @@ export default async function TransactionGrid({
           {transactions.map((p) => {
             const installments = Math.max(1, p.installments || 1);
             const startIndex = p.startYear * 100 + p.startMonth;
-            const currentInstallment = selectedIndex - startIndex + 1;
+            const currentInstallment = index - startIndex + 1;
             const installmentAmount = p.totalAmount / installments;
 
             return (
