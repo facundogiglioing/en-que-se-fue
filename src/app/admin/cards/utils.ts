@@ -13,11 +13,14 @@ export async function GetPageData(cardId: string | undefined, index: number) {
       .filter((p) => {
         if (p.cardId !== cardId) return false;
         const startIndex = p.startYear * 100 + (p.startMonth + 1);
+        if (index < startIndex) return false;
         // Si es recurrente, no tiene fin; si no, termina con las cuotas
-        const endIndex = p.isRecurring
-          ? Infinity
-          : startIndex + Math.max(1, p.installments || 1) - 1;
-        return index >= startIndex && index <= endIndex;
+        if (p.isRecurring) return true;
+        const endIndex = shiftIndex(
+          startIndex,
+          Math.max(1, p.installments || 1) - 1,
+        );
+        return index <= endIndex;
       })
       .sort((a, b) => {
         const aStartIndex = a.startYear * 100 + (a.startMonth + 1);
@@ -72,4 +75,14 @@ export function shiftIndex(index: number, monthDelta: number): number {
   const date = new Date(year, month - 1 + monthDelta, 1);
 
   return date.getFullYear() * 100 + (date.getMonth() + 1);
+}
+
+// Diferencia en meses entre dos índices AAAAMM, sin arrastre incorrecto de año
+export function monthsBetween(fromIndex: number, toIndex: number): number {
+  const fromYear = Math.trunc(fromIndex / 100);
+  const fromMonth = fromIndex % 100;
+  const toYear = Math.trunc(toIndex / 100);
+  const toMonth = toIndex % 100;
+
+  return (toYear - fromYear) * 12 + (toMonth - fromMonth);
 }

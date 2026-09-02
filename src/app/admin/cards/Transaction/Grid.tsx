@@ -3,6 +3,7 @@ import { deletePurchase } from "@/actions/creditCard";
 import { DeleteButton } from "@/components/base/DeleteButton";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import type { Transaction } from "@/types";
+import { monthsBetween } from "../utils";
 import EditPurchaseAction from "./EditPurchaseAction";
 
 type Props = {
@@ -42,8 +43,8 @@ export default async function TransactionGrid({
           )}
           {transactions.map((p) => {
             const installments = Math.max(1, p.installments || 1);
-            const startIndex = p.startYear * 100 + p.startMonth;
-            const currentInstallment = index - startIndex;
+            const startIndex = p.startYear * 100 + (p.startMonth + 1);
+            const currentInstallment = monthsBetween(startIndex, index) + 1;
             const installmentAmount = p.totalAmount / installments;
 
             return (

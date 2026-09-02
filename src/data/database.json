@@ -1010,7 +1010,7 @@
       "isRecurring": false
     },
     {
-      "id": "5943f4b8-f515-4c15-8cec-2d47cffacc49",
+      "id": "a8c65048-789c-4eb8-91fc-2639f6a6cb62",
       "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
       "description": "Dia tienda 739",
       "totalAmount": 16214.26,
@@ -1018,17 +1018,6 @@
       "startMonth": 7,
       "startYear": 2026,
       "category": "Supermercado",
-      "isRecurring": false
-    },
-    {
-      "id": "a8c65048-789c-4eb8-91fc-2639f6a6cb62",
-      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
-      "description": "Dia tienda 739",
-      "totalAmount": 20000,
-      "installments": 1,
-      "startMonth": 7,
-      "startYear": 2026,
-      "category": "Salidas",
       "isRecurring": false
     },
     {
@@ -1079,11 +1068,22 @@
       "id": "d1195db9-bf21-4469-a6f0-d6189cd668b3",
       "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
       "description": "Merpago*electronicafl",
-      "totalAmount": 40146.9,
-      "installments": 1,
+      "totalAmount": 240881.4,
+      "installments": 6,
       "startMonth": 2,
       "startYear": 2026,
       "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "1efcc98f-1a97-4522-87e7-1e6260415449",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Daniel bakery",
+      "totalAmount": 20000,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Supermercado",
       "isRecurring": false
     }
   ],
