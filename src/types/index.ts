@@ -62,6 +62,7 @@ export interface CreditCard {
   dueDay: number; // Día que vence el resumen
   order: number; // Orden de visualización en el carrusel
   last4Digits: string; // Últimos 4 dígitos de la tarjeta
+  paysInArrears?: boolean; // Si el resumen se paga al mes siguiente del consumo
 }
 
 export interface Transaction {

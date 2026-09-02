@@ -7,12 +7,16 @@ import TransactionHeader from "./Header";
 type Props = {
   cardId: string;
   index: number;
+  transactionsIndex?: number;
+  paysInArrears?: boolean;
   transactions: Transaction[];
 };
 
 export default async function Transactions({
   cardId,
   index,
+  transactionsIndex,
+  paysInArrears,
   transactions,
 }: Props) {
   const totalForPeriod = transactions.reduce(
@@ -41,10 +45,13 @@ export default async function Transactions({
         selectedPeriodLabel={getMonthLabel(index)}
         cardId={cardId}
         selectedIndex={index}
+        consumptionPeriodLabel={
+          paysInArrears ? getMonthLabel(transactionsIndex ?? index) : undefined
+        }
       />
       <TransactionGrid
         activeCardId={cardId}
-        index={index}
+        index={transactionsIndex ?? index}
         transactions={transactions}
       />
     </div>

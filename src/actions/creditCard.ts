@@ -21,6 +21,7 @@ export async function createCard(formData: FormData) {
     closingDay: Number(formData.get("closingDay")),
     dueDay: Number(formData.get("dueDay")),
     order: maxOrder + 1,
+    paysInArrears: formData.get("paysInArrears") === "on",
   };
 
   if (!db.data.creditCards) db.data.creditCards = [];
@@ -38,8 +39,6 @@ export async function updateCardDetails(formData: FormData) {
   const name = (formData.get("name") as string)?.trim();
   const bank = (formData.get("bank") as string)?.trim();
 
-  console.log(formData);
-
   if (!cardId || !name || !bank) return;
 
   const card = db.data.creditCards.find((c) => c.id === cardId);
@@ -47,6 +46,9 @@ export async function updateCardDetails(formData: FormData) {
 
   card.name = name;
   card.bank = bank;
+  card.closingDay = Number(formData.get("closingDay")) || card.closingDay;
+  card.dueDay = Number(formData.get("dueDay")) || card.dueDay;
+  card.paysInArrears = formData.get("paysInArrears") === "on";
   await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");

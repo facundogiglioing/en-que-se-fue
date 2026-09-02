@@ -22,10 +22,12 @@ export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
     ? normalizeIndex(Math.trunc(parsedSegmentIndex))
     : currentIndex;
 
-  const { cards, transactions } = await GetPageData(
+  const { cards, transactions, consumptionIndex } = await GetPageData(
     cardId,
     selectedIndex,
   );
+
+  const activeCard = cards.find((c) => c.id === cardId);
 
   return (
     <Container className="flex h-full overflow-hidden">
@@ -37,6 +39,8 @@ export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
           <Transactions
             cardId={id || "0"}
             index={selectedIndex}
+            transactionsIndex={consumptionIndex}
+            paysInArrears={!!activeCard?.paysInArrears}
             transactions={transactions}
           />
         </div>

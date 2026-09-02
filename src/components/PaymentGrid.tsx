@@ -6,7 +6,7 @@ import {
   type ModalData,
   PaymentConfirmModal,
 } from "@/components/PaymentConfirmModal";
-import { getInstallmentInfo } from "@/lib/utils";
+import { getInstallmentInfo, shiftMonthYear } from "@/lib/utils";
 import type {
   CardPayment,
   CreditCard as CreditCardType,
@@ -283,11 +283,16 @@ export function PaymentGrid({
                     </td>
                     {visibleMonthIndices.map((monthIdx) => {
                       let monthlyTotal = 0;
+                      // A mes vencido: la columna "monthIdx" cobra los consumos del mes anterior
+                      const { month: consumptionMonth, year: consumptionYear } =
+                        card.paysInArrears
+                          ? shiftMonthYear(monthIdx, currentYear, -1)
+                          : { month: monthIdx, year: currentYear };
                       for (const p of transactionsList) {
                         const info = getInstallmentInfo(
                           p,
-                          monthIdx,
-                          currentYear,
+                          consumptionMonth,
+                          consumptionYear,
                         );
                         monthlyTotal += info ? info.amount : 0;
                       }

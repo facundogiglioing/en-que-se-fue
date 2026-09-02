@@ -73,6 +73,18 @@ export function CardForm({ card, cardId, selectedIndex, onCancel }: Props) {
             </div>
           </div>
 
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              name="paysInArrears"
+              defaultChecked={card?.paysInArrears}
+              className="w-4 h-4 border border-slate-300 rounded focus:ring-1 focus:ring-slate-400"
+            />
+            <span className="text-xxs text-slate-600 font-medium">
+              Pago a mes vencido (el resumen del mes se cobra al mes siguiente)
+            </span>
+          </label>
+
           <div className="flex flex-wrap gap-2">
             <Button type="submit" variant="primary">
               {submitLabel}

@@ -280,15 +280,17 @@
       "bank": "Santander",
       "closingDay": 4,
       "dueDay": 3,
-      "last4Digits": "3838"
+      "last4Digits": "3838",
+      "paysInArrears": true
     },
     {
       "id": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
       "name": "Facu - Visa",
       "bank": "Santander",
       "closingDay": 1,
-      "dueDay": 22,
-      "last4Digits": "4563"
+      "dueDay": 4,
+      "last4Digits": "4563",
+      "paysInArrears": true
     },
     {
       "id": "44ceb513-f1aa-4a8c-8397-5a127567fbff",

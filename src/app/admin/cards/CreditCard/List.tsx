@@ -1,12 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
 import type { KeyboardEvent, MouseEvent } from "react";
+import { useState } from "react";
 import { deleteCard } from "@/actions/creditCard";
 import { BankLogo } from "@/components/BankLogo";
 import { EntityListItem } from "@/components/EntityListItem";
 import PanelHeader from "@/components/PanelHeader";
+import { Sheet } from "@/components/Sheet";
 import type { CreditCard } from "@/types";
 import { HeaderActions, ItemActions } from "./Actions";
+import { CardForm } from "./Form";
 
 type CreditCardListProps = {
   id?: string;
@@ -16,14 +19,16 @@ type CreditCardListProps = {
 
 export default function CreditCardList({ id, cards, selectedIndex }: CreditCardListProps) {
   const router = useRouter();
+  const [editingCard, setEditingCard] = useState<CreditCard | null>(null);
 
   const handleEditCard = (
     event: MouseEvent<HTMLButtonElement>,
+    card: CreditCard,
   ) => {
     event.preventDefault();
     event.stopPropagation();
 
-
+    setEditingCard(card);
   };
 
   const handleDeleteCard = async (
@@ -63,7 +68,8 @@ export default function CreditCardList({ id, cards, selectedIndex }: CreditCardL
           <EntityListItem
             key={card.id}
             title={`${card.name}`}
-            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
+            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}${card.paysInArrears ? " · Mes vencido" : ""}`}
+            subtitleClassName={card.paysInArrears ? "text-amber-600 font-semibold" : undefined}
             icon={BankLogo(card.bank, 20)}
             value={card.last4Digits}
             isActive={id === card.id}
@@ -78,13 +84,28 @@ export default function CreditCardList({ id, cards, selectedIndex }: CreditCardL
             }}
             actions={
               <ItemActions
-                onEdit={(event) => handleEditCard(event)}
+                onEdit={(event) => handleEditCard(event, card)}
                 onDelete={(event) => handleDeleteCard(event, card.id)}
               />
             }
           />
         ))}
       </div>
+
+      {editingCard && (
+        <Sheet
+          title="Editar tarjeta"
+          description="Actualizá los datos de la tarjeta seleccionada."
+          onClose={() => setEditingCard(null)}
+        >
+          <CardForm
+            card={editingCard}
+            cardId={id}
+            selectedIndex={selectedIndex}
+            onCancel={() => setEditingCard(null)}
+          />
+        </Sheet>
+      )}
     </div>
   );
 }

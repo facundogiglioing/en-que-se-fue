@@ -5,6 +5,16 @@ interface CardPurchase {
   totalAmount: number;
 }
 
+// Desplaza (mes 0-11, año) por `delta` meses, respetando el cambio de año.
+export function shiftMonthYear(
+  month: number,
+  year: number,
+  delta: number,
+): { month: number; year: number } {
+  const date = new Date(year, month + delta, 1);
+  return { month: date.getMonth(), year: date.getFullYear() };
+}
+
 export function getInstallmentInfo(
   purchase: CardPurchase,
   targetMonth: number,

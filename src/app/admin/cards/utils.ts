@@ -7,20 +7,27 @@ export async function GetPageData(cardId: string | undefined, index: number) {
   const db = await getDb();
   const cards = db.data.creditCards || [];
   const purchases = db.data.transactions || [];
+  const activeCard = cards.find((c) => c.id === cardId);
+
+  // Si la tarjeta se paga a mes vencido, el resumen de "index" corresponde
+  // a los consumos del mes anterior (los movimientos no cambian de fecha).
+  const consumptionIndex = activeCard?.paysInArrears
+    ? shiftIndex(index, -1)
+    : index;
 
   const transactions = cardId
     ? purchases
       .filter((p) => {
         if (p.cardId !== cardId) return false;
         const startIndex = p.startYear * 100 + (p.startMonth + 1);
-        if (index < startIndex) return false;
+        if (consumptionIndex < startIndex) return false;
         // Si es recurrente, no tiene fin; si no, termina con las cuotas
         if (p.isRecurring) return true;
         const endIndex = shiftIndex(
           startIndex,
           Math.max(1, p.installments || 1) - 1,
         );
-        return index <= endIndex;
+        return consumptionIndex <= endIndex;
       })
       .sort((a, b) => {
         const aStartIndex = a.startYear * 100 + (a.startMonth + 1);
@@ -37,7 +44,8 @@ export async function GetPageData(cardId: string | undefined, index: number) {
   return {
     cards,
     purchases,
-    transactions
+    transactions,
+    consumptionIndex,
   }
 
 }

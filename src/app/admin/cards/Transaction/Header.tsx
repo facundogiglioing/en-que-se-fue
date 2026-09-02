@@ -9,6 +9,7 @@ type HeaderProps = {
   selectedPeriodLabel: string;
   cardId: string;
   selectedIndex: number;
+  consumptionPeriodLabel?: string;
 };
 
 export default function TransactionHeader({
@@ -16,6 +17,7 @@ export default function TransactionHeader({
   selectedPeriodLabel,
   cardId,
   selectedIndex,
+  consumptionPeriodLabel,
 }: HeaderProps) {
   const formattedTotal = totalForPeriod.toLocaleString("es-AR", {
     style: "currency",
@@ -23,6 +25,10 @@ export default function TransactionHeader({
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+
+  const subTitle = consumptionPeriodLabel
+    ? `Total: ${formattedTotal} · Mes vencido: consumos de ${consumptionPeriodLabel}`
+    : `Total: ${formattedTotal}`;
 
   const Actions = () => {
     const basePath =
@@ -57,7 +63,7 @@ export default function TransactionHeader({
   return (
     <HeaderBase
       title="Movimientos"
-      subTitle={`Total: ${formattedTotal}`}
+      subTitle={subTitle}
       actions={<Actions />}
     />
   );
