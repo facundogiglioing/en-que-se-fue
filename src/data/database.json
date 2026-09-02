@@ -964,6 +964,127 @@
       "startYear": 2026,
       "category": "Servicios",
       "isRecurring": false
+    },
+    {
+      "id": "4fc2a88f-a9ab-4e25-b557-3b27221075d7",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Farmacity",
+      "totalAmount": 31056.4,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Salud",
+      "isRecurring": false
+    },
+    {
+      "id": "d4a16395-1df1-4dfa-9ea4-0e1c98d9db6f",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Merpago*jimenafuster",
+      "totalAmount": 12000,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "81e6bc00-4d89-4c93-b219-c862e35d5365",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Merpago*bazaar",
+      "totalAmount": 21900,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "d110e549-26e6-41ff-b280-a53ee9b6d234",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Spaceball",
+      "totalAmount": 68000.04,
+      "installments": 3,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "5943f4b8-f515-4c15-8cec-2d47cffacc49",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Dia tienda 739",
+      "totalAmount": 16214.26,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Supermercado",
+      "isRecurring": false
+    },
+    {
+      "id": "a8c65048-789c-4eb8-91fc-2639f6a6cb62",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Dia tienda 739",
+      "totalAmount": 20000,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Salidas",
+      "isRecurring": false
+    },
+    {
+      "id": "7513a4a6-d158-489f-9e6b-3ece68373cd9",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pensel store-devoto shop",
+      "totalAmount": 86000.04,
+      "installments": 3,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "30d055c8-6717-465a-a4af-23bf86512704",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Arredo",
+      "totalAmount": 252857.88,
+      "installments": 12,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "106c717c-7dcf-48e7-ae1b-22ce417e3ef6",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "La princesa",
+      "totalAmount": 63300,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Supermercado",
+      "isRecurring": false
+    },
+    {
+      "id": "b02d3f21-7517-45e3-8e7b-b0f77ae2a61d",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Pinturerias rex",
+      "totalAmount": 67813.08,
+      "installments": 12,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
+    },
+    {
+      "id": "d1195db9-bf21-4469-a6f0-d6189cd668b3",
+      "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
+      "description": "Merpago*electronicafl",
+      "totalAmount": 40146.9,
+      "installments": 1,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros",
+      "isRecurring": false
     }
   ],
   "cardPayments": [
