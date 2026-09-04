@@ -1,4 +1,3 @@
-import { Link, X } from "lucide-react";
 import { redirect } from "next/navigation";
 import {
   createExpense,
@@ -45,7 +44,7 @@ export default async function ExpenseForm({
       <form
         action={handleSubmit}
         key={editingExpense?.id || "new"}
-        className="space-y-6 p-6 "
+        className="space-y-6 p-6  shadow-sm sticky top-6"
       >
         <div className="space-y-4">
           <Input
@@ -80,10 +79,10 @@ export default async function ExpenseForm({
 
         <button
           type="submit" // <--- Explícito
-          className={`w - full py - 3 rounded - xl font - semibold transition active: scale - [0.98] ${editingExpense
-            ? "bg-blue-600 text-white hover:bg-blue-700"
-            : "bg-slate-900 text-white hover:bg-slate-800"
-            } `}
+          className={`w-full py-3 text-white rounded-xl font-semibold transition active: scale-[0.98] ${editingExpense}
+            ? "bg-blue-600  hover:bg-blue-700"
+            : "bg-slate-900 hover:bg-slate-800"
+            `}
         >
           {editingExpense ? "Actualizar Cambios" : "Guardar Gasto"}
         </button>

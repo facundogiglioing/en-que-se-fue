@@ -3,6 +3,7 @@ import { Button } from "@/components/base/Button";
 import HeaderBase from "@/components/PanelHeader";
 import { shiftIndex } from "../utils";
 import AddPurchaseAction from "./AddPurchaseAction";
+import UploadStatementAction from "./UploadStatementAction";
 
 type HeaderProps = {
   totalForPeriod: number;
@@ -56,15 +57,12 @@ export default function TransactionHeader({
           <ArrowRight size={18} />
         </Button>
         <AddPurchaseAction cardId={cardId} selectedIndex={selectedIndex} />
+        <UploadStatementAction />
       </div>
     );
   };
 
   return (
-    <HeaderBase
-      title="Movimientos"
-      subTitle={subTitle}
-      actions={<Actions />}
-    />
+    <HeaderBase title="Movimientos" subTitle={subTitle} actions={<Actions />} />
   );
 }

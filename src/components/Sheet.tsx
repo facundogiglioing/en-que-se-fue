@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import type { MouseEventHandler, ReactNode } from "react";
 
-type SheetSide = "right" | "left" | "top" | "bottom";
+type SheetSide = "right" | "left" | "top" | "bottom" | "center";
 
 type Props = {
   children: ReactNode;
@@ -20,6 +20,8 @@ const sideStyles: Record<SheetSide, string> = {
   top: "left-0 top-0 w-full max-h-[85dvh] border-b border-slate-200 rounded-b-2xl",
   bottom:
     "left-0 bottom-0 w-full max-h-[85dvh] border-t border-slate-200 rounded-t-2xl",
+  center:
+    "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[85dvh] w-[calc(100%-2.5rem)] max-w-4xl border border-slate-200 rounded-2xl",
 };
 
 const sideAnimations: Record<SheetSide, string> = {
@@ -27,6 +29,7 @@ const sideAnimations: Record<SheetSide, string> = {
   left: "animate-[sheet-in-left_220ms_ease-out]",
   top: "animate-[sheet-in-top_220ms_ease-out]",
   bottom: "animate-[sheet-in-bottom_220ms_ease-out]",
+  center: "animate-[sheet-in-center_180ms_ease-out]",
 };
 
 export function Sheet({
@@ -96,7 +99,9 @@ export function Sheet({
           )}
         </header>
 
-        <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">{children}</div>
+        <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">
+          {children}
+        </div>
       </aside>
 
       <style>{`
@@ -141,6 +146,17 @@ export function Sheet({
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes sheet-in-center {
+          from {
+            opacity: 0;
+            scale: 0.98;
+          }
+          to {
+            opacity: 1;
+            scale: 1;
           }
         }
       `}</style>

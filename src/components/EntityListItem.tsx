@@ -10,7 +10,6 @@ type EntityListItemProps = {
   onKeyDown?: KeyboardEventHandler<HTMLDivElement>;
   isActive?: boolean;
   editHref?: string;
-  onDelete?: () => Promise<void>;
   className?: string;
   subtitleClassName?: string;
   valueClassName?: string;

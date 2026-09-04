@@ -4,7 +4,6 @@ import type { MouseEventHandler } from "react";
 import { useState } from "react";
 import { AddButton } from "@/components/base/AddButton";
 import { DeleteButton } from "@/components/base/DeleteButton";
-import { EditButton } from "@/components/base/EditButton";
 import { Sheet } from "@/components/Sheet";
 import { CardForm } from "../cards/CreditCard/Form";
 
@@ -36,10 +35,9 @@ const HeaderActions = () => {
   );
 };
 
-const ItemActions = ({ onEdit, onDelete }: ItemActionsProps) => {
+const ItemActions = ({ onDelete }: ItemActionsProps) => {
   return (
     <div className="flex flex-row gap-4">
-      <EditButton onClick={onEdit} />
       <DeleteButton onClick={onDelete} />
     </div>
   );

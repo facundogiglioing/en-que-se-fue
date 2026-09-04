@@ -1,5 +1,7 @@
-import { Plus, X } from "lucide-react";
+"use client";
+import { Plus } from "lucide-react";
 import Link from "next/link";
+import type { MouseEvent } from "react";
 
 import { deleteExpense } from "@/actions/expense";
 
@@ -7,17 +9,41 @@ import { EntityListItem } from "@/components/EntityListItem";
 import PanelHeader from "@/components/PanelHeader";
 import { CATEGORIES } from "@/lib/constants";
 import type { Expense } from "@/types";
-import { HeaderActions } from "./Actions";
+import { HeaderActions, ItemActions } from "./Actions";
 
 type ExpenseFormProps = {
   expenses: Expense[];
   expenseId: string | undefined;
 };
 
-export default async function ExpensesList({
+export default function ExpensesList({
   expenses,
   expenseId,
 }: ExpenseFormProps) {
+  const handleDeleteExpense = async (
+    event: MouseEvent<HTMLButtonElement>,
+    expenseId: string,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const confirmed = window.confirm(
+      "¿Estás seguro de que deseas eliminar esta tarjeta? Esta acción no se puede deshacer.",
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      "use server";
+      await deleteExpense(expenseId);
+    } catch (error) {
+      console.error(error);
+      alert(
+        "Ocurrió un error al eliminar la tarjeta. Por favor, intenta nuevamente.",
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <PanelHeader
@@ -40,10 +66,13 @@ export default async function ExpensesList({
                 value={`$${expense.estimatedAmount?.toLocaleString()}`}
                 isActive={isEditing}
                 editHref={`/admin/expenses?edit=${expense.id}`}
-                onDelete={async () => {
-                  "use server";
-                  await deleteExpense(expense.id);
-                }}
+
+
+                actions={
+                  <ItemActions
+                    onDelete={(event) => handleDeleteExpense(event, expense.id)}
+                  />
+                }
               />
             </Link>
           );
@@ -74,12 +103,7 @@ export default async function ExpensesList({
                 router.push(`/admin/cards/${card.id}/${selectedIndex}`);
               }
             }}
-            actions={
-              <ItemActions
-                onEdit={(event) => handleEditCard(event, card)}
-                onDelete={(event) => handleDeleteCard(event, card.id)}
-              />
-            }
+            
           />
         ))}
 */

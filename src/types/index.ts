@@ -87,3 +87,29 @@ export interface DbSchema {
   transactions: Transaction[];
   cardPayments: CardPayment[];
 }
+
+// --- Resúmenes de tarjeta importados desde PDF ---
+
+export interface StatementSummary {
+  bank: string;
+  ownerName: string;
+  closingDate?: string; // ISO (AAAA-MM-DD) - Fecha de cierre
+  dueDate?: string; // ISO - Fecha de vencimiento
+  nextClosingDate?: string; // ISO - Fecha próxima de cierre
+  nextDueDate?: string; // ISO - Fecha próxima de vencimiento
+  totalAmount: number; // Total a pagar (en pesos)
+}
+
+export interface StatementMovement {
+  date: string; // ISO (AAAA-MM-DD)
+  description: string;
+  installment?: string; // Ej: "12/12"
+  amountArs?: number; // Pesos
+  amountUsd?: number; // Dólares (no se utiliza todavía)
+}
+
+export interface ParsedStatement {
+  bankId: string;
+  summary: StatementSummary;
+  movements: StatementMovement[];
+}
