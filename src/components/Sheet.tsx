@@ -99,7 +99,7 @@ export function Sheet({
           )}
         </header>
 
-        <div className="min-h-0 flex-1 overflow-hidden px-6 py-5">
+        <div className={`min-h-0 flex-1 overflow-hidden px-6 ${side !== 'center' ? ' py-5' : ''}`}>
           {children}
         </div>
       </aside>
