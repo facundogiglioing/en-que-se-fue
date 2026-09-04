@@ -8,6 +8,7 @@ type Props = {
   formAction?: string | ((formData: FormData) => void | Promise<void>);
   formNoValidate?: boolean;
   href?: string;
+  disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
 };
@@ -18,6 +19,7 @@ export function Button({
   variant,
   formNoValidate,
   href,
+  disabled,
   onClick,
   children,
 }: Props) {
@@ -26,6 +28,7 @@ export function Button({
     font-bold uppercase text-xs tracking-wider
     rounded-lg transition
     cursor-pointer shrink-0
+    disabled:cursor-not-allowed disabled:opacity-50
 
     data-[variant='primary']:bg-primary
     data-[variant='primary']:hover:bg-primary-hover
@@ -55,6 +58,7 @@ export function Button({
       className={className}
       formAction={formAction}
       formNoValidate={formNoValidate}
+      disabled={disabled}
       onClick={onClick}
     >
       {children}

@@ -57,7 +57,7 @@ export default function TransactionHeader({
           <ArrowRight size={18} />
         </Button>
         <AddPurchaseAction cardId={cardId} selectedIndex={selectedIndex} />
-        <UploadStatementAction />
+        <UploadStatementAction cardId={cardId} />
       </div>
     );
   };

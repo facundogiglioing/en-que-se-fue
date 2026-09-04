@@ -1,7 +1,7 @@
-import type { StatementMovement } from "@/types";
+import type { StatementMovementDiff } from "@/types";
 
 type Props = {
-  movements: StatementMovement[];
+  movements: StatementMovementDiff[];
 };
 
 function formatDate(iso: string): string {
@@ -43,12 +43,21 @@ export function StatementMovementsGrid({ movements }: Props) {
           {movements.map((movement, index) => (
             <tr
               key={`${movement.date}-${movement.description}-${index}`}
-              className="text-slate-500 hover:bg-slate-50/60"
+              title={
+                movement.exists
+                  ? "Ya existe un movimiento cargado igual a este"
+                  : undefined
+              }
+              className={
+                movement.exists
+                  ? "bg-danger/40 text-danger-text hover:bg-danger/50"
+                  : "text-slate-500 hover:bg-slate-50/60"
+              }
             >
-              <td className="px-5 py-3 text-xs font-medium text-slate-500 whitespace-nowrap">
+              <td className="px-5 py-3 text-xs font-medium whitespace-nowrap">
                 {formatDate(movement.date)}
               </td>
-              <td className="px-2 py-3 text-sm font-bold text-slate-700">
+              <td className="px-2 py-3 text-sm font-bold">
                 {movement.description}
               </td>
               <td className="px-2 py-3 text-center">
@@ -60,12 +69,12 @@ export function StatementMovementsGrid({ movements }: Props) {
                   <span className="text-slate-300">—</span>
                 )}
               </td>
-              <td className="px-2 py-3 text-right font-mono text-black text-sm whitespace-nowrap">
+              <td className="px-2 py-3 text-right font-mono text-sm whitespace-nowrap">
                 {movement.amountArs !== undefined
                   ? `$${formatMoney(movement.amountArs)}`
                   : "—"}
               </td>
-              <td className="px-5 py-3 text-right font-mono text-slate-500 text-sm whitespace-nowrap">
+              <td className="px-5 py-3 text-right font-mono text-sm whitespace-nowrap">
                 {movement.amountUsd !== undefined
                   ? `US$${formatMoney(movement.amountUsd)}`
                   : "—"}

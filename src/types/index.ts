@@ -113,3 +113,19 @@ export interface ParsedStatement {
   summary: StatementSummary;
   movements: StatementMovement[];
 }
+
+// --- Comparación del resumen importado contra lo que ya existe en la base ---
+
+export interface StatementMovementDiff extends StatementMovement {
+  exists: boolean; // Ya hay un movimiento cargado que coincide con este
+}
+
+export interface StatementDiff {
+  isCurrentCycle: boolean; // Si este resumen sigue vigente (no fue reemplazado por uno más nuevo)
+  movements: StatementMovementDiff[];
+}
+
+export interface StatementAnalysis {
+  statement: ParsedStatement;
+  diff: StatementDiff;
+}
