@@ -42,5 +42,5 @@ export function parseNumericDate(value: string): string | undefined {
   return `20${year}-${month}-${day}`;
 }
 
-// Importes con formato argentino, ej: "89.985,00" o "-1.405.301,42"
-export const MONEY_PATTERN = /-?\d{1,3}(?:\.\d{3})*,\d{2}/g;
+// Importes con o sin separador de miles, ej: "89.985,00", "-1.405.301,42" o "11994,00"
+export const MONEY_PATTERN = /-?\d+(?:\.\d{3})*,\d{2}/g;

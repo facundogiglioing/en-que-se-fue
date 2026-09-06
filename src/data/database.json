@@ -297,8 +297,8 @@
       "name": "Sabri - Master",
       "bank": "Ciudad",
       "last4Digits": null,
-      "closingDay": 25,
-      "dueDay": 5,
+      "closingDay": 24,
+      "dueDay": 7,
       "order": null
     }
   ],
@@ -957,17 +957,6 @@
       "category": "Servicios"
     },
     {
-      "id": "0fb9f2be-366d-4651-a3de-00c3bb8ffe8a",
-      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
-      "description": "Gasto del mes",
-      "totalAmount": 537341.69,
-      "installments": 1,
-      "startMonth": 7,
-      "startYear": 2026,
-      "category": "Servicios",
-      "isRecurring": false
-    },
-    {
       "id": "4fc2a88f-a9ab-4e25-b557-3b27221075d7",
       "cardId": "4a0802a6-4191-4f04-9637-36caddbfbd7c",
       "description": "Farmacity",
@@ -1087,6 +1076,326 @@
       "startYear": 2026,
       "category": "Supermercado",
       "isRecurring": false
+    },
+    {
+      "id": "820ae2eb-b237-4ac3-8bfd-e6d836fa8421",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MEGATLON",
+      "totalAmount": 1079820,
+      "installments": 12,
+      "startMonth": 9,
+      "startYear": 2024,
+      "category": "Otros"
+    },
+    {
+      "id": "0a6eb6c8-90e9-4c3d-8421-5bfa8c8eb489",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "CHULA HOME DECO-CHUL",
+      "totalAmount": 48600,
+      "installments": 6,
+      "startMonth": 8,
+      "startYear": 2025,
+      "category": "Otros"
+    },
+    {
+      "id": "27508951-aa78-4348-b1c5-d4d1298675c8",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*EQUIPATUCASA",
+      "totalAmount": 351999.12,
+      "installments": 6,
+      "startMonth": 10,
+      "startYear": 2025,
+      "category": "Otros"
+    },
+    {
+      "id": "e20acff8-27a4-498e-bd62-8b5f08fab38b",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*LAMADRILENASA",
+      "totalAmount": 33249.96,
+      "installments": 9,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "05f562d6-5651-4724-9405-a32e29f88f02",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*EMOTYWALLDECO",
+      "totalAmount": 229642.5,
+      "installments": 3,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "b02e355e-a888-4af4-927b-4f9d1ce13ba6",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*ALTORANCHO",
+      "totalAmount": 159979.98,
+      "installments": 3,
+      "startMonth": 2,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "f285e82e-b5b0-4230-99b2-65a01537d9be",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "TORINO NORTE",
+      "totalAmount": 22200,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "c97d0fb5-1be8-4dcc-91b9-f503df807282",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "FARMACITY SAN MARTIN Y PU",
+      "totalAmount": 8849.61,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "576c4d79-ff47-48f8-a40a-a948b2b704d9",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "THE SHELTER",
+      "totalAmount": 16600,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "e26dc516-6ced-496f-a0a0-b5e3b5862ac4",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "APPLE.COM/BILL ML7X29JDWUSD 2,99",
+      "totalAmount": 0,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "f84fe272-e9df-432e-88ce-d455b3ba587a",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "CLUB ATLETICO BO 000000002412328",
+      "totalAmount": 22400,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "c2cfb523-3966-4d40-bf7a-70cb659a7a2c",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "MERPAGO*ALIMENTOSYBEBIDAS",
+      "totalAmount": 41600,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "5556b341-f4d9-41f6-bbc9-6c861b194d6b",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "PUNTA CARRASCO",
+      "totalAmount": 26000,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "2f7f2cee-e287-48d5-8fb8-c4c8c8c5a01c",
+      "cardId": "7d010032-aea8-4831-bdb5-a91c42e9e3a5",
+      "description": "PUNTA CARRASCO",
+      "totalAmount": 22000,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "59e9ea88-6bc0-4667-82b8-4df7396822d7",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "FARMACITY",
+      "totalAmount": 11994,
+      "installments": 1,
+      "startMonth": 6,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "c9ddef8e-a5f8-4d08-a6a2-f458f8316028",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*ENVASESDEVOTO",
+      "totalAmount": 35407.649999999994,
+      "installments": 3,
+      "startMonth": 3,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "90991588-5bb0-41fe-aba4-95c89f0f42b9",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "CABIFY2633DFTEC1UE",
+      "totalAmount": 6418.76,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "36368f18-727a-4e2a-ab96-85b90159e1e7",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*MPDELIVERY",
+      "totalAmount": 31739,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "5aa9e31a-ffcf-4d22-ab12-2ea79d5197c9",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*MADLAAVENIDA",
+      "totalAmount": 25200,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "c54f80c5-3e1f-4063-b5bb-e7ef26ef4596",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*MERCADOLIBRE",
+      "totalAmount": 76141.75,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "1f342e9c-fc3c-4073-ae96-3ff877d2655d",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*CARREFOUR",
+      "totalAmount": 6425,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "086e66ab-e2c3-4d18-839f-dbe89e9f6165",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "COMBUSTIBLE",
+      "totalAmount": 24018,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "ce33e0f7-ded8-4496-8820-43cc92e39d0c",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "COMBUSTIBLE",
+      "totalAmount": 51000,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "2a0fa431-b0b9-4177-b84d-cfd1b841fd2b",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*ELABUELO",
+      "totalAmount": 105000,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "82dd87c7-6ff5-4c46-b537-fbb83dbd4e7c",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*LODEPETETO",
+      "totalAmount": 37762.4,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "20e9a540-5f70-4817-8127-154b4c48166e",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*LODEPETETO",
+      "totalAmount": 7741.2,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "67fb2e63-25e5-466b-b983-2d9a02fc241e",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "LA PLAZA HELADERIA",
+      "totalAmount": 24300,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "b5dbbd30-9b8d-448b-9809-7af7c047110b",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*TEACONNECTION",
+      "totalAmount": 42349,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "b5811e09-d2dc-45f9-9d71-58ef260afc51",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*RUTH",
+      "totalAmount": 23766,
+      "installments": 1,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "9dd8ebbb-108b-4ca8-a213-149a89f4d302",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*ANIKASHOP",
+      "totalAmount": 79414.98,
+      "installments": 3,
+      "startMonth": 5,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "fc1b7efd-3ac1-4387-8c29-04f267290775",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "MERPAGO*PINTURERIAREX",
+      "totalAmount": 35775.45,
+      "installments": 3,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
+    },
+    {
+      "id": "d4cfbb55-1a45-4b95-b034-cc4e87803e2f",
+      "cardId": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
+      "description": "GURRUCHAGA - CALLE",
+      "totalAmount": 70400.04000000001,
+      "installments": 3,
+      "startMonth": 7,
+      "startYear": 2026,
+      "category": "Otros"
     }
   ],
   "cardPayments": [
