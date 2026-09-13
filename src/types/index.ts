@@ -74,7 +74,6 @@ export interface Transaction {
   startMonth: number;
   startYear: number;
   category: CategoryName;
-  isRecurring?: boolean;
   receiptNumber?: string; // Número de comprobante del resumen (usado para detectar duplicados)
   movementDate?: string; // ISO - fecha real del consumo según el resumen (no define el período)
 }
@@ -121,8 +120,6 @@ export interface ParsedStatement {
 
 export interface StatementMovementDiff extends StatementMovement {
   exists: boolean; // Ya hay un movimiento cargado que coincide con este
-  // Si coincide con un gasto recurrente cuyo importe cambió, guardamos el nuevo importe.
-  recurringUpdate?: { transactionId: string; newAmount: number };
 }
 
 export interface StatementDiff {

@@ -78,19 +78,6 @@ export function TransactionForm({
             defaultValue={transaction?.receiptNumber}
           />
         </div>
-        <div className="col-span-6 ">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="isRecurring"
-              defaultChecked={transaction?.isRecurring}
-              className="w-4 h-4 border border-slate-300 rounded focus:ring-1 focus:ring-slate-400"
-            />
-            <span className="text-xxs text-slate-600 font-medium">
-              Gasto recurrente
-            </span>
-          </label>
-        </div>
 
         <div className="col-span-6 flex items-center gap-10 justify-end">
           <button

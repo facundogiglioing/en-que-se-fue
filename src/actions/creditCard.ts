@@ -106,7 +106,6 @@ export async function addPurchase(formData: FormData) {
     startMonth,
     startYear,
     category: (formData.get("category") as CategoryName) || "Otros",
-    isRecurring: formData.get("isRecurring") === "on",
     receiptNumber: receiptNumber || undefined,
   };
 
@@ -176,7 +175,6 @@ export async function updatePurchase(formData: FormData) {
       (formData.get("category") as CategoryName) ||
       db.data.transactions[index].category ||
       "Otros",
-    isRecurring: formData.get("isRecurring") === "on",
     receiptNumber: receiptNumber || undefined,
   };
 

@@ -30,10 +30,6 @@ function projectTransaction(transaction: Transaction, monthIndex: number) {
   const startIndex = transaction.startYear * 100 + (transaction.startMonth + 1);
   if (monthIndex < startIndex) return null;
 
-  if (transaction.isRecurring) {
-    return { installmentLabel: undefined, amount: transaction.totalAmount };
-  }
-
   const installments = Math.max(1, transaction.installments || 1);
   const endIndex = shiftIndex(startIndex, installments - 1);
   if (monthIndex > endIndex) return null;
@@ -108,26 +104,13 @@ export function buildStatementDiff(
           return false;
         }
 
-        // Los gastos recurrentes (seguro, cuota de club, etc.) pueden variar de
-        // importe todos los meses, así que no lo usamos para descartar el match.
-        if (transaction.isRecurring) return true;
-
         const amount = movement.amountArs ?? 0;
         return Math.abs(amount - projected.amount) < 1;
       });
 
       if (match) usedTransactionIds.add(match.id);
 
-      let recurringUpdate: StatementMovementDiff["recurringUpdate"];
-      if (
-        match?.isRecurring &&
-        movement.amountArs !== undefined &&
-        Math.abs(movement.amountArs - match.totalAmount) >= 1
-      ) {
-        recurringUpdate = { transactionId: match.id, newAmount: movement.amountArs };
-      }
-
-      return { ...movement, exists: !!match, recurringUpdate };
+      return { ...movement, exists: !!match };
     },
   );
 

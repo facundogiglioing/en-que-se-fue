@@ -21,8 +21,6 @@ export async function GetPageData(cardId: string | undefined, index: number) {
         if (p.cardId !== cardId) return false;
         const startIndex = p.startYear * 100 + (p.startMonth + 1);
         if (consumptionIndex < startIndex) return false;
-        // Si es recurrente, no tiene fin; si no, termina con las cuotas
-        if (p.isRecurring) return true;
         const endIndex = shiftIndex(
           startIndex,
           Math.max(1, p.installments || 1) - 1,

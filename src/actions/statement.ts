@@ -101,7 +101,6 @@ function movementToTransaction(
 
 export async function applyStatement(formData: FormData): Promise<{
   createdCount: number;
-  amountsUpdated: number;
   datesUpdated: boolean;
 }> {
   const cardId = formData.get("cardId") as string;
@@ -155,21 +154,9 @@ export async function applyStatement(formData: FormData): Promise<{
 
   db.data.transactions.push(...newTransactions);
 
-  // Gastos recurrentes ya cargados cuyo importe cambió (seguro, cuota de club, etc.).
-  let amountsUpdated = 0;
-  for (const movement of diff.movements) {
-    if (!movement.recurringUpdate) continue;
-    const transaction = db.data.transactions.find(
-      (t) => t.id === movement.recurringUpdate?.transactionId,
-    );
-    if (!transaction) continue;
-    transaction.totalAmount = movement.recurringUpdate.newAmount;
-    amountsUpdated++;
-  }
-
   await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
-  return { createdCount: newTransactions.length, amountsUpdated, datesUpdated };
+  return { createdCount: newTransactions.length, datesUpdated };
 }

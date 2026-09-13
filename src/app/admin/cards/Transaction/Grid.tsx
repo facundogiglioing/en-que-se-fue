@@ -1,4 +1,3 @@
-import { Infinity as InfinityIcon } from "lucide-react";
 import { deletePurchase } from "@/actions/creditCard";
 import { DeleteButton } from "@/components/base/DeleteButton";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -61,11 +60,6 @@ export default async function TransactionGrid({
                       ${p.totalAmount.toLocaleString("es-AR")} total
                     </p>
                   </div>
-                  {p.isRecurring && (
-                    <span className="bg-blue-100 text-blue-500 rounded-full p-2 flex items-center justify-center">
-                      <InfinityIcon size={16} />
-                    </span>
-                  )}
                 </td>
                 <td className="px-2 py-4 text-sm">
                   <span className="inline-flex items-center gap-2">
@@ -77,15 +71,9 @@ export default async function TransactionGrid({
                   {p.startMonth + 1}/{p.startYear}
                 </td>
                 <td className="px-2 py-4 text-center">
-                  {p.isRecurring ? (
-                    <span className="px-2 py-1 bg-blue-50 text-blue-500 rounded-md text-xxs font-bold uppercase">
-                      Mensual
-                    </span>
-                  ) : (
-                    <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xxs font-bold uppercase">
-                      {currentInstallment} / {installments}
-                    </span>
-                  )}
+                  <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xxs font-bold uppercase">
+                    {currentInstallment} / {installments}
+                  </span>
                 </td>
                 <td className="px-2 py-4 text-right font-mono text-black text-sm">
                   $
