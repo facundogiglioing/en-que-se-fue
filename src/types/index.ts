@@ -76,6 +76,7 @@ export interface Transaction {
   category: CategoryName;
   isRecurring?: boolean;
   receiptNumber?: string; // Número de comprobante del resumen (usado para detectar duplicados)
+  movementDate?: string; // ISO - fecha real del consumo según el resumen (no define el período)
 }
 
 // Actualizamos el Schema Global

@@ -21,7 +21,7 @@ function descriptionsMatch(a: string, b: string): boolean {
   return na === nb || na.includes(nb) || nb.includes(na);
 }
 
-function dateToMonthIndex(iso: string): number {
+export function dateToMonthIndex(iso: string): number {
   return Number(iso.slice(0, 4)) * 100 + Number(iso.slice(5, 7));
 }
 
@@ -68,10 +68,15 @@ export function buildStatementDiff(
   transactions: Transaction[],
 ): StatementDiff {
   const usedTransactionIds = new Set<string>();
+  // Todos los movimientos de un resumen pertenecen al período que cierra ese
+  // resumen, sin importar la fecha real en la que se hizo cada consumo.
+  const statementMonthIndex = statement.summary.closingDate
+    ? dateToMonthIndex(statement.summary.closingDate)
+    : undefined;
 
   const movements: StatementMovementDiff[] = statement.movements.map(
     (movement) => {
-      const monthIndex = dateToMonthIndex(movement.date);
+      const monthIndex = statementMonthIndex ?? dateToMonthIndex(movement.date);
 
       const match = transactions.find((transaction) => {
         if (usedTransactionIds.has(transaction.id)) return false;

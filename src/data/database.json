@@ -1117,7 +1117,9 @@
       "installments": 9,
       "startMonth": 2,
       "startYear": 2026,
-      "category": "Otros"
+      "category": "Otros",
+      "isRecurring": false,
+      "receiptNumber": "942946"
     },
     {
       "id": "05f562d6-5651-4724-9405-a32e29f88f02",

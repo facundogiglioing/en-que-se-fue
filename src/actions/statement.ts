@@ -5,7 +5,7 @@ import { shiftIndex } from "@/app/admin/cards/utils";
 import { getDb } from "@/lib/db";
 import { extractPdfText } from "@/lib/pdf";
 import { parseStatementText } from "@/lib/statements";
-import { buildStatementDiff } from "@/lib/statements/diff";
+import { buildStatementDiff, dateToMonthIndex } from "@/lib/statements/diff";
 import type {
   ParsedStatement,
   StatementAnalysis,
@@ -67,10 +67,8 @@ function dayOfMonth(iso: string | undefined): number | undefined {
 function movementToTransaction(
   cardId: string,
   movement: StatementMovement,
+  periodIndex: number,
 ): Transaction {
-  const monthIndex =
-    Number(movement.date.slice(0, 4)) * 100 + Number(movement.date.slice(5, 7));
-
   const [currentInstallmentRaw, totalInstallmentsRaw] = movement.installment
     ? movement.installment.split("/").map((n) => Number.parseInt(n, 10))
     : [1, 1];
@@ -84,7 +82,7 @@ function movementToTransaction(
       ? currentInstallmentRaw
       : 1;
 
-  const startIndex = shiftIndex(monthIndex, -(currentInstallment - 1));
+  const startIndex = shiftIndex(periodIndex, -(currentInstallment - 1));
   const amountArs = movement.amountArs ?? 0;
 
   return {
@@ -97,6 +95,7 @@ function movementToTransaction(
     startYear: Math.trunc(startIndex / 100),
     category: "Otros",
     receiptNumber: movement.receiptNumber,
+    movementDate: movement.date,
   };
 }
 
@@ -144,7 +143,15 @@ export async function applyStatement(formData: FormData): Promise<{
   const newTransactions = diff.movements
     // Los consumos en dólares por ahora solo se muestran, no se cargan.
     .filter((movement) => !movement.exists && movement.amountArs !== undefined)
-    .map((movement) => movementToTransaction(cardId, movement));
+    .map((movement) =>
+      movementToTransaction(
+        cardId,
+        movement,
+        statement.summary.closingDate
+          ? dateToMonthIndex(statement.summary.closingDate)
+          : dateToMonthIndex(movement.date),
+      ),
+    );
 
   db.data.transactions.push(...newTransactions);
 
