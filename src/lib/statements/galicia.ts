@@ -84,14 +84,52 @@ function parseMovementLine(line: string): StatementMovement | null {
   };
 }
 
+// En "CONSOLIDADO" puede aparecer un saldo en dólares del período anterior que
+// se convierte a pesos ("TRANSFERENCIA DEUDA ... TC... <monto ARS> <monto USD>").
+// Ese monto en pesos hay que pagarlo este período, así que lo sumamos como un
+// movimiento más aunque no esté dentro de "DETALLE DEL CONSUMO".
+function extractDebtTransferMovements(lines: string[]): StatementMovement[] {
+  const startIndex = lines.findIndex((line) => /^CONSOLIDADO\b/i.test(line));
+  if (startIndex === -1) return [];
+
+  let endIndex = lines.findIndex(
+    (line, index) => index > startIndex && /DETALLE DEL CONSUMO/i.test(line),
+  );
+  if (endIndex === -1) endIndex = lines.length;
+
+  const movements: StatementMovement[] = [];
+  for (let i = startIndex + 1; i < endIndex; i++) {
+    const match = lines[i].match(
+      /^(\d{2}-\d{2}-\d{2})\s+TRANSFERENCIA DEUDA\s+[\d.,]+\s+TC[\d.,]+\s+([\d.,]+)\s+-?[\d.,]+/i,
+    );
+    if (!match) continue;
+
+    const date = parseNumericDate(match[1]);
+    if (!date) continue;
+
+    movements.push({
+      date,
+      description: "Transferencia de deuda (saldo en USD convertido a pesos)",
+      amountArs: parseArNumber(match[2]),
+    });
+  }
+
+  return movements;
+}
+
 function extractMovements(lines: string[]): StatementMovement[] {
   const startIndex = lines.findIndex((line) =>
     /DETALLE DEL CONSUMO/i.test(line),
   );
   if (startIndex === -1) return [];
 
+  // Ojo: el encabezado "Tarjeta Crédito VISA" se repite en cada hoja del resumen,
+  // por eso el corte de fin no puede usar "TARJETA" como marcador. Además, después
+  // de la fila "TARJETA 6862 Total Consumos..." vienen cargos extra (gastos de
+  // servicio, intereses, IVA, etc.) que también forman parte de lo que hay que
+  // pagar, así que el corte real es la fila "TOTAL A PAGAR" al final.
   let endIndex = lines.findIndex(
-    (line, index) => index > startIndex && /^TARJETA\b/i.test(line),
+    (line, index) => index > startIndex && /^TOTAL A PAGAR\b/i.test(line),
   );
   if (endIndex === -1) endIndex = lines.length;
 
@@ -127,7 +165,10 @@ export const galiciaVisaParser: StatementParser = {
         totalAmount: extractTotalAmount(joined),
         ...extractBillingCycle(joined),
       },
-      movements: extractMovements(lines),
+      movements: [
+        ...extractDebtTransferMovements(lines),
+        ...extractMovements(lines),
+      ],
     };
   },
 };

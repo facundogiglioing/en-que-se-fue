@@ -109,7 +109,10 @@ export default function UploadStatementAction({ cardId }: Props) {
                 summary={result.statement.summary}
                 isCurrentCycle={result.diff.isCurrentCycle}
               />
-              <StatementMovementsGrid movements={result.diff.movements} />
+              <StatementMovementsGrid
+                movements={result.diff.movements}
+                expectedTotal={result.statement.summary.totalAmount}
+              />
               <div className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 px-6 py-4">
                 <p className="text-xs text-slate-500">
                   {saveSummary ? (
