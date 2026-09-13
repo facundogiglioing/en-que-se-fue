@@ -72,7 +72,9 @@ export default async function TransactionGrid({
                 </td>
                 <td className="px-2 py-4 text-center">
                   <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xxs font-bold uppercase">
-                    {currentInstallment} / {installments}
+                    {installments === 1
+                      ? "Mensual"
+                      : `${currentInstallment} / ${installments}`}
                   </span>
                 </td>
                 <td className="px-2 py-4 text-right font-mono text-black text-sm">
