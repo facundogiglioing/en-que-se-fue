@@ -75,6 +75,7 @@ export interface Transaction {
   startYear: number;
   category: CategoryName;
   isRecurring?: boolean;
+  receiptNumber?: string; // Número de comprobante del resumen (usado para detectar duplicados)
 }
 
 // Actualizamos el Schema Global
@@ -106,6 +107,7 @@ export interface StatementMovement {
   installment?: string; // Ej: "12/12"
   amountArs?: number; // Pesos
   amountUsd?: number; // Dólares (no se utiliza todavía)
+  receiptNumber?: string; // Número de comprobante, cuando el banco lo informa
 }
 
 export interface ParsedStatement {

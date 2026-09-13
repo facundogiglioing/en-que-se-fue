@@ -71,6 +71,9 @@ function parseMovementLine(line: string): StatementMovement | null {
   const amountValue = parseArNumber(lastAmount[0]);
 
   let description = rest.slice(0, lastAmount.index).trim();
+  // El número de comprobante queda pegado justo antes del importe.
+  const receiptMatch = description.match(/\b(\d{5,})\b\s*$/);
+  const receiptNumber = receiptMatch?.[1];
   description = description.replace(/\b\d{5,}\b\s*$/, "").trim();
   description = description.replace(/^[*KFW]{1,2}\s+/, "").trim();
   description = description.replace(/\s{2,}/g, " ");
@@ -81,6 +84,7 @@ function parseMovementLine(line: string): StatementMovement | null {
     installment,
     amountArs: isUsd ? undefined : amountValue,
     amountUsd: isUsd ? amountValue : undefined,
+    receiptNumber,
   };
 }
 

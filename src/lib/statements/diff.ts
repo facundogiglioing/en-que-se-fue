@@ -76,6 +76,12 @@ export function buildStatementDiff(
       const match = transactions.find((transaction) => {
         if (usedTransactionIds.has(transaction.id)) return false;
 
+        // Si el resumen trae número de comprobante, es la forma más confiable de
+        // detectar duplicados: alcanza con que coincida, sin importar fecha/monto.
+        if (movement.receiptNumber && transaction.receiptNumber) {
+          return transaction.receiptNumber === movement.receiptNumber;
+        }
+
         const projected = projectTransaction(transaction, monthIndex);
         if (!projected) return false;
 

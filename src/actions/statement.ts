@@ -96,6 +96,7 @@ function movementToTransaction(
     startMonth: (startIndex % 100) - 1,
     startYear: Math.trunc(startIndex / 100),
     category: "Otros",
+    receiptNumber: movement.receiptNumber,
   };
 }
 

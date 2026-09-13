@@ -95,6 +95,8 @@ export async function addPurchase(formData: FormData) {
     startMonth = parseInt(month, 10) - 1; // Ajuste 0-11
   }
 
+  const receiptNumber = (formData.get("receiptNumber") as string)?.trim();
+
   const newPurchase: Transaction = {
     id: crypto.randomUUID(),
     cardId,
@@ -105,6 +107,7 @@ export async function addPurchase(formData: FormData) {
     startYear,
     category: (formData.get("category") as CategoryName) || "Otros",
     isRecurring: formData.get("isRecurring") === "on",
+    receiptNumber: receiptNumber || undefined,
   };
 
   if (!db.data.transactions) db.data.transactions = [];
@@ -159,6 +162,8 @@ export async function updatePurchase(formData: FormData) {
   const index = db.data.transactions.findIndex((p) => p.id === id);
   if (index === -1) return;
 
+  const receiptNumber = (formData.get("receiptNumber") as string)?.trim();
+
   db.data.transactions[index] = {
     ...db.data.transactions[index],
     cardId,
@@ -172,6 +177,7 @@ export async function updatePurchase(formData: FormData) {
       db.data.transactions[index].category ||
       "Otros",
     isRecurring: formData.get("isRecurring") === "on",
+    receiptNumber: receiptNumber || undefined,
   };
 
   const cookieStore = await cookies();

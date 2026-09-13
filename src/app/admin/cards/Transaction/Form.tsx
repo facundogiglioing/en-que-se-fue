@@ -70,6 +70,14 @@ export function TransactionForm({
         <div className="col-span-3">
           <Categories value={transaction?.category} />
         </div>
+        <div className="col-span-3">
+          <Input
+            name="receiptNumber"
+            label="Comprobante"
+            placeholder="Número de comprobante"
+            defaultValue={transaction?.receiptNumber}
+          />
+        </div>
         <div className="col-span-6 ">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
