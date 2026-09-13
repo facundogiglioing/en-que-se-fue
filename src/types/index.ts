@@ -120,6 +120,8 @@ export interface ParsedStatement {
 
 export interface StatementMovementDiff extends StatementMovement {
   exists: boolean; // Ya hay un movimiento cargado que coincide con este
+  // Si coincide con un gasto recurrente cuyo importe cambió, guardamos el nuevo importe.
+  recurringUpdate?: { transactionId: string; newAmount: number };
 }
 
 export interface StatementDiff {

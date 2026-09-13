@@ -15,7 +15,7 @@ type Props = {
   cardId: string;
 };
 
-type SaveSummary = { createdCount: number; datesUpdated: boolean };
+type SaveSummary = { createdCount: number; amountsUpdated: number; datesUpdated: boolean };
 
 export default function UploadStatementAction({ cardId }: Props) {
   const router = useRouter();
@@ -94,7 +94,10 @@ export default function UploadStatementAction({ cardId }: Props) {
     !!result &&
     (result.diff.isCurrentCycle ||
       result.diff.movements.some(
-        (movement, index) => !movement.exists && !excludedIndices.has(index),
+        (movement, index) =>
+          !excludedIndices.has(index) &&
+          (!!movement.recurringUpdate ||
+            (!movement.exists && movement.amountArs !== undefined)),
       ));
 
   const handleToggleExclude = (index: number) => {
@@ -143,6 +146,9 @@ export default function UploadStatementAction({ cardId }: Props) {
                   {saveSummary ? (
                     <span className="font-semibold text-success-text">
                       {saveSummary.createdCount} movimiento(s) creado(s)
+                      {saveSummary.amountsUpdated
+                        ? ` · ${saveSummary.amountsUpdated} importe(s) actualizado(s)`
+                        : ""}
                       {saveSummary.datesUpdated
                         ? " · Fechas de cierre/vencimiento actualizadas"
                         : ""}

@@ -102,6 +102,7 @@ function movementToTransaction(
 
 export async function applyStatement(formData: FormData): Promise<{
   createdCount: number;
+  amountsUpdated: number;
   datesUpdated: boolean;
 }> {
   const cardId = formData.get("cardId") as string;
@@ -141,14 +142,27 @@ export async function applyStatement(formData: FormData): Promise<{
   }
 
   const newTransactions = diff.movements
-    .filter((movement) => !movement.exists)
+    // Los consumos en dólares por ahora solo se muestran, no se cargan.
+    .filter((movement) => !movement.exists && movement.amountArs !== undefined)
     .map((movement) => movementToTransaction(cardId, movement));
 
   db.data.transactions.push(...newTransactions);
+
+  // Gastos recurrentes ya cargados cuyo importe cambió (seguro, cuota de club, etc.).
+  let amountsUpdated = 0;
+  for (const movement of diff.movements) {
+    if (!movement.recurringUpdate) continue;
+    const transaction = db.data.transactions.find(
+      (t) => t.id === movement.recurringUpdate?.transactionId,
+    );
+    if (!transaction) continue;
+    transaction.totalAmount = movement.recurringUpdate.newAmount;
+    amountsUpdated++;
+  }
 
   await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
-  return { createdCount: newTransactions.length, datesUpdated };
+  return { createdCount: newTransactions.length, amountsUpdated, datesUpdated };
 }

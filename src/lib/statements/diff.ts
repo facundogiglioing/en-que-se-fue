@@ -76,10 +76,13 @@ export function buildStatementDiff(
       const match = transactions.find((transaction) => {
         if (usedTransactionIds.has(transaction.id)) return false;
 
-        // Si el resumen trae número de comprobante, es la forma más confiable de
-        // detectar duplicados: alcanza con que coincida, sin importar fecha/monto.
+        // El comprobante puede repetirse entre movimientos distintos (ej. mismo
+        // número en rubros diferentes), así que lo combinamos con la descripción.
         if (movement.receiptNumber && transaction.receiptNumber) {
-          return transaction.receiptNumber === movement.receiptNumber;
+          return (
+            transaction.receiptNumber === movement.receiptNumber &&
+            descriptionsMatch(transaction.description, movement.description)
+          );
         }
 
         const projected = projectTransaction(transaction, monthIndex);
@@ -100,13 +103,26 @@ export function buildStatementDiff(
           return false;
         }
 
+        // Los gastos recurrentes (seguro, cuota de club, etc.) pueden variar de
+        // importe todos los meses, así que no lo usamos para descartar el match.
+        if (transaction.isRecurring) return true;
+
         const amount = movement.amountArs ?? 0;
         return Math.abs(amount - projected.amount) < 1;
       });
 
       if (match) usedTransactionIds.add(match.id);
 
-      return { ...movement, exists: !!match };
+      let recurringUpdate: StatementMovementDiff["recurringUpdate"];
+      if (
+        match?.isRecurring &&
+        movement.amountArs !== undefined &&
+        Math.abs(movement.amountArs - match.totalAmount) >= 1
+      ) {
+        recurringUpdate = { transactionId: match.id, newAmount: movement.amountArs };
+      }
+
+      return { ...movement, exists: !!match, recurringUpdate };
     },
   );
 
