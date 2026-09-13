@@ -10,6 +10,16 @@ import {
   Zap,
 } from "lucide-react";
 import type { CategoryName } from "@/types";
+import type { Options } from "@/types/general";
+
+export const BANKS = ["Santander", "Galicia", "Ciudad", "Patagonia"] as const;
+
+export type BankName = (typeof BANKS)[number];
+
+export const BANK_OPTIONS: Options[] = BANKS.map((bank) => ({
+  label: bank,
+  value: bank,
+}));
 
 export const CATEGORIES: {
   name: CategoryName;

@@ -1,10 +1,12 @@
 import Image from "next/image";
+import { BANKS } from "@/lib/constants";
 
-const BANK_LOGOS = {
-  ciudad: "/assets/bank-logos/logo-banco-ciudad.png",
-  santander: "/assets/bank-logos/logo-banco-santander.png",
-  galicia: "/assets/bank-logos/logo-banco-galicia.png",
-} as const;
+const BANK_LOGO_FILES: Record<(typeof BANKS)[number], string> = {
+  Santander: "logo-banco-santander.png",
+  Galicia: "logo-banco-galicia.png",
+  Ciudad: "logo-banco-ciudad.png",
+  Patagonia: "logo-banco-patagonia.png",
+};
 
 const normalizeBankName = (bankName: string): string => {
   return bankName
@@ -17,20 +19,13 @@ const normalizeBankName = (bankName: string): string => {
 
 const getBankLogoSrc = (bankName: string): string | null => {
   const normalizedName = normalizeBankName(bankName);
+  const match = BANKS.find((bank) => normalizedName.includes(normalizeBankName(bank)));
 
-  if (normalizedName.includes("ciudad")) {
-    return BANK_LOGOS.ciudad;
+  if (!match) {
+    return null;
   }
 
-  if (normalizedName.includes("santander")) {
-    return BANK_LOGOS.santander;
-  }
-
-  if (normalizedName.includes("galicia")) {
-    return BANK_LOGOS.galicia;
-  }
-
-  return null;
+  return `/assets/bank-logos/${BANK_LOGO_FILES[match]}`;
 };
 
 export const BankLogo = (bankName: string, size = 24) => {

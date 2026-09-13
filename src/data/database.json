@@ -264,7 +264,8 @@
       "bank": "Galicia",
       "closingDay": 6,
       "dueDay": 25,
-      "last4Digits": "1234"
+      "last4Digits": "6862",
+      "paysInArrears": false
     },
     {
       "id": "a5fc603e-7427-4fe7-a2c8-28b01b639758",
@@ -296,10 +297,11 @@
       "id": "44ceb513-f1aa-4a8c-8397-5a127567fbff",
       "name": "Sabri - Master",
       "bank": "Ciudad",
-      "last4Digits": null,
+      "last4Digits": "5544",
       "closingDay": 24,
       "dueDay": 7,
-      "order": null
+      "order": null,
+      "paysInArrears": false
     }
   ],
   "transactions": [

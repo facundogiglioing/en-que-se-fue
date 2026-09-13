@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import type { MouseEventHandler } from "react";
 import { createCard, updateCardDetails } from "@/actions/creditCard";
 import { Button } from "@/components/base/Button";
 import { Input } from "@/components/base/Input";
+import { Dropdown } from "@/components/Dropdown";
+import { BANK_OPTIONS } from "@/lib/constants";
 import type { CreditCard } from "@/types";
 
 type Props = {
@@ -10,28 +14,23 @@ type Props = {
   cardId?: string;
   selectedIndex?: number;
   onCancel?: MouseEventHandler<HTMLButtonElement>;
+  onSuccess?: () => void;
 };
 
-export function CardForm({ card, cardId, selectedIndex, onCancel }: Props) {
+export function CardForm({ card, cardId, selectedIndex, onCancel, onSuccess }: Props) {
   const isEditing = !!card;
   const action = isEditing ? updateCardDetails : createCard;
-  const title = isEditing ? "Editar Tarjeta" : "Registrar Tarjeta";
   const submitLabel = isEditing ? "Actualizar Tarjeta" : "Guardar Tarjeta";
+
+  // updateCardDetails no redirige, así que avisamos al padre para cerrar el panel
+  async function handleAction(formData: FormData) {
+    await action(formData);
+    onSuccess?.();
+  }
 
   return (
     <div className="space-y-4">
-      <div>
-        <h3 className="text-sm font-black uppercase tracking-widest text-slate-700">
-          {title}
-        </h3>
-        <p className="mt-1 text-xs text-slate-500">
-          {isEditing
-            ? "Actualizá los datos de la tarjeta seleccionada."
-            : "Agregá una tarjeta para empezar a registrar movimientos."}
-        </p>
-      </div>
-
-      <form action={action} className="space-y-4">
+      <form action={handleAction} className="space-y-4">
         {isEditing && <input type="hidden" name="cardId" value={card.id} />}
 
         <div className="space-y-3">
@@ -42,15 +41,25 @@ export function CardForm({ card, cardId, selectedIndex, onCancel }: Props) {
             defaultValue={card?.name}
             required
           />
-          <Input
-            label="Banco"
+          <Dropdown
             name="bank"
-            placeholder="Banco (Ej: Santander)"
+            label="Banco"
+            placeholder="Seleccionar Banco..."
+            cards={BANK_OPTIONS}
             defaultValue={card?.bank}
-            required
           />
-
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-1">
+              <Input
+                label="Últimos 4 dígitos"
+                name="last4Digits"
+                placeholder="1234"
+                type="numeric"
+                maxLength={4}
+                defaultValue={card?.last4Digits}
+                required
+              />
+            </div>
             <div className="space-y-1">
               <Input
                 name="closingDay"

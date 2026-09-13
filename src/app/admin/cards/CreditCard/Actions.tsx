@@ -28,7 +28,7 @@ const HeaderActions = () => {
           description="Completá los datos para registrar una nueva tarjeta."
           onClose={() => setIsOpen(false)}
         >
-          <CardForm onCancel={() => setIsOpen(false)} />
+          <CardForm onCancel={() => setIsOpen(false)} onSuccess={() => setIsOpen(false)} />
         </Sheet>
       )}
     </>

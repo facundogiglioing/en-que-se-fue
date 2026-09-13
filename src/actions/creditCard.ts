@@ -38,6 +38,7 @@ export async function updateCardDetails(formData: FormData) {
   const cardId = formData.get("cardId") as string;
   const name = (formData.get("name") as string)?.trim();
   const bank = (formData.get("bank") as string)?.trim();
+  const last4Digits = (formData.get("last4Digits") as string)?.trim();
 
   if (!cardId || !name || !bank) return;
 
@@ -46,6 +47,7 @@ export async function updateCardDetails(formData: FormData) {
 
   card.name = name;
   card.bank = bank;
+  card.last4Digits = last4Digits || card.last4Digits;
   card.closingDay = Number(formData.get("closingDay")) || card.closingDay;
   card.dueDay = Number(formData.get("dueDay")) || card.dueDay;
   card.paysInArrears = formData.get("paysInArrears") === "on";

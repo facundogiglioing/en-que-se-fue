@@ -103,6 +103,7 @@ export default function CreditCardList({ id, cards, selectedIndex }: CreditCardL
             cardId={id}
             selectedIndex={selectedIndex}
             onCancel={() => setEditingCard(null)}
+            onSuccess={() => setEditingCard(null)}
           />
         </Sheet>
       )}
