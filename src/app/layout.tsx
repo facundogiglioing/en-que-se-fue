@@ -5,7 +5,7 @@ import { Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
 
 import { Header } from "@/components/Header";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import Navbar, { MobileNav } from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "Home Expenses",
@@ -35,28 +35,19 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} ${robotoMono.variable}`}
     >
       <body className="h-dvh overflow-hidden bg-background text-foreground">
-        <div
-          className="grid h-full min-h-0"
-          style={{
-            gridTemplateAreas: '"header header" "menu content" "footer footer"',
-            gridTemplateColumns: "minmax(200px, 1fr) minmax(0, 10fr)",
-            gridTemplateRows: "auto minmax(0, 1fr) auto",
-          }}
-        >
-
+        <div className="flex h-full min-h-0 flex-col">
           <Header />
-          <Navbar />
-          <main
-            className="min-h-0 overflow-hidden bg-white"
-            style={{ gridArea: "content" }}
-          >
-            {children}
-          </main>
 
-          <footer
-            className="border-t border-border-primary bg-white px-5 py-3 text-center text-xxs font-semibold uppercase tracking-[0.2em] text-slate-400"
-            style={{ gridArea: "footer" }}
-          >
+          <div className="flex min-h-0 flex-1">
+            <Navbar />
+            <main className="min-h-0 flex-1 overflow-y-auto bg-white lg:overflow-hidden">
+              {children}
+            </main>
+          </div>
+
+          <MobileNav />
+
+          <footer className="hidden border-t border-border-primary bg-white px-5 py-3 text-center text-xxs font-semibold uppercase tracking-[0.2em] text-slate-400 lg:block">
             Home Expenses · panel global
           </footer>
         </div>

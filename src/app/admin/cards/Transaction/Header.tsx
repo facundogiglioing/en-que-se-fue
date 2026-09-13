@@ -38,7 +38,7 @@ export default function TransactionHeader({
     const nextIndex = shiftIndex(selectedIndex, 1);
 
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-end gap-2">
         <Button
           type="button"
           variant="danger"
@@ -46,7 +46,7 @@ export default function TransactionHeader({
         >
           <ArrowLeft size={18} />
         </Button>
-        <span className="px-3 py-2 text-xs uppercase text-slate-900 bg-slate-100 rounded-lg whitespace-nowrap w-40 text-center">
+        <span className="w-28 whitespace-nowrap rounded-lg bg-slate-100 px-3 py-2 text-center text-xs uppercase text-slate-900 sm:w-40">
           {selectedPeriodLabel}
         </span>
         <Button

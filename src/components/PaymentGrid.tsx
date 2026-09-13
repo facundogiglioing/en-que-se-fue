@@ -392,7 +392,7 @@ export function PaymentGrid({
       </div>
 
       {/* FOOTER LEGEND */}
-      <div className="flex gap-6 justify-center">
+      <div className="flex flex-wrap justify-center gap-3 px-4 py-3 sm:gap-6 sm:py-0">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 bg-blue-600/10 rounded-sm" />
           <span className="text-xxs font-bold uppercase text-slate-400">

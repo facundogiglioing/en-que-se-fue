@@ -10,7 +10,7 @@ export function Categories({ value }: Props) {
       <span className="block text-xxs uppercase text-slate-500 mb-2">
         Categoría
       </span>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {CATEGORIES.map((cat) => (
           <label
             key={cat.name}

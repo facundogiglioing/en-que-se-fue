@@ -41,8 +41,8 @@ export function TransactionForm({
       <input type="hidden" name="cardId" value={activeCardId} />
       <input type="hidden" name="selectedIndex" value={selectedIndex ?? ""} />
 
-      <div className="grid grid-cols-6 gap-6">
-        <div className="col-span-6 ">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-6">
+        <div className="col-span-1 sm:col-span-6">
           <Input
             name="description"
             label="Descripción"
@@ -51,13 +51,13 @@ export function TransactionForm({
             required
           />
         </div>
-        <div className="col-span-6 ">
+        <div className="col-span-1 sm:col-span-6">
           <InstallmentAmountFields
             defaultInstallments={transaction?.installments ?? 1}
             defaultAmount={transaction?.totalAmount}
           />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-1 sm:col-span-3">
           <Input
             id="start-period"
             name="startPeriod"
@@ -67,10 +67,10 @@ export function TransactionForm({
             required
           />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-1 sm:col-span-3">
           <Categories value={transaction?.category} />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-1 sm:col-span-3">
           <Input
             name="receiptNumber"
             label="Comprobante"
@@ -79,7 +79,7 @@ export function TransactionForm({
           />
         </div>
 
-        <div className="col-span-6 flex items-center gap-10 justify-end">
+        <div className="col-span-1 flex flex-wrap items-center justify-end gap-3 sm:col-span-6 sm:gap-10">
           <button
             type="submit"
             className="px-4 py-2 bg-slate-900 text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-slate-700 transition"

@@ -17,7 +17,7 @@ export default async function TransactionGrid({
   activeCardId,
 }: Props) {
   return (
-    <div className="min-h-0 flex-1 overflow-auto">
+    <div className="overflow-x-auto lg:min-h-0 lg:flex-1 lg:overflow-auto">
       <table className="w-full text-left">
         <thead>
           <tr className="sticky top-0 bg-cell text-black text-sm border-b border-slate-100">

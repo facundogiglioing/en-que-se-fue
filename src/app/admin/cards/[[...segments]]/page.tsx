@@ -30,12 +30,12 @@ export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
   const activeCard = cards.find((c) => c.id === cardId);
 
   return (
-    <Container className="flex h-full overflow-hidden">
-      <div className="grid h-full min-h-0 w-full grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+    <Container className="flex overflow-y-auto lg:h-full lg:overflow-hidden">
+      <div className="grid min-h-0 w-full grid-cols-1 lg:h-full lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
         <div className="min-w-0">
           <CreditCardList id={id} cards={cards} selectedIndex={selectedIndex} />
         </div>
-        <div className="flex min-h-0 min-w-0 flex-col border-l border-border-primary">
+        <div className="flex min-h-0 min-w-0 flex-col border-t border-border-primary lg:border-t-0 lg:border-l">
           <Transactions
             cardId={id || "0"}
             index={selectedIndex}
