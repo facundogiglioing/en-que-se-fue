@@ -26,12 +26,14 @@ export default function UploadStatementAction({ cardId }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSummary, setSaveSummary] = useState<SaveSummary | null>(null);
+  const [excludedIndices, setExcludedIndices] = useState<Set<number>>(new Set());
 
   const reset = () => {
     setResult(null);
     setError(null);
     setSaveError(null);
     setSaveSummary(null);
+    setExcludedIndices(new Set());
   };
 
   const handleClose = () => {
@@ -48,6 +50,7 @@ export default function UploadStatementAction({ cardId }: Props) {
       formData.append("cardId", cardId);
       const analysis = await analyzeStatement(formData);
       setResult(analysis);
+      setExcludedIndices(new Set());
     } catch (err) {
       setError(
         err instanceof Error
@@ -66,7 +69,13 @@ export default function UploadStatementAction({ cardId }: Props) {
     try {
       const formData = new FormData();
       formData.append("cardId", cardId);
-      formData.append("statement", JSON.stringify(result.statement));
+      const statementToSave = {
+        ...result.statement,
+        movements: result.statement.movements.filter(
+          (_, index) => !excludedIndices.has(index),
+        ),
+      };
+      formData.append("statement", JSON.stringify(statementToSave));
       const summary = await applyStatement(formData);
       setSaveSummary(summary);
       router.refresh();
@@ -84,7 +93,21 @@ export default function UploadStatementAction({ cardId }: Props) {
   const hasPendingChanges =
     !!result &&
     (result.diff.isCurrentCycle ||
-      result.diff.movements.some((movement) => !movement.exists));
+      result.diff.movements.some(
+        (movement, index) => !movement.exists && !excludedIndices.has(index),
+      ));
+
+  const handleToggleExclude = (index: number) => {
+    setExcludedIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
 
   return (
     <>
@@ -112,6 +135,8 @@ export default function UploadStatementAction({ cardId }: Props) {
               <StatementMovementsGrid
                 movements={result.diff.movements}
                 expectedTotal={result.statement.summary.totalAmount}
+                excludedIndices={excludedIndices}
+                onToggleExclude={handleToggleExclude}
               />
               <div className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 px-6 py-4">
                 <p className="text-xs text-slate-500">
