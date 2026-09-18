@@ -1,11 +1,9 @@
 
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
-
-
-import { Header } from "@/components/Header";
-import "./globals.css";
 import Navbar, { MobileNav } from "@/components/Navbar";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Home Expenses",
@@ -36,8 +34,6 @@ export default function RootLayout({
     >
       <body className="h-dvh overflow-hidden bg-background text-foreground">
         <div className="flex h-full min-h-0 flex-col">
-          <Header />
-
           <div className="flex min-h-0 flex-1">
             <Navbar />
             <main className="min-h-0 flex-1 overflow-y-auto bg-white lg:overflow-hidden">

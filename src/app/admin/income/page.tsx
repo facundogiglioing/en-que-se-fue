@@ -136,11 +136,10 @@ export default async function IncomePage({
 
           <button
             type="submit"
-            className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${
-              editingIncome
+            className={`w-full py-3 rounded-xl font-semibold transition active:scale-[0.98] ${editingIncome
                 ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-100 shadow-lg"
                 : "bg-slate-900 text-white hover:bg-slate-800"
-            }`}
+              }`}
           >
             {editingIncome ? "Actualizar Ingreso" : "Guardar Ingreso"}
           </button>
@@ -170,10 +169,6 @@ export default async function IncomePage({
               valueClassName="font-black text-green-600"
               isActive={income.id === edit}
               editHref={`/admin/income?edit=${income.id}`}
-              onDelete={async () => {
-                "use server";
-                await deleteIncome(income.id);
-              }}
             />
           ))}
 

@@ -1,6 +1,6 @@
 import { CreditCard, Home, Settings, Wallet } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import PanelHeader from "./PanelHeader";
 
 const NAV_ITEMS = [
   { href: "/", label: "Inicio", icon: Home },
@@ -11,19 +11,28 @@ const NAV_ITEMS = [
 
 export default function Navbar() {
   return (
-    <aside className="hidden min-h-0 shrink-0 overflow-hidden border-r border-border-primary bg-white shadow-sm lg:flex lg:w-64 lg:flex-col lg:gap-5">
+    <aside className="hidden min-h-0 shrink-0 overflow-visible border-r border-border-primary bg-white shadow-sm lg:flex lg:w-20 lg:flex-col lg:gap-5">
       <div>
-        <PanelHeader title="Menu" />
+        <Link
+          href="/"
+          className="flex items-center justify-center border-b border-border-primary p-4"
+        >
+          <Image src="/assets/logo-md.png" alt="Logo" width={40} height={40} />
+        </Link>
 
-        <div className="mt-3 flex flex-col gap-2">
+        <div className="mt-3 flex flex-col items-center gap-2 px-2">
           {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
+              className="group relative flex items-center justify-center rounded-lg p-3 text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
             >
-              <Icon size={18} />
-              {label}
+              <Icon size={20} />
+
+              {/* Tooltip */}
+              <span className="pointer-events-none absolute left-full z-50 ml-3 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-xs font-semibold text-white opacity-0 shadow-xl transition-opacity group-hover:opacity-100">
+                {label}
+              </span>
             </Link>
           ))}
         </div>
