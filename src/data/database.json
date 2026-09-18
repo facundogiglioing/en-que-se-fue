@@ -33,7 +33,7 @@
       "name": "COVICIFA",
       "category": "Otros",
       "dueDate": 5,
-      "estimatedAmount": 483600
+      "estimatedAmount": 522800
     },
     {
       "id": "d7374e6a-0504-4908-864c-e33d642048c5",
@@ -229,6 +229,60 @@
       "isPaid": true,
       "paidAt": "2026-08-11T14:01:56.109Z",
       "actualAmount": 888603.22
+    },
+    {
+      "id": "a6715bfc-cb0c-46aa-8e29-af7bd1c90d18",
+      "expenseId": "0b08ce49-fd01-492e-bbfd-f920d53fa5f3",
+      "month": 8,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-09-18T17:03:29.193Z",
+      "actualAmount": 908020.91
+    },
+    {
+      "id": "be293416-e0cc-4e35-9f46-34877e2955d1",
+      "expenseId": "ebfdc286-4199-4376-8610-e740a339b426",
+      "month": 8,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-09-18T17:14:13.078Z",
+      "actualAmount": 182934.19
+    },
+    {
+      "id": "48442cc9-c0af-43d4-a7e3-1f613c88796b",
+      "expenseId": "d2062af3-c0f3-4bbd-b6a0-378ede2c29ec",
+      "month": 8,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-09-18T17:14:35.062Z",
+      "actualAmount": 182245.12
+    },
+    {
+      "id": "0a44dd0f-aa31-45bf-9814-b682203991a0",
+      "expenseId": "d83038a2-590d-490f-99de-a9641ca7f382",
+      "month": 8,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-09-18T17:14:59.905Z",
+      "actualAmount": 522800
+    },
+    {
+      "id": "20984a63-38cd-4797-930f-0eb295dc0c8a",
+      "expenseId": "d7374e6a-0504-4908-864c-e33d642048c5",
+      "month": 8,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-09-18T17:16:45.355Z",
+      "actualAmount": 417852
+    },
+    {
+      "id": "f1505a31-a358-4c7e-a10f-febf33ce55ce",
+      "expenseId": "16d2773d-d3a4-420b-9825-90ad009e6052",
+      "month": 8,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-09-18T17:17:10.259Z",
+      "actualAmount": 48050
     }
   ],
   "incomes": [

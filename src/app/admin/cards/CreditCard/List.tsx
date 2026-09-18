@@ -68,7 +68,7 @@ export default function CreditCardList({ id, cards, selectedIndex }: CreditCardL
           <EntityListItem
             key={card.id}
             title={`${card.name}`}
-            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}${card.paysInArrears ? " · Mes vencido" : ""}`}
+            subtitle={`Cierre: ${card.closingDay} -  Vto: ${card.dueDay}`}
             subtitleClassName={card.paysInArrears ? "text-amber-600 font-semibold" : undefined}
             icon={BankLogo(card.bank, 20)}
             value={card.last4Digits}
