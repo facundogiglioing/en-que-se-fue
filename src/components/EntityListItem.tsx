@@ -45,10 +45,10 @@ export function EntityListItem({
         className,
       )}
     >
-      <div className="flex justify-center gap-4">
+      <div className="flex min-w-0 flex-1 items-center gap-4">
         <div
           className={cn(
-            "rounded-lg p-2",
+            "shrink-0 rounded-lg p-2",
             isActive
               ? "bg-blue-50 text-blue-600"
               : "bg-slate-50 text-slate-600",
@@ -57,11 +57,11 @@ export function EntityListItem({
         >
           {icon}
         </div>
-        <div className="flex flex-col items-start justify-center min-w-0">
-          <h3 className="font-semibold text-slate-900">{title}</h3>
+        <div className="flex min-w-0 flex-1 flex-col items-start justify-center">
+          <h3 className="w-full truncate font-semibold text-slate-900">{title}</h3>
           <p
             className={cn(
-              "text-xs font-medium text-slate-400",
+              "w-full truncate text-xs font-medium text-slate-400",
               subtitleClassName,
             )}
           >
@@ -70,7 +70,7 @@ export function EntityListItem({
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-3">
         {value && (
           <span
             className={cn(
