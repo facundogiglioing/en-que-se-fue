@@ -35,23 +35,19 @@ export function EntityListItem({
     <div
       role="button"
       tabIndex={0}
+      data-active={isActive || undefined}
       onKeyDown={onKeyDown}
       onClick={onClick}
       className={cn(
-        "group flex items-center justify-between rounded-xl border p-4 transition-all cursor-pointer w-full text-left",
-        isActive
-          ? "border-blue-500 ring-2 ring-blue-500/10 shadow-lg"
-          : "border-slate-200 hover:shadow-md",
+        "group flex items-center justify-between rounded-xl border border-slate-200 p-4 transition-all cursor-pointer w-full text-left hover:shadow-md",
+        "data-active:border-blue-500 data-active:ring-2 data-active:ring-blue-500/10 data-active:shadow-lg",
         className,
       )}
     >
       <div className="flex min-w-0 flex-1 items-center gap-4">
         <div
           className={cn(
-            "shrink-0 rounded-lg p-2",
-            isActive
-              ? "bg-blue-50 text-blue-600"
-              : "bg-slate-50 text-slate-600",
+            "shrink-0 rounded-lg bg-slate-50 p-2 text-slate-600 group-data-active:bg-blue-50 group-data-active:text-blue-600",
             iconClassName,
           )}
         >

@@ -41,7 +41,7 @@ export const BankLogo = (bankName: string, size = 24) => {
       alt={bankName}
       width={size}
       height={size}
-      className="h-auto w-auto shrink-0 object-contain"
+      className="h-auto w-auto object-contain"
     />
   );
 };
