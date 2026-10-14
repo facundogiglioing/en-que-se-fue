@@ -1,32 +1,31 @@
 "use server";
 
+import { eq, max } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getDb } from "@/lib/db";
-import type { CategoryName, CreditCard, Transaction } from "@/types";
+import { db } from "@/lib/db";
+import { creditCards, transactions } from "@/lib/schema";
+import type { CategoryName } from "@/types";
 
 export async function createCard(formData: FormData) {
-  const db = await getDb();
-  const maxOrder = Math.max(
-    ...(db.data.creditCards?.map((c) => c.order) ?? [0]),
-    0,
-  );
+  const [{ maxOrder }] = await db
+    .select({ maxOrder: max(creditCards.order) })
+    .from(creditCards);
 
-  const newCard: CreditCard = {
-    id: crypto.randomUUID(),
-    name: formData.get("name") as string,
-    bank: formData.get("bank") as string,
-    last4Digits: formData.get("last4Digits") as string,
-    closingDay: Number(formData.get("closingDay")),
-    dueDay: Number(formData.get("dueDay")),
-    order: maxOrder + 1,
-    paysInArrears: formData.get("paysInArrears") === "on",
-  };
+  const [newCard] = await db
+    .insert(creditCards)
+    .values({
+      name: formData.get("name") as string,
+      bank: formData.get("bank") as string,
+      last4Digits: formData.get("last4Digits") as string,
+      closingDay: Number(formData.get("closingDay")),
+      dueDay: Number(formData.get("dueDay")),
+      order: Math.max(maxOrder ?? 0, 0) + 1,
+      paysInArrears: formData.get("paysInArrears") === "on",
+    })
+    .returning({ id: creditCards.id });
 
-  if (!db.data.creditCards) db.data.creditCards = [];
-  db.data.creditCards.push(newCard);
-  await db.write();
   revalidatePath("/admin/cards");
   const now = new Date();
   const currentIndex = now.getFullYear() * 100 + (now.getMonth() + 1);
@@ -34,7 +33,6 @@ export async function createCard(formData: FormData) {
 }
 
 export async function updateCardDetails(formData: FormData) {
-  const db = await getDb();
   const cardId = formData.get("cardId") as string;
   const name = (formData.get("name") as string)?.trim();
   const bank = (formData.get("bank") as string)?.trim();
@@ -42,28 +40,25 @@ export async function updateCardDetails(formData: FormData) {
 
   if (!cardId || !name || !bank) return;
 
-  const card = db.data.creditCards.find((c) => c.id === cardId);
-  if (!card) return;
-
-  card.name = name;
-  card.bank = bank;
-  card.last4Digits = last4Digits || card.last4Digits;
-  card.closingDay = Number(formData.get("closingDay")) || card.closingDay;
-  card.dueDay = Number(formData.get("dueDay")) || card.dueDay;
-  card.paysInArrears = formData.get("paysInArrears") === "on";
-  await db.write();
+  // Los campos en undefined no se actualizan y conservan el valor anterior.
+  await db
+    .update(creditCards)
+    .set({
+      name,
+      bank,
+      last4Digits: last4Digits || undefined,
+      closingDay: Number(formData.get("closingDay")) || undefined,
+      dueDay: Number(formData.get("dueDay")) || undefined,
+      paysInArrears: formData.get("paysInArrears") === "on",
+    })
+    .where(eq(creditCards.id, cardId));
   revalidatePath("/admin/cards");
   revalidatePath("/");
 }
 
 export async function deleteCard(id: string) {
-  const db = await getDb();
-  // Borramos la tarjeta
-  db.data.creditCards = db.data.creditCards.filter((c) => c.id !== id);
-  // IMPORTANTE: También borramos sus consumos asociados para no dejar basura
-  db.data.transactions = db.data.transactions.filter((p) => p.cardId !== id);
-
-  await db.write();
+  // Los consumos y pagos de la tarjeta se borran en cascada.
+  await db.delete(creditCards).where(eq(creditCards.id, id));
   revalidatePath("/admin/cards");
   revalidatePath("/");
 }
@@ -71,7 +66,6 @@ export async function deleteCard(id: string) {
 // --- ACCIONES DE CONSUMOS ---
 
 export async function addPurchase(formData: FormData) {
-  const db = await getDb();
   const cardId = formData.get("cardId") as string;
   const selectedIndex = Number(formData.get("selectedIndex"));
   const installments = Math.max(1, Number(formData.get("installments")) || 1);
@@ -97,8 +91,7 @@ export async function addPurchase(formData: FormData) {
 
   const receiptNumber = (formData.get("receiptNumber") as string)?.trim();
 
-  const newPurchase: Transaction = {
-    id: crypto.randomUUID(),
+  await db.insert(transactions).values({
     cardId,
     description: formData.get("description") as string,
     totalAmount,
@@ -106,11 +99,8 @@ export async function addPurchase(formData: FormData) {
     startMonth,
     startYear,
     category: (formData.get("category") as CategoryName) || "Otros",
-    receiptNumber: receiptNumber || undefined,
-  };
-
-  if (!db.data.transactions) db.data.transactions = [];
-  db.data.transactions.push(newPurchase);
+    receiptNumber: receiptNumber || null,
+  });
 
   const cookieStore = await cookies();
   cookieStore.set("lastSelectedCardId", cardId, {
@@ -119,7 +109,6 @@ export async function addPurchase(formData: FormData) {
     maxAge: 60 * 60 * 24 * 365,
   });
 
-  await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
@@ -133,7 +122,6 @@ export async function addPurchase(formData: FormData) {
 }
 
 export async function updatePurchase(formData: FormData) {
-  const db = await getDb();
   const id = formData.get("id") as string;
   const cardId = formData.get("cardId") as string;
   const selectedIndex = formData.get("selectedIndex") as string;
@@ -158,25 +146,24 @@ export async function updatePurchase(formData: FormData) {
     startMonth = parseInt(month, 10) - 1;
   }
 
-  const index = db.data.transactions.findIndex((p) => p.id === id);
-  if (index === -1) return;
-
   const receiptNumber = (formData.get("receiptNumber") as string)?.trim();
 
-  db.data.transactions[index] = {
-    ...db.data.transactions[index],
-    cardId,
-    description: formData.get("description") as string,
-    totalAmount,
-    installments,
-    startMonth,
-    startYear,
-    category:
-      (formData.get("category") as CategoryName) ||
-      db.data.transactions[index].category ||
-      "Otros",
-    receiptNumber: receiptNumber || undefined,
-  };
+  const updated = await db
+    .update(transactions)
+    .set({
+      cardId,
+      description: formData.get("description") as string,
+      totalAmount,
+      installments,
+      startMonth,
+      startYear,
+      // Sin categoría en el form se conserva la existente.
+      category: (formData.get("category") as CategoryName) || undefined,
+      receiptNumber: receiptNumber || null,
+    })
+    .where(eq(transactions.id, id))
+    .returning({ id: transactions.id });
+  if (updated.length === 0) return;
 
   const cookieStore = await cookies();
   cookieStore.set("lastSelectedCardId", cardId, {
@@ -185,7 +172,6 @@ export async function updatePurchase(formData: FormData) {
     maxAge: 60 * 60 * 24 * 365,
   });
 
-  await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
@@ -197,9 +183,7 @@ export async function updatePurchase(formData: FormData) {
 }
 
 export async function deletePurchase(id: string) {
-  const db = await getDb();
-  db.data.transactions = db.data.transactions.filter((p) => p.id !== id);
-  await db.write();
+  await db.delete(transactions).where(eq(transactions.id, id));
   revalidatePath("/admin/cards");
   revalidatePath("/");
 }

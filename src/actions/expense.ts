@@ -1,12 +1,17 @@
 "use server";
 
+import { asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { getDb } from "@/lib/db";
+import { db, toExpense } from "@/lib/db";
+import { expenses } from "@/lib/schema";
 import type { CategoryName, Expense } from "@/types";
 
 export async function getExpenses(): Promise<Expense[]> {
-  const db = await getDb();
-  return db.data.expenses;
+  const rows = await db
+    .select()
+    .from(expenses)
+    .orderBy(asc(expenses.createdAt));
+  return rows.map(toExpense);
 }
 
 export async function getExpenseById(
@@ -14,55 +19,39 @@ export async function getExpenseById(
 ): Promise<Expense | undefined> {
   if (!id) return undefined;
 
-  const db = await getDb();
-  return db.data.expenses.find((e) => e.id === id);
+  const [row] = await db.select().from(expenses).where(eq(expenses.id, id));
+  return row ? toExpense(row) : undefined;
 }
 
-export async function createExpense(formData: FormData) {
-  const db = await getDb();
-  const electronicPaymentCode =
-    (formData.get("electronicPaymentCode") as string)?.trim() || undefined;
-
-  const newExpense: Expense = {
-    id: crypto.randomUUID(),
+function expenseFromForm(formData: FormData) {
+  return {
     name: formData.get("name") as string,
     category: formData.get("category") as CategoryName,
     dueDate: Number(formData.get("dueDate")),
     estimatedAmount: Number(formData.get("amount")) || 0,
-    electronicPaymentCode,
+    electronicPaymentCode:
+      (formData.get("electronicPaymentCode") as string)?.trim() || null,
   };
-  db.data.expenses.push(newExpense);
-  await db.write();
+}
+
+export async function createExpense(formData: FormData) {
+  await db.insert(expenses).values(expenseFromForm(formData));
   revalidatePath("/admin/expenses");
   revalidatePath("/");
 }
 
 export async function updateExpense(id: string, formData: FormData) {
-  const db = await getDb();
-  const index = db.data.expenses.findIndex((e) => e.id === id);
-  const electronicPaymentCode =
-    (formData.get("electronicPaymentCode") as string)?.trim() || undefined;
-
-  if (index !== -1) {
-    db.data.expenses[index] = {
-      ...db.data.expenses[index],
-      name: formData.get("name") as string,
-      category: formData.get("category") as CategoryName,
-      dueDate: Number(formData.get("dueDate")),
-      estimatedAmount: Number(formData.get("amount")) || 0,
-      electronicPaymentCode,
-    };
-    await db.write();
-    revalidatePath("/admin/expenses");
-    revalidatePath("/");
-  }
+  await db
+    .update(expenses)
+    .set(expenseFromForm(formData))
+    .where(eq(expenses.id, id));
+  revalidatePath("/admin/expenses");
+  revalidatePath("/");
 }
 
 export async function deleteExpense(id: string) {
-  const db = await getDb();
-  db.data.expenses = db.data.expenses.filter((e) => e.id !== id);
-  db.data.payments = db.data.payments.filter((p) => p.expenseId !== id); // Limpiamos pagos huérfanos
-  await db.write();
+  // Los pagos asociados se borran en cascada.
+  await db.delete(expenses).where(eq(expenses.id, id));
   revalidatePath("/admin/expenses");
   revalidatePath("/");
 }
