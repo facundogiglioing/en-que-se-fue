@@ -1,14 +1,19 @@
 "use server";
 
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { getDb } from "@/lib/db";
+import { db, toCardPayment } from "@/lib/db";
+import { cardPayments } from "@/lib/schema";
 import type { CardPayment } from "@/types";
 
 export async function getCardPaymentsForYear(
   year: number,
 ): Promise<CardPayment[]> {
-  const db = await getDb();
-  return (db.data.cardPayments ?? []).filter((p) => p.year === year);
+  const rows = await db
+    .select()
+    .from(cardPayments)
+    .where(eq(cardPayments.year, year));
+  return rows.map(toCardPayment);
 }
 
 export async function confirmCardPayment(
@@ -17,32 +22,14 @@ export async function confirmCardPayment(
   year: number,
   actualAmount: number,
 ) {
-  const db = await getDb();
-  if (!db.data.cardPayments) db.data.cardPayments = [];
-
-  const index = db.data.cardPayments.findIndex(
-    (p) => p.cardId === cardId && p.month === month && p.year === year,
-  );
-
-  if (index !== -1) {
-    db.data.cardPayments[index] = {
-      ...db.data.cardPayments[index],
-      isPaid: true,
-      paidAt: new Date().toISOString(),
-      actualAmount,
-    };
-  } else {
-    db.data.cardPayments.push({
-      id: crypto.randomUUID(),
-      cardId,
-      month,
-      year,
-      isPaid: true,
-      paidAt: new Date().toISOString(),
-      actualAmount,
+  const paidAt = new Date();
+  await db
+    .insert(cardPayments)
+    .values({ cardId, month, year, isPaid: true, paidAt, actualAmount })
+    .onConflictDoUpdate({
+      target: [cardPayments.cardId, cardPayments.month, cardPayments.year],
+      set: { isPaid: true, paidAt, actualAmount },
     });
-  }
-  await db.write();
   revalidatePath("/");
 }
 
@@ -51,11 +38,14 @@ export async function unconfirmCardPayment(
   month: number,
   year: number,
 ) {
-  const db = await getDb();
-  if (!db.data.cardPayments) return;
-  db.data.cardPayments = db.data.cardPayments.filter(
-    (p) => !(p.cardId === cardId && p.month === month && p.year === year),
-  );
-  await db.write();
+  await db
+    .delete(cardPayments)
+    .where(
+      and(
+        eq(cardPayments.cardId, cardId),
+        eq(cardPayments.month, month),
+        eq(cardPayments.year, year),
+      ),
+    );
   revalidatePath("/");
 }

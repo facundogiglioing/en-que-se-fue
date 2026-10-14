@@ -1,20 +1,32 @@
 "use server";
 
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { getDb } from "@/lib/db";
+import { db, toPayment } from "@/lib/db";
+import { payments } from "@/lib/schema";
 import type { Payment } from "@/types";
+
+const paymentFor = (expenseId: string, month: number, year: number) =>
+  and(
+    eq(payments.expenseId, expenseId),
+    eq(payments.month, month),
+    eq(payments.year, year),
+  );
 
 export async function getPayments(
   month: number,
   year: number,
 ): Promise<Payment[]> {
-  const db = await getDb();
-  return db.data.payments.filter((p) => p.month === month && p.year === year);
+  const rows = await db
+    .select()
+    .from(payments)
+    .where(and(eq(payments.month, month), eq(payments.year, year)));
+  return rows.map(toPayment);
 }
 
 export async function getPaymentsForYear(year: number): Promise<Payment[]> {
-  const db = await getDb();
-  return db.data.payments.filter((p) => p.year === year);
+  const rows = await db.select().from(payments).where(eq(payments.year, year));
+  return rows.map(toPayment);
 }
 
 export async function togglePaymentStatus(
@@ -22,24 +34,16 @@ export async function togglePaymentStatus(
   month: number,
   year: number,
 ) {
-  const db = await getDb();
-  const index = db.data.payments.findIndex(
-    (p) => p.expenseId === expenseId && p.month === month && p.year === year,
-  );
+  const deleted = await db
+    .delete(payments)
+    .where(paymentFor(expenseId, month, year))
+    .returning({ id: payments.id });
 
-  if (index !== -1) {
-    db.data.payments.splice(index, 1);
-  } else {
-    db.data.payments.push({
-      id: crypto.randomUUID(),
-      expenseId,
-      month,
-      year,
-      isPaid: true,
-      paidAt: new Date().toISOString(),
-    });
+  if (deleted.length === 0) {
+    await db
+      .insert(payments)
+      .values({ expenseId, month, year, isPaid: true, paidAt: new Date() });
   }
-  await db.write();
   revalidatePath("/");
 }
 
@@ -49,30 +53,14 @@ export async function confirmExpensePayment(
   year: number,
   actualAmount: number,
 ) {
-  const db = await getDb();
-  const index = db.data.payments.findIndex(
-    (p) => p.expenseId === expenseId && p.month === month && p.year === year,
-  );
-
-  if (index !== -1) {
-    db.data.payments[index] = {
-      ...db.data.payments[index],
-      isPaid: true,
-      paidAt: new Date().toISOString(),
-      actualAmount,
-    };
-  } else {
-    db.data.payments.push({
-      id: crypto.randomUUID(),
-      expenseId,
-      month,
-      year,
-      isPaid: true,
-      paidAt: new Date().toISOString(),
-      actualAmount,
+  const paidAt = new Date();
+  await db
+    .insert(payments)
+    .values({ expenseId, month, year, isPaid: true, paidAt, actualAmount })
+    .onConflictDoUpdate({
+      target: [payments.expenseId, payments.month, payments.year],
+      set: { isPaid: true, paidAt, actualAmount },
     });
-  }
-  await db.write();
   revalidatePath("/");
 }
 
@@ -81,10 +69,6 @@ export async function unconfirmExpensePayment(
   month: number,
   year: number,
 ) {
-  const db = await getDb();
-  db.data.payments = db.data.payments.filter(
-    (p) => !(p.expenseId === expenseId && p.month === month && p.year === year),
-  );
-  await db.write();
+  await db.delete(payments).where(paymentFor(expenseId, month, year));
   revalidatePath("/");
 }

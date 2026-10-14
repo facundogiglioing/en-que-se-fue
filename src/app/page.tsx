@@ -1,15 +1,16 @@
 import { getCardPaymentsForYear } from "@/actions/cardPayment";
 import { getExpenses } from "@/actions/expense";
 import { getPaymentsForYear } from "@/actions/payment";
+import { GetAllTransactions, GetCreditCardList } from "@/app/admin/cards/data";
 import PanelHeader from "@/components/PanelHeader";
 import { PaymentGrid } from "@/components/PaymentGrid";
-import { getDb } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const db = await getDb();
   const expenses = await getExpenses();
-  const cards = db.data.creditCards || [];
-  const purchases = db.data.transactions || [];
+  const cards = await GetCreditCardList();
+  const purchases = await GetAllTransactions();
 
   const currentYear = new Date().getFullYear();
   const currentMonthIdx = new Date().getMonth();

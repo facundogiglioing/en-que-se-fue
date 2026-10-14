@@ -1,7 +1,8 @@
 import Container from "@/components/Container";
 import CreditCardList from "../CreditCard/List";
+import { GetPageData } from "../data";
 import Transactions from "../Transaction";
-import { GetPageData, getCurrentIndex, normalizeIndex } from "../utils";
+import { getCurrentIndex, normalizeIndex } from "../utils";
 
 type CardsAdminPageProps = {
   params: Promise<{

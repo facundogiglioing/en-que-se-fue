@@ -1,9 +1,11 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { shiftIndex } from "@/app/admin/cards/utils";
-import { getDb } from "@/lib/db";
+import { db, toCreditCard, toTransaction } from "@/lib/db";
 import { extractPdfText } from "@/lib/pdf";
+import { creditCards, transactions } from "@/lib/schema";
 import { parseStatementText } from "@/lib/statements";
 import { buildStatementDiff, dateToMonthIndex } from "@/lib/statements/diff";
 import type {
@@ -48,13 +50,17 @@ export async function analyzeStatement(
 
   const statement = parseStatementText(text);
 
-  const db = await getDb();
-  const transactions =
+  const cardTransactions =
     cardId && cardId !== "0"
-      ? (db.data.transactions ?? []).filter((t) => t.cardId === cardId)
+      ? (
+        await db
+          .select()
+          .from(transactions)
+          .where(eq(transactions.cardId, cardId))
+      ).map(toTransaction)
       : [];
 
-  return { statement, diff: buildStatementDiff(statement, transactions) };
+  return { statement, diff: buildStatementDiff(statement, cardTransactions) };
 }
 
 function dayOfMonth(iso: string | undefined): number | undefined {
@@ -112,16 +118,18 @@ export async function applyStatement(formData: FormData): Promise<{
 
   const statement = JSON.parse(rawStatement) as ParsedStatement;
 
-  const db = await getDb();
-  const card = db.data.creditCards.find((c) => c.id === cardId);
-  if (!card) {
+  const [cardRow] = await db
+    .select()
+    .from(creditCards)
+    .where(eq(creditCards.id, cardId));
+  if (!cardRow) {
     throw new Error("No encontramos la tarjeta seleccionada.");
   }
+  const card = toCreditCard(cardRow);
 
-  if (!db.data.transactions) db.data.transactions = [];
-  const cardTransactions = db.data.transactions.filter(
-    (t) => t.cardId === cardId,
-  );
+  const cardTransactions = (
+    await db.select().from(transactions).where(eq(transactions.cardId, cardId))
+  ).map(toTransaction);
   const diff = buildStatementDiff(statement, cardTransactions);
 
   let datesUpdated = false;
@@ -152,9 +160,16 @@ export async function applyStatement(formData: FormData): Promise<{
       ),
     );
 
-  db.data.transactions.push(...newTransactions);
+  if (newTransactions.length > 0) {
+    await db.insert(transactions).values(newTransactions);
+  }
+  if (datesUpdated) {
+    await db
+      .update(creditCards)
+      .set({ closingDay: card.closingDay, dueDay: card.dueDay })
+      .where(eq(creditCards.id, cardId));
+  }
 
-  await db.write();
   revalidatePath("/admin/cards");
   revalidatePath("/");
 
