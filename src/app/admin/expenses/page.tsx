@@ -12,7 +12,7 @@ export default async function ExpensesPage({
 
   return (
     <div className="flex min-h-0 flex-col overflow-y-auto lg:h-full lg:overflow-hidden">
-      <div className="grid min-h-0 w-full grid-cols-1 lg:h-full lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+      <div className="grid min-h-0 w-full grid-cols-1 lg:h-full lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:grid-rows-[minmax(0,1fr)]">
         <div className="min-w-0">
           <ExpenseForm expenses={expenses} expenseId={edit} />
         </div>

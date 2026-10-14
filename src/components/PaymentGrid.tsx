@@ -94,6 +94,7 @@ export function PaymentGrid({
       month: monthIdx,
       year: currentYear,
       estimatedAmount: exp.estimatedAmount ?? 0,
+      paymentCode: exp.electronicPaymentCode,
       existingPayment: existing
         ? { actualAmount: existing.actualAmount, paidAt: existing.paidAt }
         : undefined,

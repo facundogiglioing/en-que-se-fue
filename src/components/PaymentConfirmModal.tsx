@@ -18,6 +18,7 @@ export type ModalData = {
   month: number;
   year: number;
   estimatedAmount: number;
+  paymentCode?: string;
   existingPayment?: { actualAmount?: number; paidAt?: string };
 };
 
@@ -49,6 +50,7 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
     month,
     year,
     estimatedAmount,
+    paymentCode,
     existingPayment,
   } = data;
   const isPaid = !!existingPayment;
@@ -149,6 +151,17 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
               ${estimatedAmount.toLocaleString("es-AR")}
             </span>
           </div>
+
+          {paymentCode && (
+            <div className="flex justify-between items-center text-sm">
+              <span className="font-semibold text-slate-500">
+                Código de pago
+              </span>
+              <span className="font-black font-mono text-slate-900 select-all">
+                {paymentCode}
+              </span>
+            </div>
+          )}
 
           <div className="space-y-1.5">
             <label

@@ -301,6 +301,51 @@
       "isPaid": true,
       "paidAt": "2026-10-13T12:57:40.709Z",
       "actualAmount": 183243.15
+    },
+    {
+      "id": "1af4f50a-9567-4aba-99d7-f3cccd18cf18",
+      "expenseId": "d83038a2-590d-490f-99de-a9641ca7f382",
+      "month": 9,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-10-14T12:23:19.201Z",
+      "actualAmount": 522800
+    },
+    {
+      "id": "814f5d0d-cf65-4f41-a51d-8e5beb374f04",
+      "expenseId": "16d2773d-d3a4-420b-9825-90ad009e6052",
+      "month": 9,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-10-14T12:24:17.094Z",
+      "actualAmount": 48050
+    },
+    {
+      "id": "8d33106d-84a3-42b2-9ec6-56f8b83b2d0c",
+      "expenseId": "0b08ce49-fd01-492e-bbfd-f920d53fa5f3",
+      "month": 9,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-10-14T12:24:40.007Z",
+      "actualAmount": 924061.24
+    },
+    {
+      "id": "afa1b5c0-6d0f-469b-9310-bf8721dadea6",
+      "expenseId": "d7374e6a-0504-4908-864c-e33d642048c5",
+      "month": 9,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-10-14T12:26:01.018Z",
+      "actualAmount": 468401
+    },
+    {
+      "id": "f8d9968a-c31d-411d-9657-4252da2c9ad6",
+      "expenseId": "88a3ed75-1af8-433a-9873-358a9d0cea1c",
+      "month": 9,
+      "year": 2026,
+      "isPaid": true,
+      "paidAt": "2026-10-14T12:40:30.726Z",
+      "actualAmount": 57236.57
     }
   ],
   "incomes": [
