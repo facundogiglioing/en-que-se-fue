@@ -77,6 +77,11 @@ export function buildStatementDiff(
       const match = transactions.find((transaction) => {
         if (usedTransactionIds.has(transaction.id)) return false;
 
+        // Débitos automáticos repiten comprobante y descripción todos los meses,
+        // así que la transacción tiene que estar vigente en el período del resumen.
+        const projected = projectTransaction(transaction, monthIndex);
+        if (!projected) return false;
+
         // El comprobante puede repetirse entre movimientos distintos (ej. mismo
         // número en rubros diferentes), así que lo combinamos con la descripción.
         if (movement.receiptNumber && transaction.receiptNumber) {
@@ -85,9 +90,6 @@ export function buildStatementDiff(
             descriptionsMatch(transaction.description, movement.description)
           );
         }
-
-        const projected = projectTransaction(transaction, monthIndex);
-        if (!projected) return false;
 
         const bothHaveInstallment =
           !!projected.installmentLabel === !!movement.installment;

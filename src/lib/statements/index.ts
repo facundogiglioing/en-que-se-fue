@@ -1,10 +1,17 @@
 import type { ParsedStatement } from "@/types";
 import { bancoCiudadParser } from "./banco-ciudad";
 import { galiciaVisaParser } from "./galicia";
+import { patagoniaParser } from "./patagonia";
+import { santanderParser } from "./santander";
 import type { StatementParser } from "./types";
 
 // Agregar acá el parser de cada nuevo banco soportado.
-const parsers: StatementParser[] = [galiciaVisaParser, bancoCiudadParser];
+const parsers: StatementParser[] = [
+  galiciaVisaParser,
+  bancoCiudadParser,
+  patagoniaParser,
+  santanderParser,
+];
 
 export function parseStatementText(text: string): ParsedStatement {
   const parser = parsers.find((p) => p.matches(text));
