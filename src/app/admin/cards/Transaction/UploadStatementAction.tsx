@@ -13,11 +13,17 @@ import { StatementSummaryHeader } from "./StatementSummaryHeader";
 
 type Props = {
   cardId: string;
+  selectedIndex: number;
+  selectedPeriodLabel: string;
 };
 
 type SaveSummary = { createdCount: number; datesUpdated: boolean };
 
-export default function UploadStatementAction({ cardId }: Props) {
+export default function UploadStatementAction({
+  cardId,
+  selectedIndex,
+  selectedPeriodLabel,
+}: Props) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -48,6 +54,7 @@ export default function UploadStatementAction({ cardId }: Props) {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("cardId", cardId);
+      formData.append("selectedIndex", String(selectedIndex));
       const analysis = await analyzeStatement(formData);
       setResult(analysis);
       setExcludedIndices(new Set());
@@ -69,6 +76,7 @@ export default function UploadStatementAction({ cardId }: Props) {
     try {
       const formData = new FormData();
       formData.append("cardId", cardId);
+      formData.append("selectedIndex", String(selectedIndex));
       const statementToSave = {
         ...result.statement,
         movements: result.statement.movements.filter(
@@ -155,7 +163,7 @@ export default function UploadStatementAction({ cardId }: Props) {
                       {saveError}
                     </span>
                   ) : hasPendingChanges ? (
-                    "Se van a crear los movimientos nuevos y actualizar la fecha de cierre y vencimiento."
+                    `Los movimientos nuevos se van a cargar en ${selectedPeriodLabel}${result.diff.isCurrentCycle ? " y se van a actualizar la fecha de cierre y vencimiento" : ""}.`
                   ) : (
                     "No hay cambios para guardar."
                   )}

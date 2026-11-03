@@ -2,12 +2,12 @@
 
 import { and, count, eq, isNotNull, max, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { shiftIndex } from "@/app/admin/cards/utils";
+import { normalizeIndex, shiftIndex } from "@/app/admin/cards/utils";
 import { db, toCreditCard, toTransaction } from "@/lib/db";
 import { extractPdfText } from "@/lib/pdf";
 import { creditCards, transactions } from "@/lib/schema";
 import { parseStatementText } from "@/lib/statements";
-import { buildStatementDiff, dateToMonthIndex } from "@/lib/statements/diff";
+import { buildStatementDiff } from "@/lib/statements/diff";
 import type {
   ParsedStatement,
   StatementAnalysis,
@@ -21,6 +21,18 @@ const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46]; // "%PDF"
 function hasPdfSignature(buffer: ArrayBuffer): boolean {
   const header = new Uint8Array(buffer.slice(0, PDF_MAGIC_BYTES.length));
   return PDF_MAGIC_BYTES.every((byte, index) => header[index] === byte);
+}
+
+// Período (AAAAMM) en el que se cargan los movimientos: el mes seleccionado en la
+// vista. Si la tarjeta se paga a mes vencido, ese mes muestra los consumos del
+// mes anterior, así que se corre uno para que aparezcan donde se los cargó.
+function resolvePeriodIndex(formData: FormData, paysInArrears: boolean) {
+  const selectedIndex = Number(formData.get("selectedIndex"));
+  if (!Number.isFinite(selectedIndex)) {
+    throw new Error("Falta el mes seleccionado.");
+  }
+  const safeIndex = normalizeIndex(Math.trunc(selectedIndex));
+  return paysInArrears ? shiftIndex(safeIndex, -1) : safeIndex;
 }
 
 export async function analyzeStatement(
@@ -50,17 +62,28 @@ export async function analyzeStatement(
 
   const statement = parseStatementText(text);
 
-  const cardTransactions =
-    cardId && cardId !== "0"
-      ? (
+  const hasCard = !!cardId && cardId !== "0";
+  const [cardRow] = hasCard
+    ? await db
+        .select({ paysInArrears: creditCards.paysInArrears })
+        .from(creditCards)
+        .where(eq(creditCards.id, cardId))
+    : [];
+  const periodIndex = resolvePeriodIndex(formData, !!cardRow?.paysInArrears);
+
+  const cardTransactions = hasCard
+    ? (
         await db
           .select()
           .from(transactions)
           .where(eq(transactions.cardId, cardId))
       ).map(toTransaction)
-      : [];
+    : [];
 
-  return { statement, diff: buildStatementDiff(statement, cardTransactions) };
+  return {
+    statement,
+    diff: buildStatementDiff(statement, cardTransactions, periodIndex),
+  };
 }
 
 function dayOfMonth(iso: string | undefined): number | undefined {
@@ -126,11 +149,12 @@ export async function applyStatement(formData: FormData): Promise<{
     throw new Error("No encontramos la tarjeta seleccionada.");
   }
   const card = toCreditCard(cardRow);
+  const periodIndex = resolvePeriodIndex(formData, !!card.paysInArrears);
 
   const cardTransactions = (
     await db.select().from(transactions).where(eq(transactions.cardId, cardId))
   ).map(toTransaction);
-  const diff = buildStatementDiff(statement, cardTransactions);
+  const diff = buildStatementDiff(statement, cardTransactions, periodIndex);
 
   let datesUpdated = false;
   if (diff.isCurrentCycle) {
@@ -150,15 +174,7 @@ export async function applyStatement(formData: FormData): Promise<{
   const newTransactions = diff.movements
     // Los consumos en dólares por ahora solo se muestran, no se cargan.
     .filter((movement) => !movement.exists && movement.amountArs !== undefined)
-    .map((movement) =>
-      movementToTransaction(
-        cardId,
-        movement,
-        statement.summary.closingDate
-          ? dateToMonthIndex(statement.summary.closingDate)
-          : dateToMonthIndex(movement.date),
-      ),
-    );
+    .map((movement) => movementToTransaction(cardId, movement, periodIndex));
 
   if (newTransactions.length > 0) {
     await db.insert(transactions).values(newTransactions);

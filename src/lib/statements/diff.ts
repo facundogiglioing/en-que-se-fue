@@ -59,20 +59,18 @@ export function isCurrentBillingCycle(
   return todayIso > dueDate && sameMonthAsDue;
 }
 
+// Todos los movimientos de un resumen pertenecen a un mismo período (el que
+// eligió el usuario), sin importar la fecha real en la que se hizo cada consumo.
 export function buildStatementDiff(
   statement: ParsedStatement,
   transactions: Transaction[],
+  periodIndex: number,
 ): StatementDiff {
   const usedTransactionIds = new Set<string>();
-  // Todos los movimientos de un resumen pertenecen al período que cierra ese
-  // resumen, sin importar la fecha real en la que se hizo cada consumo.
-  const statementMonthIndex = statement.summary.closingDate
-    ? dateToMonthIndex(statement.summary.closingDate)
-    : undefined;
 
   const movements: StatementMovementDiff[] = statement.movements.map(
     (movement) => {
-      const monthIndex = statementMonthIndex ?? dateToMonthIndex(movement.date);
+      const monthIndex = periodIndex;
 
       const match = transactions.find((transaction) => {
         if (usedTransactionIds.has(transaction.id)) return false;
