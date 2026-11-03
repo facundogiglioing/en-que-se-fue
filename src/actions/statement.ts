@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, count, eq, isNotNull, max, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { shiftIndex } from "@/app/admin/cards/utils";
 import { db, toCreditCard, toTransaction } from "@/lib/db";
@@ -174,4 +174,49 @@ export async function applyStatement(formData: FormData): Promise<{
   revalidatePath("/");
 
   return { createdCount: newTransactions.length, datesUpdated };
+}
+
+// Los movimientos importados de un resumen son los únicos con movementDate y,
+// al insertarse en un solo INSERT, comparten el mismo createdAt.
+const lastImportFilter = (cardId: string) =>
+  and(
+    eq(transactions.cardId, cardId),
+    isNotNull(transactions.movementDate),
+    sql`${transactions.createdAt} = (
+      select max(${transactions.createdAt}) from ${transactions}
+      where ${transactions.cardId} = ${cardId}
+        and ${transactions.movementDate} is not null
+    )`,
+  );
+
+export async function getLastStatementImport(
+  cardId: string,
+): Promise<{ count: number; importedAt: string } | null> {
+  if (!cardId || cardId === "0") return null;
+
+  const [row] = await db
+    .select({ count: count(), importedAt: max(transactions.createdAt) })
+    .from(transactions)
+    .where(lastImportFilter(cardId));
+
+  if (!row || row.count === 0 || !row.importedAt) return null;
+  return { count: row.count, importedAt: row.importedAt.toISOString() };
+}
+
+export async function deleteLastStatementImport(
+  cardId: string,
+): Promise<{ deletedCount: number }> {
+  if (!cardId || cardId === "0") {
+    throw new Error("Seleccioná una tarjeta.");
+  }
+
+  const deleted = await db
+    .delete(transactions)
+    .where(lastImportFilter(cardId))
+    .returning({ id: transactions.id });
+
+  revalidatePath("/admin/cards");
+  revalidatePath("/");
+
+  return { deletedCount: deleted.length };
 }
