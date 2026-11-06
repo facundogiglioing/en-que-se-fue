@@ -9,6 +9,8 @@ import {
 } from "@/actions/income";
 import { DayPicker } from "@/components/DayPicker";
 import { EntityListItem } from "@/components/EntityListItem";
+import { requireRoles } from "@/lib/auth-session";
+import { ROLES } from "@/lib/roles";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +19,7 @@ export default async function IncomePage({
 }: {
   searchParams: Promise<{ edit?: string }>;
 }) {
+  await requireRoles([ROLES.ADMIN]);
   // Manejo asíncrono de params para Next 16
   const { edit } = await searchParams;
   const incomes = await getIncomes();

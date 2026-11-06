@@ -4,11 +4,14 @@ import { eq, max } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { requireRoles } from "@/lib/auth-session";
 import { db } from "@/lib/db";
+import { ROLES } from "@/lib/roles";
 import { creditCards, transactions } from "@/lib/schema";
 import type { CategoryName } from "@/types";
 
 export async function createCard(formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   const [{ maxOrder }] = await db
     .select({ maxOrder: max(creditCards.order) })
     .from(creditCards);
@@ -33,6 +36,7 @@ export async function createCard(formData: FormData) {
 }
 
 export async function updateCardDetails(formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   const cardId = formData.get("cardId") as string;
   const name = (formData.get("name") as string)?.trim();
   const bank = (formData.get("bank") as string)?.trim();
@@ -57,6 +61,7 @@ export async function updateCardDetails(formData: FormData) {
 }
 
 export async function deleteCard(id: string) {
+  await requireRoles([ROLES.ADMIN]);
   // Los consumos y pagos de la tarjeta se borran en cascada.
   await db.delete(creditCards).where(eq(creditCards.id, id));
   revalidatePath("/admin/cards");
@@ -66,6 +71,7 @@ export async function deleteCard(id: string) {
 // --- ACCIONES DE CONSUMOS ---
 
 export async function addPurchase(formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   const cardId = formData.get("cardId") as string;
   const selectedIndex = Number(formData.get("selectedIndex"));
   const installments = Math.max(1, Number(formData.get("installments")) || 1);
@@ -122,6 +128,7 @@ export async function addPurchase(formData: FormData) {
 }
 
 export async function updatePurchase(formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   const id = formData.get("id") as string;
   const cardId = formData.get("cardId") as string;
   const selectedIndex = formData.get("selectedIndex") as string;
@@ -183,6 +190,7 @@ export async function updatePurchase(formData: FormData) {
 }
 
 export async function deletePurchase(id: string) {
+  await requireRoles([ROLES.ADMIN]);
   await db.delete(transactions).where(eq(transactions.id, id));
   revalidatePath("/admin/cards");
   revalidatePath("/");

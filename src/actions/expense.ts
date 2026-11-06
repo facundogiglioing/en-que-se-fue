@@ -2,11 +2,14 @@
 
 import { asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { requireRoles } from "@/lib/auth-session";
 import { db, toExpense } from "@/lib/db";
+import { ROLES } from "@/lib/roles";
 import { expenses } from "@/lib/schema";
 import type { CategoryName, Expense } from "@/types";
 
 export async function getExpenses(): Promise<Expense[]> {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db
     .select()
     .from(expenses)
@@ -17,6 +20,7 @@ export async function getExpenses(): Promise<Expense[]> {
 export async function getExpenseById(
   id: string | undefined,
 ): Promise<Expense | undefined> {
+  await requireRoles([ROLES.ADMIN]);
   if (!id) return undefined;
 
   const [row] = await db.select().from(expenses).where(eq(expenses.id, id));
@@ -35,12 +39,14 @@ function expenseFromForm(formData: FormData) {
 }
 
 export async function createExpense(formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   await db.insert(expenses).values(expenseFromForm(formData));
   revalidatePath("/admin/expenses");
   revalidatePath("/");
 }
 
 export async function updateExpense(id: string, formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   await db
     .update(expenses)
     .set(expenseFromForm(formData))
@@ -50,6 +56,7 @@ export async function updateExpense(id: string, formData: FormData) {
 }
 
 export async function deleteExpense(id: string) {
+  await requireRoles([ROLES.ADMIN]);
   // Los pagos asociados se borran en cascada.
   await db.delete(expenses).where(eq(expenses.id, id));
   revalidatePath("/admin/expenses");

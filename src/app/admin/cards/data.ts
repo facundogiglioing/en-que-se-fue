@@ -1,11 +1,14 @@
 import { asc, eq } from "drizzle-orm";
+import { requireRoles } from "@/lib/auth-session";
 import { db, toCreditCard, toTransaction } from "@/lib/db";
+import { ROLES } from "@/lib/roles";
 import { creditCards, transactions } from "@/lib/schema";
 import { shiftIndex } from "./utils";
 
 // Separado de utils.ts porque ese archivo también se importa desde componentes cliente.
 
 export async function GetCreditCardList() {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db
     .select()
     .from(creditCards)
@@ -14,6 +17,7 @@ export async function GetCreditCardList() {
 }
 
 export async function GetAllTransactions() {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db
     .select()
     .from(transactions)
@@ -22,6 +26,7 @@ export async function GetAllTransactions() {
 }
 
 export async function GetPageData(cardId: string | undefined, index: number) {
+  await requireRoles([ROLES.ADMIN]);
   const cards = await GetCreditCardList();
   const activeCard = cards.find((c) => c.id === cardId);
 

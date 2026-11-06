@@ -4,10 +4,13 @@ import { getPaymentsForYear } from "@/actions/payment";
 import { GetAllTransactions, GetCreditCardList } from "@/app/admin/cards/data";
 import PanelHeader from "@/components/PanelHeader";
 import { PaymentGrid } from "@/components/PaymentGrid";
+import { requireRoles } from "@/lib/auth-session";
+import { ROLES } from "@/lib/roles";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
+  await requireRoles([ROLES.ADMIN]);
   const expenses = await getExpenses();
   const cards = await GetCreditCardList();
   const purchases = await GetAllTransactions();

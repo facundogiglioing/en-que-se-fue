@@ -1,4 +1,6 @@
 import { getExpenses } from "@/actions/expense";
+import { requireRoles } from "@/lib/auth-session";
+import { ROLES } from "@/lib/roles";
 import ExpenseForm from "./Form";
 import ExpenseList from "./List";
 
@@ -7,6 +9,7 @@ export default async function ExpensesPage({
 }: {
   searchParams: Promise<{ edit?: string }>;
 }) {
+  await requireRoles([ROLES.ADMIN]);
   const expenses = await getExpenses();
   const { edit } = await searchParams;
 

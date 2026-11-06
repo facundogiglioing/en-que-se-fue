@@ -1,6 +1,8 @@
 import { CreditCard, Home, Settings, Wallet } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { hasRole, ROLES } from "@/lib/roles";
+import SignOutButton from "./SignOutButton";
 
 const NAV_ITEMS = [
   { href: "/", label: "Inicio", icon: Home },
@@ -9,7 +11,8 @@ const NAV_ITEMS = [
   { href: "/admin/expenses", label: "Gastos fijos", icon: Settings },
 ];
 
-export default function Navbar() {
+export default function Navbar({ role }: { role: string }) {
+  const items = hasRole(role, [ROLES.ADMIN]) ? NAV_ITEMS : [];
   return (
     <aside className="hidden min-h-0 shrink-0 overflow-visible border-r border-border-primary bg-white shadow-sm lg:flex lg:w-20 lg:flex-col lg:gap-5">
       <div>
@@ -21,7 +24,7 @@ export default function Navbar() {
         </Link>
 
         <div className="mt-3 flex flex-col items-center gap-2 px-2">
-          {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
+          {items.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
@@ -37,14 +40,18 @@ export default function Navbar() {
           ))}
         </div>
       </div>
+      <div className="mt-auto border-t border-border-primary py-3">
+        <SignOutButton />
+      </div>
     </aside>
   );
 }
 
-export function MobileNav() {
+export function MobileNav({ role }: { role: string }) {
+  const items = hasRole(role, [ROLES.ADMIN]) ? NAV_ITEMS : [];
   return (
     <nav className="flex shrink-0 items-stretch justify-around border-t border-border-primary bg-white/95 backdrop-blur-md lg:hidden">
-      {NAV_ITEMS.map(({ href, label, icon: Icon }) => (
+      {items.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}
           href={href}
@@ -56,6 +63,7 @@ export function MobileNav() {
           </span>
         </Link>
       ))}
+      <SignOutButton compact />
     </nav>
   );
 }

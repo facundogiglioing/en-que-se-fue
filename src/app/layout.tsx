@@ -1,7 +1,7 @@
-
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
 import Navbar, { MobileNav } from "@/components/Navbar";
+import { getSession } from "@/lib/auth-session";
 
 import "./globals.css";
 
@@ -22,11 +22,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getSession();
   return (
     <html
       lang="es"
@@ -35,17 +36,19 @@ export default function RootLayout({
       <body className="h-dvh overflow-hidden bg-background text-foreground">
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex min-h-0 flex-1">
-            <Navbar />
+            {session && <Navbar role={session.user.role} />}
             <main className="min-h-0 flex-1 overflow-y-auto bg-white lg:overflow-hidden">
               {children}
             </main>
           </div>
 
-          <MobileNav />
+          {session && <MobileNav role={session.user.role} />}
 
-          <footer className="hidden border-t border-border-primary bg-white px-5 py-3 text-center text-xxs font-semibold uppercase tracking-[0.2em] text-slate-400 lg:block">
-            Home Expenses · panel global
-          </footer>
+          {session && (
+            <footer className="hidden border-t border-border-primary bg-white px-5 py-3 text-center text-xxs font-semibold uppercase tracking-[0.2em] text-slate-400 lg:block">
+              Home Expenses · panel global
+            </footer>
+          )}
         </div>
       </body>
     </html>

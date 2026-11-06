@@ -1,4 +1,6 @@
 import Container from "@/components/Container";
+import { requireRoles } from "@/lib/auth-session";
+import { ROLES } from "@/lib/roles";
 import CreditCardList from "../CreditCard/List";
 import { GetPageData } from "../data";
 import Transactions from "../Transaction";
@@ -11,6 +13,7 @@ type CardsAdminPageProps = {
 };
 
 export default async function CardsAdminPage({ params }: CardsAdminPageProps) {
+  await requireRoles([ROLES.ADMIN]);
   const { segments } = await params;
 
   const [id, index] = segments ?? [];

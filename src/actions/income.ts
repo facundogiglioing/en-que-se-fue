@@ -2,11 +2,14 @@
 
 import { and, asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { requireRoles } from "@/lib/auth-session";
 import { db, toIncome, toIncomeReceipt } from "@/lib/db";
+import { ROLES } from "@/lib/roles";
 import { incomeReceipts, incomes } from "@/lib/schema";
 import type { Income, IncomeReceipt } from "@/types";
 
 export async function getIncomes(): Promise<Income[]> {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db.select().from(incomes).orderBy(asc(incomes.createdAt));
   return rows.map(toIncome);
 }
@@ -21,11 +24,13 @@ function incomeFromForm(formData: FormData) {
 }
 
 export async function createIncome(formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   await db.insert(incomes).values(incomeFromForm(formData));
   revalidatePath("/admin/income");
 }
 
 export async function updateIncome(id: string, formData: FormData) {
+  await requireRoles([ROLES.ADMIN]);
   await db
     .update(incomes)
     .set(incomeFromForm(formData))
@@ -35,6 +40,7 @@ export async function updateIncome(id: string, formData: FormData) {
 }
 
 export async function deleteIncome(id: string) {
+  await requireRoles([ROLES.ADMIN]);
   await db.delete(incomes).where(eq(incomes.id, id));
   revalidatePath("/admin/expenses");
   revalidatePath("/");
@@ -46,6 +52,7 @@ export async function toggleIncomeStatus(
   month: number,
   year: number,
 ) {
+  await requireRoles([ROLES.ADMIN]);
   const deleted = await db
     .delete(incomeReceipts)
     .where(
@@ -73,6 +80,7 @@ export async function getIncomeReceipts(
   month: number,
   year: number,
 ): Promise<IncomeReceipt[]> {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db
     .select()
     .from(incomeReceipts)

@@ -2,7 +2,9 @@
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { requireRoles } from "@/lib/auth-session";
 import { db, toPayment } from "@/lib/db";
+import { ROLES } from "@/lib/roles";
 import { payments } from "@/lib/schema";
 import type { Payment } from "@/types";
 
@@ -17,6 +19,7 @@ export async function getPayments(
   month: number,
   year: number,
 ): Promise<Payment[]> {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db
     .select()
     .from(payments)
@@ -25,6 +28,7 @@ export async function getPayments(
 }
 
 export async function getPaymentsForYear(year: number): Promise<Payment[]> {
+  await requireRoles([ROLES.ADMIN]);
   const rows = await db.select().from(payments).where(eq(payments.year, year));
   return rows.map(toPayment);
 }
@@ -34,6 +38,7 @@ export async function togglePaymentStatus(
   month: number,
   year: number,
 ) {
+  await requireRoles([ROLES.ADMIN]);
   const deleted = await db
     .delete(payments)
     .where(paymentFor(expenseId, month, year))
@@ -53,6 +58,7 @@ export async function confirmExpensePayment(
   year: number,
   actualAmount: number,
 ) {
+  await requireRoles([ROLES.ADMIN]);
   const paidAt = new Date();
   await db
     .insert(payments)
@@ -69,6 +75,7 @@ export async function unconfirmExpensePayment(
   month: number,
   year: number,
 ) {
+  await requireRoles([ROLES.ADMIN]);
   await db.delete(payments).where(paymentFor(expenseId, month, year));
   revalidatePath("/");
 }

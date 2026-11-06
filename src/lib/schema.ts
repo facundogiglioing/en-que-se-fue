@@ -1,4 +1,5 @@
 import {
+  bigint,
   boolean,
   date,
   index,
@@ -11,10 +12,81 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import type { CategoryName, Income } from "@/types";
+import type { Role } from "./roles";
 
 const money = () => numeric({ precision: 14, scale: 2, mode: "number" });
 const createdAt = () =>
   timestamp({ withTimezone: true }).notNull().defaultNow();
+
+export const user = pgTable("auth_user", {
+  id: text().primaryKey(),
+  name: text().notNull(),
+  email: text().notNull().unique(),
+  emailVerified: boolean().notNull().default(false),
+  image: text(),
+  role: text().$type<Role>().notNull(),
+  createdAt: createdAt(),
+  updatedAt: createdAt(),
+});
+
+export const session = pgTable(
+  "auth_session",
+  {
+    id: text().primaryKey(),
+    token: text().notNull().unique(),
+    userId: text()
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    ipAddress: text(),
+    userAgent: text(),
+    createdAt: createdAt(),
+    updatedAt: createdAt(),
+  },
+  (t) => [index().on(t.userId)],
+);
+
+export const account = pgTable(
+  "auth_account",
+  {
+    id: text().primaryKey(),
+    accountId: text().notNull(),
+    providerId: text().notNull(),
+    userId: text()
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    accessToken: text(),
+    refreshToken: text(),
+    idToken: text(),
+    accessTokenExpiresAt: timestamp({ withTimezone: true }),
+    refreshTokenExpiresAt: timestamp({ withTimezone: true }),
+    scope: text(),
+    password: text(),
+    createdAt: createdAt(),
+    updatedAt: createdAt(),
+  },
+  (t) => [index().on(t.userId), unique().on(t.providerId, t.accountId)],
+);
+
+export const verification = pgTable(
+  "auth_verification",
+  {
+    id: text().primaryKey(),
+    identifier: text().notNull(),
+    value: text().notNull(),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: createdAt(),
+  },
+  (t) => [index().on(t.identifier)],
+);
+
+export const rateLimit = pgTable("auth_rate_limit", {
+  id: text().primaryKey(),
+  key: text().notNull().unique(),
+  count: integer().notNull(),
+  lastRequest: bigint({ mode: "number" }).notNull(),
+});
 
 export const expenses = pgTable("expenses", {
   id: uuid().primaryKey().defaultRandom(),

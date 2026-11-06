@@ -3,8 +3,10 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { shiftIndex } from "@/app/admin/cards/utils";
+import { requireRoles } from "@/lib/auth-session";
 import { db, toCreditCard, toTransaction } from "@/lib/db";
 import { extractPdfText } from "@/lib/pdf";
+import { ROLES } from "@/lib/roles";
 import { creditCards, transactions } from "@/lib/schema";
 import { parseStatementText } from "@/lib/statements";
 import { buildStatementDiff, dateToMonthIndex } from "@/lib/statements/diff";
@@ -26,6 +28,7 @@ function hasPdfSignature(buffer: ArrayBuffer): boolean {
 export async function analyzeStatement(
   formData: FormData,
 ): Promise<StatementAnalysis> {
+  await requireRoles([ROLES.ADMIN]);
   const file = formData.get("file");
   const cardId = formData.get("cardId") as string | null;
 
@@ -109,6 +112,7 @@ export async function applyStatement(formData: FormData): Promise<{
   createdCount: number;
   datesUpdated: boolean;
 }> {
+  await requireRoles([ROLES.ADMIN]);
   const cardId = formData.get("cardId") as string;
   const rawStatement = formData.get("statement") as string;
 
