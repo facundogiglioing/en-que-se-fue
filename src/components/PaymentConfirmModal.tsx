@@ -10,6 +10,7 @@ import {
   confirmExpensePayment,
   unconfirmExpensePayment,
 } from "@/actions/payment";
+import type { MonthlyPayment } from "@/lib/dashboard";
 
 export type ModalData = {
   type: "expense" | "card";
@@ -21,6 +22,25 @@ export type ModalData = {
   paymentCode?: string;
   existingPayment?: { actualAmount?: number; paidAt?: string };
 };
+
+export function paymentModalData(
+  row: MonthlyPayment,
+  month: number,
+  year: number,
+): ModalData {
+  return {
+    type: row.type,
+    entityId: row.entityId,
+    entityName: row.name,
+    month,
+    year,
+    estimatedAmount: row.estimatedAmount ?? 0,
+    paymentCode: row.paymentCode,
+    existingPayment: row.isPaid
+      ? { actualAmount: row.amount ?? undefined, paidAt: row.paidAt }
+      : undefined,
+  };
+}
 
 const MONTH_NAMES = [
   "Enero",
@@ -55,30 +75,54 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
   } = data;
   const isPaid = !!existingPayment;
   const [amount, setAmount] = useState(
-    existingPayment?.actualAmount ?? estimatedAmount,
+    String(existingPayment?.actualAmount ?? estimatedAmount),
   );
   const [isPending, startTransition] = useTransition();
   const [showUnconfirm, setShowUnconfirm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleConfirm = () => {
+    const parsedAmount = Number(amount);
+    if (!amount.trim() || !Number.isFinite(parsedAmount) || parsedAmount < 0) {
+      setError("Ingresá un monto válido, mayor o igual a cero.");
+      return;
+    }
+    setError(null);
     startTransition(async () => {
-      if (type === "expense") {
-        await confirmExpensePayment(entityId, month, year, amount);
-      } else {
-        await confirmCardPayment(entityId, month, year, amount);
+      try {
+        if (type === "expense") {
+          await confirmExpensePayment(entityId, month, year, parsedAmount);
+        } else {
+          await confirmCardPayment(entityId, month, year, parsedAmount);
+        }
+        onClose();
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "No se pudo guardar el pago. Reintentá.",
+        );
       }
-      onClose();
     });
   };
 
   const handleUnconfirm = () => {
+    setError(null);
     startTransition(async () => {
-      if (type === "expense") {
-        await unconfirmExpensePayment(entityId, month, year);
-      } else {
-        await unconfirmCardPayment(entityId, month, year);
+      try {
+        if (type === "expense") {
+          await unconfirmExpensePayment(entityId, month, year);
+        } else {
+          await unconfirmCardPayment(entityId, month, year);
+        }
+        onClose();
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "No se pudo desmarcar el pago. Reintentá.",
+        );
       }
-      onClose();
     });
   };
 
@@ -89,11 +133,17 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
         type="button"
         aria-label="Cerrar"
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+        disabled={isPending}
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-3xl shadow-2xl shadow-slate-900/20 w-full max-w-sm overflow-hidden">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="payment-dialog-title"
+        className="relative bg-white rounded-3xl shadow-2xl shadow-slate-900/20 w-full max-w-sm overflow-hidden"
+      >
         {/* Header */}
         <div
           className={`px-6 pt-6 pb-4 ${isPaid ? "bg-emerald-50" : "bg-slate-50"}`}
@@ -112,7 +162,10 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
                 />
               )}
               <div>
-                <p className="font-black text-slate-900 tracking-tight leading-tight">
+                <p
+                  id="payment-dialog-title"
+                  className="font-black text-slate-900 tracking-tight leading-tight"
+                >
                   {entityName}
                 </p>
                 <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
@@ -122,6 +175,8 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
             </div>
             <button
               type="button"
+              aria-label="Cerrar pago"
+              disabled={isPending}
               onClick={onClose}
               className="p-1.5 rounded-xl hover:bg-slate-200/60 text-slate-400 hover:text-slate-600 transition-colors"
             >
@@ -178,13 +233,20 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
                 id="actualAmount"
                 type="number"
                 min={0}
-                step={1}
+                step={0.01}
+                disabled={isPending}
                 value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
+                onChange={(e) => setAmount(e.target.value)}
                 className="w-full pl-7 pr-4 py-3 rounded-xl border border-slate-200 text-sm font-mono font-bold text-slate-900 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"
               />
             </div>
           </div>
+
+          {error && (
+            <p role="alert" className="text-xs text-danger-text">
+              {error}
+            </p>
+          )}
 
           {/* Confirm button */}
           <button
@@ -239,6 +301,7 @@ export function PaymentConfirmModal({ data, onClose }: Props) {
             <button
               type="button"
               onClick={onClose}
+              disabled={isPending}
               className="w-full py-2 text-slate-400 hover:text-slate-600 font-bold text-xs uppercase tracking-widest transition"
             >
               Cancelar

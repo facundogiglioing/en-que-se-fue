@@ -87,6 +87,23 @@ para corregirlas, deshacer la última y volver a importar en el mes deseado.
 
 Validación del período y duplicados: `yarn test:statements`.
 
+## Tablero de pagos
+
+La pantalla principal abre la vista operativa del mes actual: total, pagado y
+pendiente, con filtros de estado y grupos plegables de gastos y tarjetas.
+Los vencimientos pendientes aparecen primero dentro de cada grupo. El monto
+visible usa el importe real confirmado, o la estimación si todavía está pendiente;
+los conceptos sin monto se identifican y los totales se muestran como parciales.
+
+“Confirmar pago” guarda el monto visible en un clic. El lápiz permite ajustarlo
+antes de confirmar y “Gestionar pago” permite corregir o desmarcar un pago.
+El próximo mes es solo una proyección. La pestaña Histórico / Proyección muestra
+los 12 meses del año actual y conserva la gestión de pagos actuales y anteriores.
+Las tarjetas a mes vencido mantienen el desplazamiento al período de consumo,
+también al pasar de diciembre a enero. Los KPIs no cambian al filtrar la lista.
+
+Validación de cálculos: `yarn test:dashboard`.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

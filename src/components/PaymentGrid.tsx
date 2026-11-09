@@ -1,420 +1,125 @@
 "use client";
 
-import { CheckCircle2, CreditCard, Zap } from "lucide-react";
+import { Check } from "lucide-react";
 import { useState } from "react";
+import {
+  type DashboardData,
+  formatDashboardMoney,
+  getMonthlyPayments,
+} from "@/lib/dashboard";
 import {
   type ModalData,
   PaymentConfirmModal,
-} from "@/components/PaymentConfirmModal";
-import { getInstallmentInfo, shiftMonthYear } from "@/lib/utils";
-import type {
-  CardPayment,
-  CreditCard as CreditCardType,
-  Expense,
-  Payment,
-  Transaction,
-} from "@/types";
+  paymentModalData,
+} from "./PaymentConfirmModal";
 
-interface Props {
-  expenses: Expense[];
-  cards: CreditCardType[];
-  purchases: Transaction[];
-  payments: Payment[];
-  cardPayments: CardPayment[];
+type Props = DashboardData & {
   currentYear: number;
   currentMonthIdx: number;
-}
+};
 
-const MONTH_NAMES = [
-  "Ene",
-  "Feb",
-  "Mar",
-  "Abr",
-  "May",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dic",
-];
-
-export function PaymentGrid({
-  expenses,
-  cards,
-  purchases,
-  payments,
-  cardPayments,
-  currentYear,
-  currentMonthIdx,
-}: Props) {
+export function PaymentGrid(props: Props) {
   const [modalData, setModalData] = useState<ModalData | null>(null);
-  const visibleWindowSize = 7;
-  const halfWindow = Math.floor(visibleWindowSize / 2);
-
-  let windowStart = Math.max(0, currentMonthIdx - halfWindow);
-  let windowEnd = Math.min(11, currentMonthIdx + halfWindow);
-
-  const currentWindowSize = windowEnd - windowStart + 1;
-  if (currentWindowSize < visibleWindowSize) {
-    const missing = visibleWindowSize - currentWindowSize;
-    const extraBefore = Math.min(windowStart, missing);
-    windowStart -= extraBefore;
-    const extraAfter = Math.min(11 - windowEnd, missing - extraBefore);
-    windowEnd += extraAfter;
-  }
-
-  const visibleMonthIndices = Array.from(
-    { length: windowEnd - windowStart + 1 },
-    (_, idx) => windowStart + idx,
-  );
-
-  const findExpensePayment = (expenseId: string, monthIdx: number) =>
-    payments.find(
-      (p) =>
-        p.expenseId === expenseId &&
-        p.month === monthIdx &&
-        p.year === currentYear,
-    );
-
-  const findCardPayment = (cardId: string, monthIdx: number) =>
-    cardPayments.find(
-      (p) =>
-        p.cardId === cardId && p.month === monthIdx && p.year === currentYear,
-    );
-
-  const openExpenseModal = (exp: Expense, monthIdx: number) => {
-    if (monthIdx > currentMonthIdx) return; // no confirmar futuro
-    const existing = findExpensePayment(exp.id, monthIdx);
-    setModalData({
-      type: "expense",
-      entityId: exp.id,
-      entityName: exp.name,
-      month: monthIdx,
-      year: currentYear,
-      estimatedAmount: exp.estimatedAmount ?? 0,
-      paymentCode: exp.electronicPaymentCode,
-      existingPayment: existing
-        ? { actualAmount: existing.actualAmount, paidAt: existing.paidAt }
-        : undefined,
-    });
-  };
-
-  const openCardModal = (
-    card: CreditCardType,
-    monthIdx: number,
-    monthlyTotal: number,
-  ) => {
-    if (monthIdx > currentMonthIdx) return;
-    if (monthlyTotal === 0) return;
-    const existing = findCardPayment(card.id, monthIdx);
-    setModalData({
-      type: "card",
-      entityId: card.id,
-      entityName: `${card.name} · ${card.bank}`,
-      month: monthIdx,
-      year: currentYear,
-      estimatedAmount: monthlyTotal,
-      existingPayment: existing
-        ? { actualAmount: existing.actualAmount, paidAt: existing.paidAt }
-        : undefined,
-    });
-  };
+  const months = Array.from({ length: 12 }, (_, month) => ({
+    month,
+    label: new Intl.DateTimeFormat("es-AR", { month: "short" }).format(
+      new Date(props.currentYear, month, 1),
+    ),
+    rows: getMonthlyPayments(props, month, props.currentYear),
+  }));
+  const concepts = [
+    ...props.expenses.map((expense) => ({
+      key: `expense-${expense.id}`,
+      name: expense.name,
+    })),
+    ...props.cards.map((card) => ({ key: `card-${card.id}`, name: card.name })),
+  ];
 
   return (
     <>
-      <div className="bg-white  overflow-hidden">
-        <div className="flex h-full overflow-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-slate-50/80 border-b border-slate-100">
-                <th className="p-5 text-left min-w-55 sticky left-0 bg-slate-50/80 backdrop-blur-md z-10">
-                  <span className="text-xxs font-black uppercase tracking-widest text-slate-400">
-                    Concepto
-                  </span>
+      <div className="min-h-0 flex-1 overflow-auto">
+        <table className="w-full border-collapse text-sm">
+          <caption className="sr-only">
+            Histórico y proyección de los 12 meses de {props.currentYear}
+          </caption>
+          <thead className="sticky top-0 z-20 bg-slate-50">
+            <tr>
+              <th
+                scope="col"
+                className="sticky left-0 z-30 min-w-48 bg-slate-50 px-5 py-4 text-left text-xs text-slate-500"
+              >
+                Concepto
+              </th>
+              {months.map(({ month, label }) => (
+                <th
+                  scope="col"
+                  key={month}
+                  className={`min-w-32 px-3 py-4 text-center text-xs capitalize ${month === props.currentMonthIdx ? "bg-primary text-primary-text" : "text-slate-500"}`}
+                >
+                  {label}
                 </th>
-                {visibleMonthIndices.map((monthIdx) => (
-                  <th
-                    key={MONTH_NAMES[monthIdx]}
-                    className={`p-4 text-center min-w-25 ${monthIdx === currentMonthIdx ? "bg-blue-600/5" : ""}`}
-                  >
-                    <span
-                      className={`text-xxs font-black uppercase tracking-widest ${monthIdx === currentMonthIdx ? "text-blue-600" : "text-slate-400"}`}
-                    >
-                      {MONTH_NAMES[monthIdx]}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              {/* --- SECCIÓN: SERVICIOS --- */}
-              <tr className="bg-slate-50/30">
-                <td
-                  colSpan={visibleMonthIndices.length + 1}
-                  className="px-5 py-2 font-black text-[9px] uppercase tracking-[0.3em] text-blue-600 border-y border-slate-100"
-                >
-                  Gastos Fijos y Servicios
-                </td>
-              </tr>
-              {expenses.map((exp) => (
-                <tr
-                  key={exp.id}
-                  className="group hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-0"
-                >
-                  <td className="p-4 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-slate-50">
-                    <div className="flex items-center gap-3">
-                      <div className="p-1.5 bg-slate-100 rounded-lg text-slate-400 group-hover:text-slate-900 transition-colors">
-                        <Zap size={14} />
-                      </div>
-                      <span className="font-bold text-slate-700 tracking-tight">
-                        {exp.name}
-                      </span>
-                    </div>
-                  </td>
-                  {visibleMonthIndices.map((monthIdx) => {
-                    const payment = findExpensePayment(exp.id, monthIdx);
-                    const isPaid = !!payment;
-                    const isCurrent = monthIdx === currentMonthIdx;
-                    const isPast = monthIdx < currentMonthIdx;
-                    const isClickable = monthIdx <= currentMonthIdx;
-                    const displayAmount =
-                      isPaid && payment.actualAmount != null
-                        ? payment.actualAmount
-                        : exp.estimatedAmount;
-
-                    return (
-                      <td
-                        key={`${exp.id}-${monthIdx}`}
-                        onClick={() => openExpenseModal(exp, monthIdx)}
-                        onKeyDown={(e) =>
-                          e.key === "Enter" && openExpenseModal(exp, monthIdx)
-                        }
-                        className={[
-                          "p-3 text-center transition-colors",
-                          isClickable ? "cursor-pointer" : "",
-                          isPaid
-                            ? "bg-emerald-50/70 hover:bg-emerald-50"
-                            : isCurrent
-                              ? "bg-blue-600/2 hover:bg-blue-600/5"
-                              : isPast
-                                ? "hover:bg-amber-50/40"
-                                : "",
-                        ].join(" ")}
-                      >
-                        <div className="flex flex-col items-center gap-0.5">
-                          {isPaid ? (
-                            <>
-                              <CheckCircle2
-                                size={12}
-                                className="text-emerald-500"
-                              />
-                              <span className="font-mono font-bold text-emerald-700 text-sm">
-                                ${displayAmount?.toLocaleString("es-AR")}
-                              </span>
-                              {payment.actualAmount != null &&
-                                payment.actualAmount !==
-                                exp.estimatedAmount && (
-                                  <span className="text-[9px] font-bold text-emerald-400 line-through">
-                                    $
-                                    {exp.estimatedAmount?.toLocaleString(
-                                      "es-AR",
-                                    )}
-                                  </span>
-                                )}
-                            </>
-                          ) : (
-                            <>
-                              <span
-                                className={`text-[9px] font-black uppercase tracking-tighter ${isCurrent ? "text-blue-400" : isPast ? "text-amber-400" : "text-slate-300"}`}
-                              >
-                                {isCurrent
-                                  ? "Confirmar"
-                                  : isPast
-                                    ? "Sin pagar"
-                                    : `Día ${exp.dueDate}`}
-                              </span>
-                              <span
-                                className={`font-mono font-bold ${isCurrent ? "text-slate-900" : isPast ? "text-slate-500" : "text-slate-900"}`}
-                              >
-                                ${exp.estimatedAmount?.toLocaleString("es-AR")}
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
               ))}
-
-              {/* --- SECCIÓN: TARJETAS --- */}
-              <tr className="bg-slate-50/30">
-                <td
-                  colSpan={visibleMonthIndices.length + 1}
-                  className="px-5 py-2 font-black text-[9px] uppercase tracking-[0.3em] text-green-600 border-y border-slate-100"
+            </tr>
+          </thead>
+          <tbody>
+            {concepts.map((concept) => (
+              <tr key={concept.key} className="border-b border-slate-100">
+                <th
+                  scope="row"
+                  className="sticky left-0 z-10 bg-white px-5 py-4 text-left font-semibold text-slate-700"
                 >
-                  Tarjetas de Crédito
-                </td>
-              </tr>
-              {cards.map((card) => {
-                const transactionsList = purchases.filter(
-                  (p) => p.cardId === card.id,
-                );
-                return (
-                  <tr
-                    key={card.id}
-                    className="group hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-0"
-                  >
-                    <td className="p-4 sticky left-0 bg-white group-hover:bg-slate-50 transition-colors z-10 border-r border-slate-50">
-                      <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-slate-100 rounded-lg text-slate-400 group-hover:text-slate-900 transition-colors">
-                          <CreditCard size={14} />
-                        </div>
-                        <div>
-                          <p className="font-bold text-slate-700 tracking-tight leading-none">
-                            {card.name}
-                          </p>
-                          <p className="text-[8px] font-bold text-slate-400 uppercase mt-1 tracking-widest">
-                            {card.bank}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    {visibleMonthIndices.map((monthIdx) => {
-                      let monthlyTotal = 0;
-                      // A mes vencido: la columna "monthIdx" cobra los consumos del mes anterior
-                      const { month: consumptionMonth, year: consumptionYear } =
-                        card.paysInArrears
-                          ? shiftMonthYear(monthIdx, currentYear, -1)
-                          : { month: monthIdx, year: currentYear };
-                      for (const p of transactionsList) {
-                        const info = getInstallmentInfo(
-                          p,
-                          consumptionMonth,
-                          consumptionYear,
-                        );
-                        monthlyTotal += info ? info.amount : 0;
-                      }
-
-                      const cardPayment = findCardPayment(card.id, monthIdx);
-                      const isPaid = !!cardPayment;
-                      const isCurrent = monthIdx === currentMonthIdx;
-                      const isPast = monthIdx < currentMonthIdx;
-                      const isClickable =
-                        monthIdx <= currentMonthIdx && monthlyTotal > 0;
-                      const displayAmount =
-                        isPaid && cardPayment.actualAmount != null
-                          ? cardPayment.actualAmount
-                          : monthlyTotal;
-
-                      return (
-                        <td
-                          key={`${card.id}-${monthIdx}`}
+                  {concept.name}
+                </th>
+                {months.map(({ month, rows }) => {
+                  const row = rows.find((item) => item.key === concept.key);
+                  const canManage =
+                    row &&
+                    month <= props.currentMonthIdx &&
+                    (row.type === "expense" ||
+                      row.isPaid ||
+                      (row.amount ?? 0) > 0);
+                  return (
+                    <td
+                      key={month}
+                      className={`p-2 text-center ${row?.isPaid ? "bg-success/40" : month === props.currentMonthIdx ? "bg-primary/20" : ""}`}
+                    >
+                      {row ? (
+                        <button
+                          type="button"
+                          disabled={!canManage}
+                          aria-label={`${concept.name}, ${months[month].label}: ${row.isPaid ? "pagado" : "pendiente"}, ${row.amount === null ? "sin monto" : formatDashboardMoney(row.amount)}`}
                           onClick={() =>
-                            openCardModal(card, monthIdx, monthlyTotal)
+                            setModalData(
+                              paymentModalData(row, month, props.currentYear),
+                            )
                           }
-                          onKeyDown={(e) =>
-                            e.key === "Enter" &&
-                            openCardModal(card, monthIdx, monthlyTotal)
-                          }
-                          className={[
-                            "p-3 text-center transition-colors",
-                            isClickable ? "cursor-pointer" : "",
-                            isPaid
-                              ? "bg-emerald-50/70 hover:bg-emerald-50"
-                              : isCurrent && monthlyTotal > 0
-                                ? "bg-blue-600/2 hover:bg-blue-600/5"
-                                : isPast && monthlyTotal > 0
-                                  ? "hover:bg-amber-50/40"
-                                  : "",
-                          ].join(" ")}
+                          className={`inline-flex w-full items-center justify-center gap-1 rounded-lg px-2 py-3 font-mono text-xs transition enabled:hover:bg-slate-100 disabled:cursor-default ${row.isPaid ? "text-success-text" : "text-slate-600"}`}
                         >
-                          {monthlyTotal > 0 || isPaid ? (
-                            <div className="flex flex-col items-center gap-0.5">
-                              {isPaid ? (
-                                <>
-                                  <CheckCircle2
-                                    size={12}
-                                    className="text-emerald-500"
-                                  />
-                                  <span className="font-mono font-bold text-emerald-700 text-sm">
-                                    $
-                                    {displayAmount.toLocaleString("es-AR", {
-                                      maximumFractionDigits: 0,
-                                    })}
-                                  </span>
-                                  {cardPayment.actualAmount != null &&
-                                    Math.round(cardPayment.actualAmount) !==
-                                    Math.round(monthlyTotal) && (
-                                      <span className="text-[9px] font-bold text-emerald-400 line-through">
-                                        $
-                                        {monthlyTotal.toLocaleString("es-AR", {
-                                          maximumFractionDigits: 0,
-                                        })}
-                                      </span>
-                                    )}
-                                </>
-                              ) : (
-                                <>
-                                  <span
-                                    className={`text-[9px] font-black uppercase tracking-tighter ${isCurrent ? "text-blue-400" : isPast ? "text-amber-400" : "text-green-400"}`}
-                                  >
-                                    {isCurrent
-                                      ? "Confirmar"
-                                      : isPast
-                                        ? "Sin pagar"
-                                        : `Vto ${card.dueDay}`}
-                                  </span>
-                                  <span
-                                    className={`font-mono font-bold ${isCurrent ? "text-slate-900" : isPast ? "text-slate-500" : "text-green-700"}`}
-                                  >
-                                    $
-                                    {monthlyTotal.toLocaleString("es-AR", {
-                                      maximumFractionDigits: 0,
-                                    })}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          ) : (
-                            <span className="text-slate-100 italic">—</span>
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                          {row.isPaid && <Check size={12} />}
+                          {row.amount === null
+                            ? "Sin monto"
+                            : formatDashboardMoney(row.amount)}
+                        </button>
+                      ) : (
+                        <span className="text-slate-300">—</span>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {concepts.length === 0 && (
+          <p className="p-10 text-center text-sm text-slate-400">
+            Todavía no hay conceptos cargados.
+          </p>
+        )}
       </div>
-
-      {/* FOOTER LEGEND */}
-      <div className="flex flex-wrap justify-center gap-3 px-4 py-3 sm:gap-6 sm:py-0">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-600/10 rounded-sm" />
-          <span className="text-xxs font-bold uppercase text-slate-400">
-            Mes Actual
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-emerald-100 rounded-sm border border-emerald-200" />
-          <span className="text-xxs font-bold uppercase text-slate-400">
-            Pago Confirmado
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-green-50 rounded-sm border border-green-100" />
-          <span className="text-xxs font-bold uppercase text-slate-400">
-            Consumo de Tarjeta
-          </span>
-        </div>
-      </div>
-
-      {/* Modal de confirmación */}
+      <p className="shrink-0 border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
+        ✓ Pagado · Fondo azul: mes actual · Los importes pendientes son
+        estimados.
+      </p>
       {modalData && (
         <PaymentConfirmModal
           data={modalData}
