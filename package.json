@@ -12,10 +12,12 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "db:seed-loan": "tsx --env-file=.env.local scripts/seed-loan.ts",
     "auth:create-user": "tsx --env-file=.env.local scripts/create-user.ts",
     "test:auth": "node --conditions=react-server --import tsx --test src/lib/auth.test.mts",
     "test:statements": "node --import tsx --test src/lib/statements/*.test.mts",
     "test:dashboard": "node --import tsx --test src/lib/dashboard.test.mts",
+    "test:loan": "node --import tsx --test src/lib/loan.test.mts",
     "test:navigation": "node --import tsx --test src/lib/navigation.test.mts"
   },
   "dependencies": {

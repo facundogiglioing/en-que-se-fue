@@ -1,34 +1,78 @@
-import "server-only";
+// Motor de cálculo del préstamo UVA.
+// El cuadro de amortización en UVA (capital, interés, seguro, IVA por cuota)
+// es el oficial del banco y es fijo de por vida: está embebido en
+// loan-amortization.ts. Lo que varía es el valor del UVA y el tipo de cambio,
+// que se obtienen de APIs públicas. Este módulo replica las fórmulas de la
+// planilla original:
+// - Saldo: saldo anterior - capital de la cuota (precisión completa).
+// - Total cuota: capital + interés + seguro + IVA.
+// - ARS: valores en UVA × UVA de la fecha de vencimiento.
+// - Saldo ARS/USD: saldo en UVA × UVA, / tipo de cambio.
 
-export interface LoanSummary {
-  title: string;
-  originalCapital: string;
-  remainingCapital: string;
-  uva: string;
-  exchangeRate: string;
-  totalArs: string;
-  totalUsd: string;
-  remainingInstallments: string;
+import { AMORTIZATION } from "./loan-amortization";
+
+export const LOAN = {
+  title: "Préstamo UVA - TNA: 6,9% - 20/08/2025",
+  /** Fecha de desembolso */
+  startDate: "2025-08-20",
+  /** Primer vencimiento; las demás cuotas vencen el mismo día de cada mes */
+  firstPaymentDate: "2025-09-10",
+  months: AMORTIZATION.length,
+  tna: 0.069,
+  /** Capital otorgado, en UVA */
+  capitalUva: 55_778.53,
+  uvaAtStart: 1_559.74,
+  exchangeRateAtStart: 1_315,
+  /** Monto desembolsado en ARS */
+  originalArs: 87_000_000,
+} as const;
+
+export interface LoanPaymentRecord {
+  installmentNumber: number;
+  uva: number;
+  exchangeRate: number;
+  paidAt?: string;
 }
 
 export interface LoanInstallment {
-  number: string;
-  uva: string;
-  uvaVariation: string;
-  exchangeRate: string;
-  capitalBalance: string;
-  capital: string;
-  interest: string;
-  other: string;
-  vat: string;
-  total: string;
+  number: number;
+  /** Fecha de vencimiento en formato ISO (yyyy-mm-dd) */
+  dueDate: string;
+  uva: number;
+  /** true si el UVA no está publicado aún y se usó el último valor conocido */
+  uvaIsEstimated: boolean;
+  uvaVariation: number;
+  exchangeRate: number;
+  /** Saldo de capital en UVA antes de pagar la cuota */
+  capitalBalance: number;
+  capital: number;
+  interest: number;
+  other: number;
+  vat: number;
+  total: number;
   paid: boolean;
-  paymentDate: string;
-  arsCapital: string;
-  arsInterest: string;
-  arsTotal: string;
-  totalArs: string;
-  totalUsd: string;
+  paidAt?: string;
+  arsCapital: number;
+  arsInterest: number;
+  arsTotal: number;
+  /** Saldo de capital valuado en ARS (antes de pagar la cuota) */
+  totalArs: number;
+  totalUsd: number;
+}
+
+export interface LoanSummary {
+  title: string;
+  originalCapital: number;
+  /** Capital restante en UVA: original - capital de las cuotas abonadas */
+  remainingCapital: number;
+  uvaAtStart: number;
+  exchangeRateAtStart: number;
+  originalArs: number;
+  originalUsd: number;
+  currentUva: number;
+  currentExchangeRate: number;
+  paidInstallments: number;
+  remainingInstallments: number;
 }
 
 export interface LoanData {
@@ -36,107 +80,97 @@ export interface LoanData {
   installments: LoanInstallment[];
 }
 
-/**
- * Parser CSV mínimo que soporta campos entrecomillados
- * con comas y saltos de línea internos (formato export de Google Sheets).
- */
-export function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let field = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (inQuotes) {
-      if (char === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += char;
-      }
-    } else if (char === '"') {
-      inQuotes = true;
-    } else if (char === ",") {
-      row.push(field);
-      field = "";
-    } else if (char === "\n" || char === "\r") {
-      if (char === "\r" && text[i + 1] === "\n") i++;
-      row.push(field);
-      field = "";
-      rows.push(row);
-      row = [];
-    } else {
-      field += char;
-    }
-  }
-  if (field !== "" || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows;
+export interface BuildScheduleInput {
+  /** Valores UVA publicados, indexados por fecha ISO (yyyy-mm-dd) */
+  uvaByDate: Map<string, number>;
+  /** Último valor UVA publicado (fallback para fechas futuras) */
+  latestUva: number;
+  /** Tipo de cambio actual para cuotas no abonadas */
+  currentExchangeRate: number;
+  /** Cuotas confirmadas como abonadas, con el UVA/TC usados */
+  payments: LoanPaymentRecord[];
 }
 
-export function parseLoanSheet(csv: string): LoanData {
-  const rows = parseCsv(csv);
+// Redondeo a 2 decimales resistente a errores de punto flotante en empates
+// (p. ej. 333,82 × 1579,75 = …,1450 debe redondear hacia arriba como en Sheets).
+const round2 = (n: number) =>
+  Math.round(Number((n * 100).toPrecision(13))) / 100;
 
-  // Fila 1: título ("Prestamo Uva - TNA: ... - fecha")
-  const title = rows[1]?.[1]?.trim() ?? "Préstamo";
+/** Fecha de vencimiento ISO de la cuota k (mismo día del mes que la primera). */
+export function installmentDueDate(k: number): string {
+  const [year, month, day] = LOAN.firstPaymentDate.split("-").map(Number);
+  const due = new Date(Date.UTC(year, month - 1 + (k - 1), day));
+  return due.toISOString().slice(0, 10);
+}
 
-  // Fila 2: resumen (Capital, UVA, TC, totales y cuotas restantes)
-  const summaryRow = rows[2] ?? [];
-  const summary: LoanSummary = {
-    title,
-    originalCapital: summaryRow[4] ?? "",
-    remainingCapital: summaryRow[5] ?? "",
-    uva: summaryRow[7] ?? "",
-    exchangeRate: summaryRow[9] ?? "",
-    totalArs: summaryRow[11] ?? "",
-    totalUsd: summaryRow[13] ?? "",
-    remainingInstallments: summaryRow[17] ?? "",
-  };
+export function buildLoanSchedule(input: BuildScheduleInput): LoanData {
+  const { uvaByDate, latestUva, currentExchangeRate, payments } = input;
+  const paymentByNumber = new Map(
+    payments.map((p) => [p.installmentNumber, p]),
+  );
 
-  // Filas 5 en adelante: cuotas (filas 3 y 4 son el encabezado doble)
   const installments: LoanInstallment[] = [];
-  for (const row of rows.slice(5)) {
-    const number = row[1]?.trim();
-    if (!number) continue;
+  let balance = LOAN.capitalUva;
+  let previousUva: number | null = null;
+  let paidCapital = 0;
+
+  AMORTIZATION.forEach(([capital, interest, other, vat], index) => {
+    const k = index + 1;
+    const total = capital + interest + other + vat;
+
+    const dueDate = installmentDueDate(k);
+    const paid = paymentByNumber.get(k);
+    const publishedUva = uvaByDate.get(dueDate);
+    const uva = paid?.uva ?? publishedUva ?? latestUva;
+    const uvaIsEstimated = !paid && publishedUva === undefined;
+    const exchangeRate = paid?.exchangeRate ?? currentExchangeRate;
+
     installments.push({
-      number,
-      uva: row[2] ?? "",
-      uvaVariation: row[3] ?? "",
-      exchangeRate: row[4] ?? "",
-      capitalBalance: row[5] ?? "",
-      capital: row[6] ?? "",
-      interest: row[7] ?? "",
-      other: row[8] ?? "",
-      vat: row[9] ?? "",
-      total: row[10] ?? "",
-      paid: (row[11] ?? "").trim().toLowerCase() === "si",
-      paymentDate: row[12] ?? "",
-      arsCapital: row[13] ?? "",
-      arsInterest: row[14] ?? "",
-      arsTotal: row[15] ?? "",
-      totalArs: row[16] ?? "",
-      totalUsd: row[17] ?? "",
+      number: k,
+      dueDate,
+      uva,
+      uvaIsEstimated,
+      uvaVariation:
+        previousUva === null
+          ? 0
+          : round2(((uva - previousUva) / previousUva) * 100),
+      exchangeRate,
+      capitalBalance: round2(balance),
+      capital: round2(capital),
+      interest: round2(interest),
+      other: round2(other),
+      vat: round2(vat),
+      total: round2(total),
+      paid: !!paid,
+      paidAt: paid?.paidAt,
+      arsCapital: round2(capital * uva),
+      arsInterest: round2(interest * uva),
+      arsTotal: round2(total * uva),
+      totalArs: round2(balance * uva),
+      totalUsd: round2((balance * uva) / exchangeRate),
     });
-  }
 
-  return { summary, installments };
-}
+    if (paid) paidCapital += capital;
+    previousUva = uva;
+    balance -= capital;
+  });
 
-export async function getLoanData(): Promise<LoanData | null> {
-  const sheetId = process.env.LOAN_SHEET_ID;
-  const gid = process.env.LOAN_SHEET_GID;
-  if (!sheetId || !gid) return null;
+  const paidCount = paymentByNumber.size;
 
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
-  const response = await fetch(url, { redirect: "follow" });
-  if (!response.ok) return null;
-
-  return parseLoanSheet(await response.text());
+  return {
+    summary: {
+      title: LOAN.title,
+      originalCapital: LOAN.capitalUva,
+      remainingCapital: round2(LOAN.capitalUva - paidCapital),
+      uvaAtStart: LOAN.uvaAtStart,
+      exchangeRateAtStart: LOAN.exchangeRateAtStart,
+      originalArs: LOAN.originalArs,
+      originalUsd: round2(LOAN.originalArs / LOAN.exchangeRateAtStart),
+      currentUva: latestUva,
+      currentExchangeRate,
+      paidInstallments: paidCount,
+      remainingInstallments: LOAN.months - paidCount,
+    },
+    installments,
+  };
 }

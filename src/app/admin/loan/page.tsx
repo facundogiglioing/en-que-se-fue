@@ -1,43 +1,74 @@
+import { getLoanPayments } from "@/actions/loanPayment";
 import { requireRoles } from "@/lib/auth-session";
-import { getLoanData } from "@/lib/loan";
+import { getOficialExchangeRate, getUvaIndex } from "@/lib/indices";
+import { buildLoanSchedule, LOAN } from "@/lib/loan";
 import { ROLES } from "@/lib/roles";
+import PaidToggle from "./PaidToggle";
 
 export const dynamic = "force-dynamic";
 
 const numCell = "px-3 py-1.5 text-right font-mono whitespace-nowrap";
 const groupBorder = "border-l border-border-primary";
 
+const fmt = (n: number) =>
+  n.toLocaleString("es-AR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+const fmtDate = (iso: string) => {
+  const [year, month, day] = iso.split("-");
+  return `${day}/${month}/${year}`;
+};
+
 export default async function LoanPage() {
   await requireRoles([ROLES.ADMIN]);
-  const loan = await getLoanData();
 
-  if (!loan) {
+  const [uvaIndex, oficialRate, payments] = await Promise.all([
+    getUvaIndex(),
+    getOficialExchangeRate(),
+    getLoanPayments(),
+  ]);
+
+  if (!uvaIndex) {
     return (
       <div className="flex h-full items-center justify-center p-10">
         <div className="text-center">
           <p className="font-semibold text-slate-600">
-            No se pudo cargar la planilla del préstamo.
+            No se pudo obtener el índice UVA.
           </p>
           <p className="mt-1 text-sm text-slate-400">
-            Verificá que <code>LOAN_SHEET_ID</code> y{" "}
-            <code>LOAN_SHEET_GID</code> estén configuradas y que la hoja sea
-            accesible con el enlace.
+            El cálculo del préstamo necesita el valor UVA publicado por el BCRA.
+            Reintentá en unos minutos.
           </p>
         </div>
       </div>
     );
   }
 
-  const { summary, installments } = loan;
+  const currentExchangeRate =
+    oficialRate ?? payments.at(-1)?.exchangeRate ?? LOAN.exchangeRateAtStart;
+
+  const { summary, installments } = buildLoanSchedule({
+    uvaByDate: uvaIndex.byDate,
+    latestUva: uvaIndex.latestValue,
+    currentExchangeRate,
+    payments,
+  });
+
+  const hasEstimatedUva = installments.some((item) => item.uvaIsEstimated);
 
   const summaryItems = [
-    { label: "Capital", value: summary.originalCapital },
-    { label: "Capital restante", value: summary.remainingCapital },
-    { label: "UVA", value: summary.uva },
-    { label: "TC", value: summary.exchangeRate },
-    { label: "Total ARS", value: summary.totalArs },
-    { label: "Total USD", value: summary.totalUsd },
-    { label: "Faltan", value: `${summary.remainingInstallments} cuotas` },
+    { label: "Capital (UVA)", value: fmt(summary.originalCapital) },
+    { label: "Capital restante (UVA)", value: fmt(summary.remainingCapital) },
+    { label: "UVA inicio", value: fmt(summary.uvaAtStart) },
+    { label: "TC inicio", value: fmt(summary.exchangeRateAtStart) },
+    { label: "Total ARS", value: fmt(summary.originalArs) },
+    { label: "Total USD", value: fmt(summary.originalUsd) },
+    { label: "UVA actual", value: fmt(summary.currentUva) },
+    { label: "TC actual", value: fmt(summary.currentExchangeRate) },
+    { label: "Pagadas", value: `${summary.paidInstallments}` },
+    { label: "Faltan", value: `${summary.remainingInstallments}` },
   ];
 
   return (
@@ -62,6 +93,13 @@ export default async function LoanPage() {
             </div>
           ))}
         </div>
+        {hasEstimatedUva && (
+          <p className="mt-2 text-xs text-slate-400">
+            * UVA estimado: para vencimientos sin valor publicado se usa el
+            último UVA informado ({fmt(uvaIndex.latestValue)} al{" "}
+            {fmtDate(uvaIndex.latestDate)}).
+          </p>
+        )}
       </div>
 
       {/* Tabla de cuotas */}
@@ -97,7 +135,7 @@ export default async function LoanPage() {
                 P
               </th>
               <th rowSpan={2} className="px-3 py-2 text-left font-semibold">
-                Fecha Pago
+                Vencimiento
               </th>
               <th
                 colSpan={3}
@@ -109,7 +147,7 @@ export default async function LoanPage() {
                 colSpan={2}
                 className={`px-3 py-1.5 text-center font-semibold ${groupBorder}`}
               >
-                Total
+                Saldo
               </th>
             </tr>
             <tr>
@@ -119,7 +157,7 @@ export default async function LoanPage() {
                 Capital
               </th>
               <th className="px-3 py-1.5 text-right font-medium">Interés</th>
-              <th className="px-3 py-1.5 text-right font-medium">O</th>
+              <th className="px-3 py-1.5 text-right font-medium">Seguro</th>
               <th className="px-3 py-1.5 text-right font-medium">IVA</th>
               <th className="px-3 py-1.5 text-right font-medium">Total</th>
               <th
@@ -146,32 +184,44 @@ export default async function LoanPage() {
                 }`}
               >
                 <td className={numCell}>{item.number}</td>
-                <td className={numCell}>{item.uva}</td>
-                <td className={numCell}>{item.uvaVariation}</td>
-                <td className={numCell}>{item.exchangeRate}</td>
-                <td className={numCell}>{item.capitalBalance}</td>
-                <td className={`${numCell} ${groupBorder}`}>{item.capital}</td>
-                <td className={numCell}>{item.interest}</td>
-                <td className={numCell}>{item.other}</td>
-                <td className={numCell}>{item.vat}</td>
-                <td className={`${numCell} font-semibold`}>{item.total}</td>
-                <td className={`px-3 py-1.5 text-center ${groupBorder}`}>
-                  {item.paid && (
-                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xxs font-bold uppercase text-green-700">
-                      Sí
-                    </span>
-                  )}
+                <td className={numCell}>
+                  {fmt(item.uva)}
+                  {item.uvaIsEstimated && "*"}
+                </td>
+                <td className={numCell}>{fmt(item.uvaVariation)}</td>
+                <td className={numCell}>{fmt(item.exchangeRate)}</td>
+                <td className={numCell}>{fmt(item.capitalBalance)}</td>
+                <td className={`${numCell} ${groupBorder}`}>
+                  {fmt(item.capital)}
+                </td>
+                <td className={numCell}>{fmt(item.interest)}</td>
+                <td className={numCell}>{fmt(item.other)}</td>
+                <td className={numCell}>{fmt(item.vat)}</td>
+                <td className={`${numCell} font-semibold`}>
+                  {fmt(item.total)}
+                </td>
+                <td className={`px-2 py-1.5 text-center ${groupBorder}`}>
+                  <PaidToggle
+                    installmentNumber={item.number}
+                    paid={item.paid}
+                    dueDateLabel={fmtDate(item.dueDate)}
+                    totalArsLabel={`$${fmt(item.arsTotal)}`}
+                  />
                 </td>
                 <td className="whitespace-nowrap px-3 py-1.5 font-mono">
-                  {item.paymentDate}
+                  {fmtDate(item.dueDate)}
                 </td>
                 <td className={`${numCell} ${groupBorder}`}>
-                  {item.arsCapital}
+                  {fmt(item.arsCapital)}
                 </td>
-                <td className={numCell}>{item.arsInterest}</td>
-                <td className={`${numCell} font-semibold`}>{item.arsTotal}</td>
-                <td className={`${numCell} ${groupBorder}`}>{item.totalArs}</td>
-                <td className={numCell}>{item.totalUsd}</td>
+                <td className={numCell}>{fmt(item.arsInterest)}</td>
+                <td className={`${numCell} font-semibold`}>
+                  {fmt(item.arsTotal)}
+                </td>
+                <td className={`${numCell} ${groupBorder}`}>
+                  {fmt(item.totalArs)}
+                </td>
+                <td className={numCell}>{fmt(item.totalUsd)}</td>
               </tr>
             ))}
           </tbody>

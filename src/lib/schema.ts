@@ -185,3 +185,13 @@ export const cardPayments = pgTable(
   },
   (t) => [unique().on(t.cardId, t.month, t.year)],
 );
+
+// Cuotas abonadas del préstamo UVA; guarda el UVA y TC usados al confirmar.
+export const loanPayments = pgTable("loan_payments", {
+  id: uuid().primaryKey().defaultRandom(),
+  installmentNumber: integer().notNull().unique(),
+  paidAt: timestamp({ withTimezone: true }),
+  uva: money().notNull(),
+  exchangeRate: money().notNull(),
+  createdAt: createdAt(),
+});

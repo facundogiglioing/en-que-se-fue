@@ -15,6 +15,13 @@
       "when": 1793966139699,
       "tag": "0001_colorful_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794245733627,
+      "tag": "0002_warm_union_jack",
+      "breakpoints": true
     }
   ]
 }
