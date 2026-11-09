@@ -18,6 +18,12 @@ export const NAV_ITEMS = [
     title: "Gastos fijos",
     icon: "expenses",
   },
+  {
+    href: "/admin/loan",
+    label: "Préstamo",
+    title: "Préstamo UVA",
+    icon: "loan",
+  },
 ] as const;
 
 export function getPageTitle(pathname: string): string {

@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Home, Settings, Wallet } from "lucide-react";
+import { CreditCard, Home, Landmark, Settings, Wallet } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/navigation";
@@ -12,6 +12,7 @@ const icons = {
   income: Wallet,
   cards: CreditCard,
   expenses: Settings,
+  loan: Landmark,
 };
 
 export default function Navbar({ role }: { role: string }) {
