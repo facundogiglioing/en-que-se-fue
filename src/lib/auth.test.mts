@@ -21,6 +21,7 @@ function fixture() {
       id: "test-admin",
       email,
       name: "Test",
+      image: "",
       role: ROLES.ADMIN,
       emailVerified: false,
       createdAt: new Date(),
@@ -92,6 +93,7 @@ async function googleCallback(
   subject: ReturnType<typeof fixture>,
   profileEmail: string,
   emailVerified: boolean,
+  profileName = "Google Test",
 ) {
   const context = await subject.instance.$context;
   const google = context.socialProviders.find(
@@ -103,7 +105,8 @@ async function googleCallback(
   });
   google.getUserInfo = async () => ({
     user: {
-      name: "Google Test",
+      name: profileName,
+      image: "https://lh3.googleusercontent.com/test-avatar",
       email: profileEmail,
       emailVerified,
     },
@@ -279,6 +282,11 @@ test("verified Google identity links to a provisioned account and preserves its 
   assert.equal(subject.users.length, 1);
   assert.equal(subject.sessions.length, 1);
   assert.equal(subject.users[0].role, ROLES.ADMIN);
+  assert.equal(subject.users[0].name, "Google Test");
+  assert.equal(
+    subject.users[0].image,
+    "https://lh3.googleusercontent.com/test-avatar",
+  );
   assert.ok(
     subject.accounts.some(
       (account) =>
@@ -297,6 +305,21 @@ test("Google cannot register an unknown user, even with an explicit signup reque
   assert.equal(subject.accounts.length, 1);
 });
 
+test("subsequent Google sign-ins refresh the display name and preserve the role", async () => {
+  const subject = fixture();
+  await googleCallback(subject, email, true);
+  const response = await googleCallback(
+    subject,
+    email,
+    true,
+    "Updated Google Name",
+  );
+  assert.equal(response.status, 302);
+  assert.equal(subject.users.length, 1);
+  assert.equal(subject.users[0].name, "Updated Google Name");
+  assert.equal(subject.users[0].role, ROLES.ADMIN);
+});
+
 test("unverified Google email cannot link to a provisioned account", async () => {
   const subject = fixture();
   const response = await googleCallback(subject, email, false);
@@ -304,4 +327,6 @@ test("unverified Google email cannot link to a provisioned account", async () =>
   assert.ok(response.headers.get("location")?.includes("/login?error="));
   assert.equal(subject.sessions.length, 0);
   assert.equal(subject.accounts.length, 1);
+  assert.equal(subject.users[0].name, "Test");
+  assert.equal(subject.users[0].image, "");
 });

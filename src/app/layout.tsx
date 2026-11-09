@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
+import AppHeader from "@/components/AppHeader";
 import Navbar, { MobileNav } from "@/components/Navbar";
 import { getSession } from "@/lib/auth-session";
 
@@ -35,9 +36,18 @@ export default async function RootLayout({
     >
       <body className="h-dvh overflow-hidden bg-background text-foreground">
         <div className="flex h-full min-h-0 flex-col">
+          {session && (
+            <AppHeader
+              user={{
+                name: session.user.name,
+                email: session.user.email,
+                image: session.user.image,
+              }}
+            />
+          )}
           <div className="flex min-h-0 flex-1">
             {session && <Navbar role={session.user.role} />}
-            <main className="min-h-0 flex-1 overflow-y-auto bg-white lg:overflow-hidden">
+            <main className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-white lg:overflow-hidden">
               {children}
             </main>
           </div>

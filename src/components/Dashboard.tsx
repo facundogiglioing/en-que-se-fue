@@ -245,21 +245,7 @@ export function Dashboard(props: Props) {
 
   return (
     <div className="flex h-full min-h-0 flex-col text-slate-800">
-      <header className="shrink-0 border-b border-border-primary px-5 pt-5 sm:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-5">
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">
-              Tablero de pagos
-            </h1>
-            <p className="mt-1 text-sm text-slate-500">
-              Tus cuentas, en orden. Un mes a la vez.
-            </p>
-          </div>
-          <span className="flex items-center gap-2 text-xs text-slate-500">
-            <CalendarDays size={16} /> {props.currentDay} de{" "}
-            {periodLabel(props.currentMonthIdx, props.currentYear)}
-          </span>
-        </div>
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border-primary px-5 pt-4 sm:px-8">
         <div
           className="flex gap-6"
           role="tablist"
@@ -305,7 +291,11 @@ export function Dashboard(props: Props) {
             </button>
           ))}
         </div>
-      </header>
+        <span className="flex items-center gap-2 pb-3 text-xs text-slate-500">
+          <CalendarDays size={16} /> {props.currentDay} de{" "}
+          {periodLabel(props.currentMonthIdx, props.currentYear)}
+        </span>
+      </div>
 
       {view === "annual" ? (
         <section

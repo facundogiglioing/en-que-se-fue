@@ -104,6 +104,23 @@ también al pasar de diciembre a enero. Los KPIs no cambian al filtrar la lista.
 
 Validación de cálculos: `yarn test:dashboard`.
 
+## Header general
+
+Las páginas autenticadas comparten un header con logo, título de la ruta actual
+y usuario de la sesión (nombre, email y foto). La columna del logo y el menú
+usan el mismo ancho de 80 px en escritorio, definido por `--sidebar-width`.
+En móvil se conserva el menú inferior y se muestra el avatar con el nombre y
+email accesibles; en escritorio también se muestran en texto.
+
+Al volver a iniciar sesión con Google se actualizan el nombre y la foto del
+perfil, conservando los permisos del usuario precargado. Las sesiones existentes
+muestran los datos guardados hasta el siguiente login. Sin foto, o si no carga,
+se muestran las iniciales. Los títulos de página y enlaces del menú se declaran
+en `src/lib/navigation.ts`; los encabezados de formularios y paneles específicos
+se conservan en el contenido.
+
+Validación de rutas e iniciales: `yarn test:navigation`.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

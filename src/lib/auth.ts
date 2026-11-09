@@ -39,6 +39,7 @@ export const auth = betterAuth({
       enabled: googleEnabled,
       disableSignUp: true,
       prompt: "select_account",
+      overrideUserInfoOnSignIn: true,
     },
   },
   user: {
