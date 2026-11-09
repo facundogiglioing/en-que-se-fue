@@ -87,10 +87,14 @@ function extractMovements(lines: string[]): StatementMovement[] {
   const startIndex = lines.findIndex((line) => /DETALLE DEL MES/i.test(line));
   if (startIndex === -1) return [];
 
-  let endIndex = lines.findIndex(
-    (line, index) => index > startIndex && /^TOTAL TITULAR/i.test(line),
-  );
-  if (endIndex === -1) endIndex = lines.length;
+  // The detail can continue across pages, so ignore earlier titular totals.
+  let endIndex = lines.length;
+  for (let i = lines.length - 1; i > startIndex; i--) {
+    if (/^TOTAL TITULAR/i.test(lines[i])) {
+      endIndex = i;
+      break;
+    }
+  }
 
   const movements: StatementMovement[] = [];
   for (let i = startIndex + 1; i < endIndex; i++) {
