@@ -69,6 +69,24 @@ directo al servidor. Usar HTTPS para las cookies seguras.
 
 Validaciones: `yarn test:auth`, `yarn tsc --noEmit` y `yarn build`.
 
+## Importar y deshacer resúmenes
+
+Los movimientos del PDF se cargan en la tarjeta y el mes seleccionados en la
+pantalla, no en el mes de cierre del resumen. Para tarjetas a mes vencido, se
+guardan en el período de consumo anterior para aparecer en el mes seleccionado.
+La fecha original del consumo se conserva; la detección de duplicados usa el
+período seleccionado. Las fechas de cierre y vencimiento solo se actualizan
+cuando el resumen está vigente.
+
+El botón de deshacer junto al importador permite borrar, previa confirmación,
+los movimientos de la última importación de esa tarjeta, aunque se hayan cargado
+en otro mes. Se identifica el lote por su fecha de creación compartida y la fecha
+de movimiento del PDF. No borra compras manuales ni revierte cambios de cierre
+y vencimiento. No vuelve a ubicar automáticamente importaciones anteriores:
+para corregirlas, deshacer la última y volver a importar en el mes deseado.
+
+Validación del período y duplicados: `yarn test:statements`.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
