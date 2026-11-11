@@ -8,7 +8,7 @@ import {
   Pencil,
   Zap,
 } from "lucide-react";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { confirmCardPayment } from "@/actions/cardPayment";
 import { confirmExpensePayment } from "@/actions/payment";
 import {
@@ -64,8 +64,10 @@ function PaymentRow({
   const [editing, setEditing] = useState(row.amount === null);
   const [amount, setAmount] = useState(row.amount?.toFixed(2) ?? "");
   const [error, setError] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState<"copied" | "error" | null>(null);
   const [pending, startTransition] = useTransition();
   const confirming = useRef(false);
+  const copyStatusTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const amountValue = editing ? Number(amount) : row.amount;
   const validAmount =
     amountValue !== null &&
@@ -109,6 +111,30 @@ function PaymentRow({
     });
   }
 
+  async function copyPaymentCode() {
+    if (!row.paymentCode) return;
+    try {
+      await navigator.clipboard.writeText(row.paymentCode);
+      if (copyStatusTimeout.current) clearTimeout(copyStatusTimeout.current);
+      setCopyStatus("copied");
+      copyStatusTimeout.current = setTimeout(() => {
+        setCopyStatus(null);
+        copyStatusTimeout.current = null;
+      }, 5000);
+    } catch {
+      if (copyStatusTimeout.current) clearTimeout(copyStatusTimeout.current);
+      copyStatusTimeout.current = null;
+      setCopyStatus("error");
+    }
+  }
+
+  useEffect(
+    () => () => {
+      if (copyStatusTimeout.current) clearTimeout(copyStatusTimeout.current);
+    },
+    [],
+  );
+
   const Icon = row.type === "card" ? CreditCard : Zap;
   return (
     <tr className="grid grid-cols-[minmax(0,1fr)_auto] items-center border-t border-slate-100 text-sm sm:table-row">
@@ -130,9 +156,28 @@ function PaymentRow({
         <span className="mr-2 font-medium text-slate-400 sm:hidden">
           Código de pago
         </span>
-        <span className="break-all font-mono text-slate-700 select-all">
-          {row.paymentCode || "—"}
-        </span>
+        {row.paymentCode ? (
+          <button
+            type="button"
+            aria-label={`Copiar código de pago de ${row.name}`}
+            onClick={copyPaymentCode}
+            className="break-all text-left font-mono text-slate-700 underline decoration-transparent underline-offset-2 transition hover:text-primary-text hover:decoration-current"
+          >
+            {row.paymentCode}
+          </button>
+        ) : (
+          <span className="font-mono text-slate-700">—</span>
+        )}
+        {copyStatus === "copied" && (
+          <span role="status" className="ml-2 text-xs text-success-text">
+            Copiado
+          </span>
+        )}
+        {copyStatus === "error" && (
+          <span role="alert" className="ml-2 text-xs text-danger-text">
+            No se pudo copiar el código.
+          </span>
+        )}
       </td>
       <td
         className={`px-4 py-2 whitespace-nowrap text-xs sm:px-3 sm:py-4 ${!row.isPaid && !isProjection && !noDebt && row.dueDay <= today ? "font-semibold text-danger-text" : "text-slate-500"}`}
