@@ -8,7 +8,7 @@ import {
   Pencil,
   Zap,
 } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { confirmCardPayment } from "@/actions/cardPayment";
 import { confirmExpensePayment } from "@/actions/payment";
 import {
@@ -65,6 +65,7 @@ function PaymentRow({
   const [amount, setAmount] = useState(row.amount?.toFixed(2) ?? "");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const confirming = useRef(false);
   const amountValue = editing ? Number(amount) : row.amount;
   const validAmount =
     amountValue !== null &&
@@ -82,10 +83,12 @@ function PaymentRow({
           : `Día ${row.dueDay}`;
 
   function confirm() {
+    if (confirming.current) return;
     if (!validAmount || amountValue === null) {
       setError("Ingresá un monto válido, mayor o igual a cero.");
       return;
     }
+    confirming.current = true;
     setError(null);
     startTransition(async () => {
       try {
@@ -100,6 +103,8 @@ function PaymentRow({
             ? err.message
             : "No se pudo confirmar el pago. Reintentá.",
         );
+      } finally {
+        confirming.current = false;
       }
     });
   }
@@ -143,7 +148,17 @@ function PaymentRow({
             step="0.01"
             value={amount}
             disabled={pending}
-            onChange={(event) => setAmount(event.target.value)}
+            onChange={(event) => {
+              setAmount(event.target.value);
+              setError(null);
+            }}
+            onBlur={confirm}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                confirm();
+              }
+            }}
             className="w-32 rounded-lg border border-slate-200 px-2 py-2 text-right font-mono text-slate-800 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
           />
         ) : (
