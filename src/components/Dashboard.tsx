@@ -118,17 +118,17 @@ function PaymentRow({
           <div>
             <span className="font-semibold text-slate-800">{row.name}</span>
             <p className="mt-1 text-xs text-slate-400">{row.detail}</p>
-            {row.paymentCode && (
-              <details className="mt-2 text-xs font-normal text-slate-500">
-                <summary className="cursor-pointer">Código de pago</summary>
-                <span className="mt-1 block break-all font-mono text-slate-800 select-all">
-                  {row.paymentCode}
-                </span>
-              </details>
-            )}
           </div>
         </div>
       </th>
+      <td className="col-span-2 px-4 pb-2 text-xs sm:px-3 sm:py-4">
+        <span className="mr-2 font-medium text-slate-400 sm:hidden">
+          Código de pago
+        </span>
+        <span className="break-all font-mono text-slate-700 select-all">
+          {row.paymentCode || "—"}
+        </span>
+      </td>
       <td
         className={`px-4 py-2 whitespace-nowrap text-xs sm:px-3 sm:py-4 ${!row.isPaid && !isProjection && !noDebt && row.dueDay <= today ? "font-semibold text-danger-text" : "text-slate-500"}`}
       >
@@ -401,14 +401,11 @@ export function Dashboard(props: Props) {
               </div>
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="-mx-5 divide-y divide-slate-200 border-y border-slate-200 bg-white sm:-mx-8">
             {groups.map((group) => {
               const isCollapsed = collapsed.has(group.type);
               return (
-                <section
-                  key={group.type}
-                  className="overflow-hidden rounded-xl border border-slate-200 bg-white"
-                >
+                <section key={group.type} className="overflow-hidden bg-white">
                   <button
                     type="button"
                     aria-expanded={!isCollapsed}
@@ -452,6 +449,9 @@ export function Dashboard(props: Props) {
                           <tr>
                             <th scope="col" className="px-5 py-3 font-medium">
                               Concepto
+                            </th>
+                            <th scope="col" className="px-3 py-3 font-medium">
+                              Código de pago
                             </th>
                             <th scope="col" className="px-3 py-3 font-medium">
                               Vencimiento / Día
