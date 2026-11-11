@@ -34,9 +34,9 @@ type Props = DashboardData & {
 type Filter = "all" | "pending" | "paid";
 
 const filters: { id: Filter; label: string }[] = [
-  { id: "all", label: "Todos" },
-  { id: "pending", label: "Pendientes" },
+  { id: "pending", label: "Pendiente" },
   { id: "paid", label: "Confirmados" },
+  { id: "all", label: "Todos" },
 ];
 
 function periodLabel(month: number, year: number) {
@@ -210,7 +210,7 @@ function PaymentRow({
 export function Dashboard(props: Props) {
   const [view, setView] = useState<"operational" | "annual">("operational");
   const [nextMonth, setNextMonth] = useState(false);
-  const [filter, setFilter] = useState<Filter>("all");
+  const [filter, setFilter] = useState<Filter>("pending");
   const [collapsed, setCollapsed] = useState<Set<MonthlyPayment["type"]>>(
     new Set(),
   );
@@ -236,13 +236,6 @@ export function Dashboard(props: Props) {
         (a.rows.find((row) => !row.isPaid)?.dueDay ?? 32) -
         (b.rows.find((row) => !row.isPaid)?.dueDay ?? 32),
     );
-  const dueNow = rows.filter(
-    (row) =>
-      !row.isPaid &&
-      row.dueDay <= props.currentDay &&
-      (row.amount === null || row.amount > 0),
-  );
-
   return (
     <div className="flex h-full min-h-0 flex-col text-slate-800">
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border-primary px-5 pt-4 sm:px-8">
@@ -320,34 +313,9 @@ export function Dashboard(props: Props) {
           role="tabpanel"
           id="panel-operational"
           aria-labelledby="tab-operational"
-          className="min-h-0 flex-1 overflow-y-auto bg-slate-50/50 px-5 py-5 sm:px-8 sm:py-6"
+          className="min-h-0 flex-1 overflow-y-auto bg-slate-50/50 px-5 pt-0 pb-5 sm:px-8 sm:pt-0 sm:pb-6"
         >
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-lg font-semibold capitalize">
-              {periodLabel(period.month, period.year)}
-            </h2>
-            <div
-              className="flex rounded-lg border border-slate-200 bg-white p-1"
-              role="group"
-              aria-label="Mes a consultar"
-            >
-              {[
-                { next: false, label: "Mes actual" },
-                { next: true, label: "Próximo mes" },
-              ].map((item) => (
-                <button
-                  type="button"
-                  key={item.label}
-                  aria-pressed={nextMonth === item.next}
-                  onClick={() => setNextMonth(item.next)}
-                  className={`rounded-md px-3 py-2 text-xs font-semibold ${nextMonth === item.next ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-slate-50"}`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="-mx-5 grid gap-0 divide-y divide-slate-200 border-b border-slate-200 bg-white sm:-mx-8 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {[
               {
                 label: "Total del mes",
@@ -368,10 +336,7 @@ export function Dashboard(props: Props) {
                 color: "text-primary-text",
               },
             ].map((kpi) => (
-              <div
-                key={kpi.label}
-                className="rounded-xl border border-slate-200 bg-white p-5"
-              >
+              <div key={kpi.label} className="px-5 py-4 sm:px-8 sm:py-5">
                 <p className="text-xs font-medium text-slate-500">
                   {kpi.label}
                 </p>
@@ -385,11 +350,8 @@ export function Dashboard(props: Props) {
             ))}
           </div>
           <div className="my-5 text-sm text-slate-500" aria-live="polite">
-            {nextMonth
-              ? "Proyección del próximo mes. Los pagos se confirman cuando comienza el mes."
-              : dueNow.length > 0
-                ? `${dueNow.length} pago(s) vencido(s) o con vencimiento hoy. Revisalos primero.`
-                : "No hay pagos pendientes con vencimiento hoy o anterior."}
+            {nextMonth &&
+              "Proyección del próximo mes. Los pagos se confirman cuando comienza el mes."}
             {totals.unknownCount > 0 && (
               <p className="mt-1 text-xs text-amber-700">
                 {totals.unknownCount} concepto(s) sin monto. Los totales son
@@ -399,22 +361,44 @@ export function Dashboard(props: Props) {
           </div>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-sm font-semibold">Gastos del mes</h3>
-            <div
-              className="flex gap-1 rounded-lg bg-slate-100 p-1"
-              role="group"
-              aria-label="Filtrar pagos"
-            >
-              {filters.map((item) => (
-                <button
-                  type="button"
-                  key={item.id}
-                  aria-pressed={filter === item.id}
-                  onClick={() => setFilter(item.id)}
-                  className={`rounded-md px-3 py-2 text-xs font-semibold ${filter === item.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
-                >
-                  {item.label}
-                </button>
-              ))}
+            <div className="flex flex-wrap items-center gap-2">
+              <div
+                className="flex rounded-lg border border-slate-200 bg-white p-1"
+                role="group"
+                aria-label="Mes a consultar"
+              >
+                {[
+                  { next: false, label: "Mes actual" },
+                  { next: true, label: "Próximo mes" },
+                ].map((item) => (
+                  <button
+                    type="button"
+                    key={item.label}
+                    aria-pressed={nextMonth === item.next}
+                    onClick={() => setNextMonth(item.next)}
+                    className={`rounded-md px-3 py-2 text-xs font-semibold ${nextMonth === item.next ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-slate-50"}`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+              <div
+                className="flex gap-1 rounded-lg bg-slate-100 p-1"
+                role="group"
+                aria-label="Filtrar pagos"
+              >
+                {filters.map((item) => (
+                  <button
+                    type="button"
+                    key={item.id}
+                    aria-pressed={filter === item.id}
+                    onClick={() => setFilter(item.id)}
+                    className={`rounded-md px-3 py-2 text-xs font-semibold ${filter === item.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-800"}`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           <div className="space-y-4">
