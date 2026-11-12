@@ -49,6 +49,8 @@ test("la primera cuota replica la planilla (interés prorrateado del banco)", ()
   assert.equal(first.uvaVariation, 0);
   assert.equal(first.arsCapital, 171213.31);
   assert.equal(first.arsInterest, 354669.67);
+  assert.equal(first.arsOther, 1232.21);
+  assert.equal(first.arsVat, 236.96);
   assert.equal(first.arsTotal, 527352.15);
   assert.equal(first.totalArs, 88116132.77);
   assert.equal(first.totalUsd, 61404.97);
@@ -64,6 +66,7 @@ test("las demás cuotas replican el cuadro de amortización de la planilla", () 
   assert.equal(second.capitalBalance, 55670.15);
   assert.equal(second.uvaVariation, 1.89);
   assert.equal(second.arsCapital, 175451.87);
+  assert.equal(second.arsInterest, 515229.69);
 
   // Desde la cuota 5 bajan los cargos fijos (0,48 + 0,10 de IVA).
   const fifth = installments[4];

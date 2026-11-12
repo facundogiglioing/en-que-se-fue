@@ -54,6 +54,8 @@ export interface LoanInstallment {
   paidAt?: string;
   arsCapital: number;
   arsInterest: number;
+  arsOther: number;
+  arsVat: number;
   arsTotal: number;
   /** Saldo de capital valuado en ARS (antes de pagar la cuota) */
   totalArs: number;
@@ -145,6 +147,8 @@ export function buildLoanSchedule(input: BuildScheduleInput): LoanData {
       paidAt: paid?.paidAt,
       arsCapital: round2(capital * uva),
       arsInterest: round2(interest * uva),
+      arsOther: round2(other * uva),
+      arsVat: round2(vat * uva),
       arsTotal: round2(total * uva),
       totalArs: round2(balance * uva),
       totalUsd: round2((balance * uva) / exchangeRate),

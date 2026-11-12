@@ -25,6 +25,7 @@ import {
   paymentModalData,
 } from "./PaymentConfirmModal";
 import { PaymentGrid } from "./PaymentGrid";
+import { Tabs } from "./Tabs";
 
 type Props = DashboardData & {
   currentYear: number;
@@ -299,51 +300,16 @@ export function Dashboard(props: Props) {
   return (
     <div className="flex h-full min-h-0 flex-col text-slate-800">
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border-primary px-5 pt-4 sm:px-8">
-        <div
-          className="flex gap-6"
-          role="tablist"
-          aria-label="Vistas del tablero"
-        >
-          {(
-            [
-              { id: "operational", label: "Este mes" },
-              { id: "annual", label: "Histórico / Proyección" },
-            ] as const
-          ).map((tab) => (
-            <button
-              type="button"
-              key={tab.id}
-              role="tab"
-              id={`tab-${tab.id}`}
-              aria-selected={view === tab.id}
-              aria-controls={`panel-${tab.id}`}
-              tabIndex={view === tab.id ? 0 : -1}
-              onKeyDown={(event) => {
-                if (
-                  !["ArrowLeft", "ArrowRight", "Home", "End"].includes(
-                    event.key,
-                  )
-                )
-                  return;
-                event.preventDefault();
-                const target =
-                  event.key === "Home"
-                    ? "operational"
-                    : event.key === "End"
-                      ? "annual"
-                      : view === "annual"
-                        ? "operational"
-                        : "annual";
-                setView(target);
-                document.getElementById(`tab-${target}`)?.focus();
-              }}
-              onClick={() => setView(tab.id)}
-              className={`border-b-2 pb-3 text-sm font-semibold transition ${view === tab.id ? "border-primary-text text-primary-text" : "border-transparent text-slate-400 hover:text-slate-700"}`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          id="dashboard"
+          label="Vistas del tablero"
+          tabs={[
+            { id: "operational", label: "Este mes" },
+            { id: "annual", label: "Histórico / Proyección" },
+          ]}
+          value={view}
+          onChange={setView}
+        />
         <span className="flex items-center gap-2 pb-3 text-xs text-slate-500">
           <CalendarDays size={16} /> {props.currentDay} de{" "}
           {periodLabel(props.currentMonthIdx, props.currentYear)}
@@ -353,8 +319,8 @@ export function Dashboard(props: Props) {
       {view === "annual" ? (
         <section
           role="tabpanel"
-          id="panel-annual"
-          aria-labelledby="tab-annual"
+          id="dashboard-panel-annual"
+          aria-labelledby="dashboard-tab-annual"
           className="flex min-h-0 flex-1 flex-col"
         >
           <div className="px-5 py-4 sm:px-8">
@@ -371,8 +337,8 @@ export function Dashboard(props: Props) {
       ) : (
         <section
           role="tabpanel"
-          id="panel-operational"
-          aria-labelledby="tab-operational"
+          id="dashboard-panel-operational"
+          aria-labelledby="dashboard-tab-operational"
           className="min-h-0 flex-1 overflow-y-auto bg-slate-50/50 px-5 pt-0 pb-5 sm:px-8 sm:pt-0 sm:pb-6"
         >
           <div className="-mx-5 grid gap-0 divide-y divide-slate-200 border-b border-slate-200 bg-white sm:-mx-8 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
